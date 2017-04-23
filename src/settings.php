@@ -5,8 +5,8 @@ return [
         'addContentLengthHeader' => false, // Allow the web server to send the content-length header
 
         // Renderer settings
-        'renderer' => [
-            'template_path' => __DIR__ . '/../templates/',
+        'template' => [
+            'template_path' => __DIR__ . '/../template/',
         ],
 
         // Monolog settings
@@ -14,6 +14,11 @@ return [
             'name' => 'slim-app',
             'path' => __DIR__ . '/../logs/app.log',
             'level' => \Monolog\Logger::DEBUG,
+        ],
+        // default
+        'default' => [
+            'server' => 'http://h5.dolphin.com/',
+            'image_server' => 'http://h5.dolphin.com/'
         ],
     ],
 ];

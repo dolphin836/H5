@@ -1,0 +1,26 @@
+<?php $this->layout('template', ['title' => $product['name'], 'server' => $server]); ?>
+
+<article class="weui-article">
+    <img src="<?php echo $product['cover']; ?>" alt="<?php echo $product['name']; ?>">
+    <h1><?php echo $product['name']; ?></h1>
+    <h2>价格：<?php echo $product['price']; ?></h2>
+    <section>
+        <h2 class="title"><?php echo $product['abstract']; ?></h2>
+        <section>
+            <?php echo $product['context']; ?>
+        </section>
+    </section>
+</article>
+
+
+
+
+<div class="weui-flex">
+    <div>
+        <a href="javascript:;" class="weui-btn weui-btn_plain-primary">加入购物车</a>
+    </div>
+    <div class="weui-flex__item">
+        <a href="javascript:;" class="weui-btn weui-btn_warn">立即购买</a>
+    </div>
+</div>
+

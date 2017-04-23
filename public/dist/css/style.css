@@ -1,0 +1,33 @@
+html,
+body {
+	height: 100%;
+	background: #fbf9fe;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.cart {
+	background: url(../img/spritesheet.png) no-repeat;
+	background-position: -0px -0px;
+	background-position: -0px -0px;
+	width: 24px;
+	height: 24px;
+}
+
+.discover {
+	background: url(../img/spritesheet.png) no-repeat;
+	background-position: -0px -0px;
+	background-position: -24px -0px;
+	width: 24px;
+	height: 24px;
+}
+
+.account {
+	background: url(../img/spritesheet.png) no-repeat;
+	background-position: -0px -0px;
+	background-position: -0px -24px;
+	width: 24px;
+	height: 24px;
+}

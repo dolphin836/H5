@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+        <title><?php echo $this->e($title); ?></title>
+        <link href="<?php echo $server . '/dist/css/weui.css'; ?>" rel="stylesheet">
+        <link href="<?php echo $server . '/dist/css/style.css'; ?>" rel="stylesheet">
+    </head>
+    <body>
+        <div class="weui-tab">
+            <div class="weui-tab__panel">
+                <?php echo $this->section('content'); ?>
+            </div>
+            <div class="weui-tabbar">
+                <a href="<?php echo $server . 'index.html'; ?>" class="weui-tabbar__item weui-bar__item_on">
+                    <img src="<?php echo $server . 'dist/img/discover.png'; ?>" alt="" class="weui-tabbar__icon">
+                    <p class="weui-tabbar__label">所有项目</p>
+                </a>
+                <a href="<?php echo $server . 'cart.html'; ?>" class="weui-tabbar__item">
+                    <img src="<?php echo $server . 'dist/img/cart.png'; ?>" alt="" class="weui-tabbar__icon">
+                    <p class="weui-tabbar__label">购物车</p>
+                </a>
+                <a href="<?php echo $server . 'account.html'; ?>" class="weui-tabbar__item">
+                    <img src="<?php echo $server . 'dist/img/account.png'; ?>" alt="" class="weui-tabbar__icon">
+                    <p class="weui-tabbar__label">我的订单</p>
+                </a>
+            </div>
+        </div>
+    </body>
+</html>
