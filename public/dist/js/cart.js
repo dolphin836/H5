@@ -51,7 +51,8 @@ $(function() {
             url      : '/addOrder',
             data     : { name: '11' },
             dataType : 'json',
-            timeout  : 300,
+            timeout  : 2000,
+            context  : $('body'),
             success  : function(data){
                 console.log(response);
                 console.log(typeof response);
