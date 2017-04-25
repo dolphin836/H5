@@ -46,36 +46,52 @@ $(function() {
     });
 
     $('#weixinPay').on('click', function() {// 发起微信支付
-        $.post('/addOrder', function(response) {
-            console.log(response);
-            console.log(typeof response);
-            var json = $.parseJSON(response);
-            console.log(typeof json);
-            console.log(json.code);
+        $.ajax({
+            type     : 'POST',
+            url      : '/addOrder',
+            data     : { name: '11' },
+            dataType : 'json',
+            timeout  : 300,
+            success  : function(data){
+                console.log(response);
+                console.log(typeof response);
+            },
+            error: function(xhr, type){
+                alert('Ajax error!')
+            }
+        })
 
-            // if (response.code != 0) {
-            //     alert(response.msg);
-            //     return;
-            // }
 
-            // var data = response.data;
+        // $.post('/addOrder', function(response) {
+        //     console.log(response);
+        //     console.log(typeof response);
+        //     var json = $.parseJSON(response);
+        //     console.log(typeof json);
+        //     console.log(json.code);
 
-            // WeixinJSBridge.invoke(
-            //     'getBrandWCPayRequest', {
-            //         "appId"     : data.appId,
-            //         "timeStamp" : data.timeStamp + "",  
-            //         "nonceStr"  : data.nonceStr,
-            //         "package"   : data.package, 
-            //         "signType"  : data.signType,
-            //         "paySign"   : data.paySign
-            //     },
-            //     function(res) {     
-            //         if (res.err_msg == "get_brand_wcpay_request:ok" ) {
-            //             //TO DO
-            //         }
-            //     }
-            // );
-        });
+        //     // if (response.code != 0) {
+        //     //     alert(response.msg);
+        //     //     return;
+        //     // }
+
+        //     // var data = response.data;
+
+        //     // WeixinJSBridge.invoke(
+        //     //     'getBrandWCPayRequest', {
+        //     //         "appId"     : data.appId,
+        //     //         "timeStamp" : data.timeStamp + "",  
+        //     //         "nonceStr"  : data.nonceStr,
+        //     //         "package"   : data.package, 
+        //     //         "signType"  : data.signType,
+        //     //         "paySign"   : data.paySign
+        //     //     },
+        //     //     function(res) {     
+        //     //         if (res.err_msg == "get_brand_wcpay_request:ok" ) {
+        //     //             //TO DO
+        //     //         }
+        //     //     }
+        //     // );
+        // });
     });
 
 });
