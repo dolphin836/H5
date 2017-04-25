@@ -57,12 +57,6 @@ $app->add(function ($request, $response, $next) {
 
         return $newResponse;
     }
-
-    $serverParams = $request->getServerParams(); // 获取客户端 IP adress
-
-    if (isset($serverParams['REMOTE_ADDR'])) {
-        $ipAddress = $serverParams['REMOTE_ADDR'];
-    }
     
     $response = $next($request, $response);
 
