@@ -43,12 +43,14 @@ $app->add(function ($request, $response, $next) {
         }
     }
     
-    // $headers   = $request->getHeader('HTTP_USER_AGENT'); // 根据 User Agent 识别微信内置浏览器，做身份验证
-    // $userAgent = $headers[0];
+    $headers   = $request->getHeader('HTTP_USER_AGENT'); // 根据 User Agent 识别微信内置浏览器，做身份验证
+    $userAgent = $headers[0];
 
-    // if ( strpos($userAgent, 'MicroMessenger') !== false ) {
+    $this->logger->addInfo($userAgent);
 
-    // }
+    if ( strpos($userAgent, 'MicroMessenger') !== false ) {
+        $this->logger->addInfo('is weixin');
+    }
     
     $serverParams = $request->getServerParams(); // 获取客户端 IP adress
 
