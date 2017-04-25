@@ -47,11 +47,7 @@ $(function() {
 
     $('#weixinPay').on('click', function() {// 发起微信支付
         $.post('/addOrder', function(response) {
-            console.log(response);
-            console.log(typeof response);
             var response = $.parseJSON(response);
-            console.log(typeof response);
-            console.log(response.code);
 
             if (response.code != 0) {
                 alert(response.msg);

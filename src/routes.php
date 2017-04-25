@@ -50,50 +50,98 @@ $app->post('/addOrder', function($request, $response, $args) {
         }
         
         return $encrypt_key;
-    } 
+    }
 
     $json       = array();
+
+    if ( ! isset($_SESSION['cart']) ) {
+        $json['code']        = 2;
+        $json['msg']         = 'The Cart Is Empty.';
+        echo json_encode($json);
+        exit;     
+    }
+
+    $cart     = $_SESSION['cart'];
+    $total    = 0;
+    foreach($cart as $c) {
+        $results        = $this->app->db->select('product', ['name', 'image', 'price'], ['id[=]' => $c['id']]);
+        $price          = 0;
+        if ( ! empty($c['option']) ) {
+            foreach ($c['option'] as $v_id) {
+                $o_val = $this->app->db->select('product_option_value', ['description', 'add_price'], ['id[=]' => $v_id]);
+                $price = $price + (int)$o_val[0]['add_price'];
+            }
+        }
+        foreach ($results as $result) {
+            $price     += (int)$result['price'];
+            $total     += $price;
+        }
+    }
+
+    $discount  = $total * 0.1;
+    $pay       = $total - $discount;
+    $pay_fen   = $pay * 100;
+
+    $code      = randstr(32); //生成订单号
+
+    $order_id = $this->db->insert("order", [
+                "code" => $code,
+                "uuid" => $_SESSION['uuid'],
+               "total" => $pay, //实际支付金额
+           "sub_total" => $total, //订单小计
+           "red_total" => $discount, //优惠的金额
+        "payment_code" => "weixin_js",
+         "create_time" => time(),
+        "modifie_time" => time(),
+          "payed_time" => time()
+    ]);
 
     $server     = "https://api.mch.weixin.qq.com/pay/unifiedorder";
     $randstr    = randstr(32);
     $this->logger->addInfo($randstr);
-    $orderNo    = md5(time());
-    $this->logger->addInfo($orderNo);
-    $ip_address = '192.168.1.1';
+
+    $ip_address = '';
+    $serverParams = $request->getServerParams(); // 获取客户端 IP adress
+
+    if (isset($serverParams['REMOTE_ADDR'])) {
+        $ip_address = $serverParams['REMOTE_ADDR'];
+    }
+
     $openid     = $_SESSION['uuid'];
     $this->logger->addInfo($openid);
+    $body       = '金宁户外运动';
 
-    $request = array(
+    $order = array(
         'appid' => $this->get('settings')['weixin']['appID'],
         'mch_id' => $this->get('settings')['weixin']['mch_id'],
         'device_info' => 'WEB',
         'nonce_str' => $randstr,
-        'body' => '支付测试',
-        'out_trade_no' => $orderNo,
-        'total_fee' => 1,
+        'body' => $body,
+        'out_trade_no' => $order_id,
+        'total_fee' => $pay_fen,
         'spbill_create_ip' => $ip_address,
         'notify_url' => $this->get('settings')['weixin']['buck_url'],
         'trade_type' => 'JSAPI',
         'openid' => $openid
     );
 
-    $sign = sign($request, $this->get('settings')['weixin']['api_key']);
+    $sign = sign($order, $this->get('settings')['weixin']['api_key']);
     $this->logger->addInfo($sign);
 
     $xml = "<xml>
-<appid>{$this->get('settings')['weixin']['appID']}</appid>
-<mch_id>{$this->get('settings')['weixin']['mch_id']}</mch_id>
-<device_info>WEB</device_info>
-<nonce_str>{$randstr}</nonce_str>
-<body>支付测试</body>
-<out_trade_no>{$orderNo}</out_trade_no>
-<total_fee>1</total_fee>
-<spbill_create_ip>{$ip_address}</spbill_create_ip>
-<notify_url>{$this->get('settings')['weixin']['buck_url']}</notify_url>
-<trade_type>JSAPI</trade_type>
-<openid>{$openid}</openid>
-<sign>{$sign}</sign>
-</xml>";
+    <appid>{$this->get('settings')['weixin']['appID']}</appid>
+    <mch_id>{$this->get('settings')['weixin']['mch_id']}</mch_id>
+    <device_info>WEB</device_info>
+    <nonce_str>{$randstr}</nonce_str>
+    <body>{$body}</body>
+    <out_trade_no>{$order_id}</out_trade_no>
+    <total_fee>{$pay_fen}</total_fee>
+    <spbill_create_ip>{$ip_address}</spbill_create_ip>
+    <notify_url>{$this->get('settings')['weixin']['buck_url']}</notify_url>
+    <trade_type>JSAPI</trade_type>
+    <openid>{$openid}</openid>
+    <sign>{$sign}</sign>
+    </xml>";
 
     Requests::register_autoloader();
 
@@ -103,8 +151,7 @@ $app->post('/addOrder', function($request, $response, $args) {
     if ($req->status_code != 200) {
         $json['code']        = 1;
         $json['msg']         = 'Requests Fail.';
-        $response = $response->withJson($json);
-        echo $response;
+        echo json_encode($json);
         exit;
     }
 
@@ -135,9 +182,8 @@ $app->post('/addOrder', function($request, $response, $args) {
     $json['code']    = 0;
     $json['msg']     = 'Requests Success.';
     $json['data']    = $data;
+
     echo json_encode($json);
-    // $response = $response->withJson($json);
-    // echo $response;
 });
 
 $app->post('/addCart', function($request, $response, $args) {
