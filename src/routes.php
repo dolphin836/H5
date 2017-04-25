@@ -29,7 +29,8 @@ foreach ($routes as $route) {
 }
 
 $app->post('/addOrder', function($request, $response, $args) {
-
+    // file_get_contents('php://input')
+    
     // $server     = "https://api.mch.weixin.qq.com/pay/unifiedorder";
     // $randstr    = 'sdfew8j2f0g938fk5de825ddfgr2sxz6';
     // $orderNo    = md5(time());
