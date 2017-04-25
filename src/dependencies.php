@@ -26,7 +26,7 @@ $container['db'] = function($c) {
         'database_name' => 'tan',
         'server' => 'localhost',
         'username' => 'root',
-        'password' => '',
+        'password' => '18133193e0',
         'charset' => 'utf8',
     ]);
 };
