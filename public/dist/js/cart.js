@@ -49,7 +49,7 @@ $(function() {
         $.post('/addOrder', function(response) {
             console.log(response);
             console.log(typeof response);
-            var json = response.parseJSON();
+            var json = $.parseJSON(response);
             console.log(typeof json);
             console.log(json.code);
 
