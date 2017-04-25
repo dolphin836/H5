@@ -56,10 +56,12 @@ $app->post('/addOrder', function($request, $response, $args) {
 
     $server     = "https://api.mch.weixin.qq.com/pay/unifiedorder";
     $randstr    = randstr(32);
+    $this->logger->addInfo($randstr);
     $orderNo    = md5(time());
+    $this->logger->addInfo($orderNo);
     $ip_address = '192.168.1.1';
-    // $openid     = $_SESSION['uuid'];
-    $openid     = '111';
+    $openid     = $_SESSION['uuid'];
+    $this->logger->addInfo($openid);
 
     $request = array(
         'appid' => $this->get('settings')['weixin']['appID'],
@@ -76,6 +78,7 @@ $app->post('/addOrder', function($request, $response, $args) {
     );
 
     $sign = sign($request, $this->get('settings')['weixin']['api_key']);
+    $this->logger->addInfo($sign);
 
     $xml = "<xml>
 <appid>{$this->get('settings')['weixin']['appID']}</appid>
@@ -95,6 +98,7 @@ $app->post('/addOrder', function($request, $response, $args) {
     Requests::register_autoloader();
 
     $req = Requests::post($server, array(), $xml);
+    $this->logger->addInfo($req->status_code);
 
     if ($req->status_code != 200) {
         $json['code']        = 1;
