@@ -50,8 +50,18 @@ $app->add(function ($request, $response, $next) {
 
     if ( strpos($userAgent, 'MicroMessenger') !== false && ! isset($_SESSION['uuid']) ) {
         $this->logger->addInfo('is weixin');
+        $host = $request->getUri()->getHost();
+        $path = $request->getUri()->getPath();
+        $back = urlencode($host . '/' . $path);
+        $this->logger->addInfo($back);
+        $url  = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" . $this->get('settings')['weixin']['appID'] . "&redirect_uri=" . $back . "&response_type=code&scope=snsapi_userinfo#wechat_redirect";
+        $this->logger->addInfo($url);
+        // header('Location: ' . $url);
+        $newResponse = $response->withHeader('Location', $url);
+
+        return $newResponse;
     }
-    
+
     $serverParams = $request->getServerParams(); // 获取客户端 IP adress
 
     if (isset($serverParams['REMOTE_ADDR'])) {
