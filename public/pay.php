@@ -61,6 +61,8 @@ var_dump($xml);
 
 $request = Requests::post($server, array(), $xml);
 
+var_dump($request);
+
 if ($request->status_code != 200) {
     $json['code'] = 2;
     $json['msg']  = '请求预支付订单失败';
