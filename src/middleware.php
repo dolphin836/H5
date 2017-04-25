@@ -10,16 +10,16 @@ $app->add(function ($request, $response, $next) {
         foreach ($query as $q) {
             $str    = explode('=', $q);
             $this->logger->addInfo('str:', $str);
-            $this->logger->addInfo('str[0]:', $str[0]);
-            $this->logger->addInfo('uuid:', isset($_SESSION['uuid']));
+            $this->logger->addInfo('key:'  . $str[0]);
+            $this->logger->addInfo('code:' . $str[1]);
             if ($str[0]  == 'code' && ! isset($_SESSION['uuid']) ) { // 检测到 code 参数并且未登录 
                 $weixin     = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" . $this->get('settings')['weixin']['appID'] . "&secret=" . $this->get('settings')['weixin']['appSecret'] . "&code=" . $str[1] . "&grant_type=authorization_code"; 
                 $data       = file_get_contents($weixin);
                 $data       = json_decode($data);
                 $access_token = $data->access_token;
-                $this->logger->addInfo('access_token:', $access_token);
+                $this->logger->addInfo('access_token:' . $access_token);
                 $open_id    = $data->openid;
-                $this->logger->addInfo('open_id:', $open_id);
+                $this->logger->addInfo('open_id:' . $open_id);
                 $user       = $this->db->select('user', ['uuid'], ['openid[=]' => $open_id]);
                 $this->logger->addInfo('user:', $user);
                 if ( empty($user) ) { // 注册新用户
@@ -46,10 +46,10 @@ $app->add(function ($request, $response, $next) {
                            "login_time" => time()
                     ]);
 
-                    $this->logger->addInfo('user_id:', $user_id);
+                    $this->logger->addInfo('user_id:' . $user_id);
                 }
 
-                $_SESSION['uuid'] = $data->openid;
+                $_SESSION['uuid'] = $open_id;
             }
         }
     }
@@ -67,7 +67,6 @@ $app->add(function ($request, $response, $next) {
         $this->logger->addInfo($back);
         $url  = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" . $this->get('settings')['weixin']['appID'] . "&redirect_uri=" . $back . "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
         $this->logger->addInfo($url);
-        // header('Location: ' . $url);
         $newResponse = $response->withHeader('Location', $url);
 
         return $newResponse;
