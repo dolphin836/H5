@@ -135,8 +135,9 @@ $app->post('/addOrder', function($request, $response, $args) {
     $json['code']    = 0;
     $json['msg']     = 'Requests Success.';
     $json['data']    = $data;
-    $response = $response->withJson($json);
-    echo $response;
+    echo json_encode($json);
+    // $response = $response->withJson($json);
+    // echo $response;
 });
 
 $app->post('/addCart', function($request, $response, $args) {
