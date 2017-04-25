@@ -27,9 +27,9 @@ $app->add(function ($request, $response, $next) {
                     $userinfo   = file_get_contents($weixin2);
                     $userinfo   = json_decode($userinfo);
                     $nickname   = $userinfo->nickname;
-                    $this->logger->addInfo('nickname:', $nickname);
+                    $this->logger->addInfo('nickname:' . $nickname);
                     $headimgurl = $userinfo->headimgurl;
-                    $this->logger->addInfo('headimgurl:', $headimgurl);
+                    $this->logger->addInfo('headimgurl:' . $headimgurl);
 
                     $password    = "12345678";
                     $en_password = password_hash($password, PASSWORD_DEFAULT);
