@@ -48,29 +48,31 @@ $(function() {
     $('#weixinPay').on('click', function() {// 发起微信支付
         $.post('/addOrder', function(response) {
             console.log(response);
+            console.log(response.code);
+            console.log(response.data);
 
-            // if (response.code != 0) {
-            //     alert(response.msg);
-            //     return;
-            // }
+            if (response.code != 0) {
+                alert(response.msg);
+                return;
+            }
 
-            // var data = response.data;
+            var data = response.data;
 
-            // WeixinJSBridge.invoke(
-            //     'getBrandWCPayRequest', {
-            //         "appId"     : data.appId,
-            //         "timeStamp" : data.timeStamp + "",  
-            //         "nonceStr"  : data.nonceStr,
-            //         "package"   : data.package, 
-            //         "signType"  : data.signType,
-            //         "paySign"   : data.paySign
-            //     },
-            //     function(res) {     
-            //         if (res.err_msg == "get_brand_wcpay_request:ok" ) {
-            //             //TO DO
-            //         }
-            //     }
-            // );
+            WeixinJSBridge.invoke(
+                'getBrandWCPayRequest', {
+                    "appId"     : data.appId,
+                    "timeStamp" : data.timeStamp + "",  
+                    "nonceStr"  : data.nonceStr,
+                    "package"   : data.package, 
+                    "signType"  : data.signType,
+                    "paySign"   : data.paySign
+                },
+                function(res) {     
+                    if (res.err_msg == "get_brand_wcpay_request:ok" ) {
+                        //TO DO
+                    }
+                }
+            );
         });
     });
 
