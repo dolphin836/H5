@@ -1,1 +1,10 @@
 <?php $this->layout('template', ['title' => '个人中心', 'server' => $server]); ?>
+
+<div class="weui-flex">
+    <div>
+        <a href="<?php echo $server . 'account/logout.html'; ?>" class="weui-btn weui-btn_plain-primary">退出</a>
+    </div>
+    <div class="weui-flex__item">
+        <a href="<?php echo $server . 'account/login.html'; ?>" class="weui-btn weui-btn_warn">登录</a>
+    </div>
+</div>

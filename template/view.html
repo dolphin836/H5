@@ -1,9 +1,46 @@
-<?php $this->layout('template', ['title' => $product['name'], 'server' => $server]); ?>
+<?php $this->layout('template', ['title' => $product['name'], 'server' => $server, 'cartCount' => $cartCount, 'scripts' => $scripts]); ?>
 
 <article class="weui-article">
-    <img src="<?php echo $product['cover']; ?>" alt="<?php echo $product['name']; ?>">
-    <h1><?php echo $product['name']; ?></h1>
-    <h2>价格：<?php echo $product['price']; ?></h2>
+    <form id="product">
+        <input type="hidden" name="id" value="<?php echo $product['id']; ?>">
+        <img src="<?php echo $product['cover']; ?>" alt="<?php echo $product['name']; ?>">
+        <h1><?php echo $product['name']; ?></h1>
+        <h2>价格：<?php echo $product['price']; ?></h2>
+
+
+        <?php foreach($product['options'] as $option): ?>
+        <div class="weui-cells__title"><?php echo $option['name'] ?></div>
+        <div class="weui-cells weui-cells_radio">
+            <?php foreach($option['value'] as $value): ?>
+            <label class="weui-cell weui-check__label">
+                <div class="weui-cell__bd">
+                    <p><?php echo $value['description'] ?></p>
+                </div>
+                <div class="weui-cell__ft">
+                    <input type="radio" class="weui-check" name="optionRadio<?php echo $option['id']; ?>" value="<?php echo $value['id']; ?>" <?php echo ($value['is_checked'] ? 'checked' : ''); ?>>
+                    <span class="weui-icon-checked"></span>
+                </div>
+            </label>
+            <?php endforeach; ?>
+        </div>
+        <?php endforeach; ?>
+        
+        <h3>数量</h3>
+
+        <div class="weui-slider-box">
+            <div class="weui-slider">
+                <div id="sliderInner" class="weui-slider__inner">
+                    <div id="sliderTrack" style="width: 1%;" class="weui-slider__track"></div>
+                    <div id="sliderHandler" style="left: 1%;" class="weui-slider__handler"></div>
+                </div>
+            </div>
+            <div id="sliderValue" class="weui-slider-box__value">1</div>
+            <input type="hidden" name="quantity" value="1">
+        </div>
+    </form>
+
+
+    
     <section>
         <h2 class="title"><?php echo $product['abstract']; ?></h2>
         <section>
@@ -14,13 +51,20 @@
 
 
 
-
 <div class="weui-flex">
     <div>
-        <a href="javascript:;" class="weui-btn weui-btn_plain-primary">加入购物车</a>
+        <buttona id="addCart" class="weui-btn weui-btn_plain-primary">加入购物车</button>
     </div>
     <div class="weui-flex__item">
-        <a href="javascript:;" class="weui-btn weui-btn_warn">立即购买</a>
+        <button id="checkout" class="weui-btn weui-btn_warn">立即购买</button>
+    </div>
+</div>
+
+<div id="add-cart-success" style="display: none;">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+        <p class="weui-toast__content">成功</p>
     </div>
 </div>
 

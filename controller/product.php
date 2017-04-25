@@ -28,23 +28,52 @@ class Product extends Controller
             );
         }
 
-        echo $this->app->template->render('product', ['server' => $this->server, 'products' => $products]);
+        $cartCount = 0;
+        if ( isset($_SESSION['cartCount']) ) {
+            $cartCount = $_SESSION['cartCount'];
+        }
+
+        echo $this->app->template->render('product', ['server' => $this->server, 'cartCount' => $cartCount, 'products' => $products]);
     }
 
     public function view()
     {
-        $Parsedown = new Parsedown();
-        $results   = $this->app->db->select('product', ['id', 'name', 'image', 'price', 'abstract', 'context'], ['id[=]' => $this->args['id']]);
+        $results        = $this->app->db->select('product', ['id', 'name', 'image', 'price', 'abstract', 'context'], ['id[=]' => $this->args['id']]);
         foreach ($results as $result) {
+            $Parsedown  = new Parsedown();
+            $product_option = array();
+
+            $options    = $this->app->db->select('product_option', ['id', 'name'], ['product_id[=]' => $this->args['id']]);
+   
+            foreach ($options as $option) {
+                $value  = $this->app->db->select('product_option_value', ['id', 'description', 'add_price', 'is_checked'], ['option_id[=]' => $option['id'], 'ORDER' => ['sort' => 'ASC']]);
+            
+                $product_option[] = array(
+                       'id' => $option['id'],
+                     'name' => $option['name'],
+                    'value' => $value
+                );
+            }   
+         
             $product  = array(
+                   'id' => $result['id'],
                 'cover' => $this->image_server . $result['image'],
                  'name' => $result['name'],
              'abstract' => $result['abstract'],
                 'price' => $result['price'],
-              'context' => $Parsedown->text($result['context'])
+              'context' => $Parsedown->text($result['context']),
+              'options' => $product_option
             );
         }
 
-        echo $this->app->template->render('view', ['server' => $this->server, 'product' => $product]);
+        $scripts[] = $this->server . 'dist/js/' . 'zepto.min.js';
+        $scripts[] = $this->server . 'dist/js/' . 'view.js';
+
+        $cartCount = 0;
+        if ( isset($_SESSION['cartCount']) ) {
+            $cartCount = $_SESSION['cartCount'];
+        }
+
+        echo $this->app->template->render('view', ['server' => $this->server, 'scripts' => $scripts, 'cartCount' => $cartCount, 'product' => $product]);
     }
 }

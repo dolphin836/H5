@@ -4,8 +4,56 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "dbfc8704af3f4b0ce9b14479d5f518bf",
+    "content-hash": "1e0f46d80c03630191cfaf4a4e4c4cf7",
     "packages": [
+        {
+            "name": "akrabat/rka-ip-address-middleware",
+            "version": "0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/akrabat/rka-ip-address-middleware.git",
+                "reference": "832687b13bae4d7fe889fab1414aef6fafeecf80"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/akrabat/rka-ip-address-middleware/832687b13bae4d7fe889fab1414aef6fafeecf80.zip",
+                "reference": "832687b13bae4d7fe889fab1414aef6fafeecf80",
+                "shasum": ""
+            },
+            "require": {
+                "psr/http-message": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8",
+                "squizlabs/php_codesniffer": "^2.3",
+                "zendframework/zend-diactoros": "^1.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "RKA\\Middleware\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Rob Allen",
+                    "email": "rob@akrabat.com",
+                    "homepage": "http://akrabat.com"
+                }
+            ],
+            "description": "PSR-7 Middleware that determines the client IP address and stores it as an ServerRequest attribute",
+            "homepage": "http://github.com/akrabat/rka-ip-address-middleware",
+            "keywords": [
+                "IP",
+                "middleware",
+                "psr7"
+            ],
+            "time": "2016-11-13T12:23:41+00:00"
+        },
         {
             "name": "catfan/medoo",
             "version": "v1.2.1",
@@ -501,6 +549,47 @@
                 "psr-3"
             ],
             "time": "2016-10-10T12:19:37+00:00"
+        },
+        {
+            "name": "rcastera/session",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rcastera/Session-Class.git",
+                "reference": "03716309602cc84683adb20b7e48ab4b4098af08"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/rcastera/Session-Class/03716309602cc84683adb20b7e48ab4b4098af08.zip",
+                "reference": "03716309602cc84683adb20b7e48ab4b4098af08",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "rcastera\\Browser\\Session": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Richard Castera",
+                    "email": "richard.castera@gmail.com"
+                }
+            ],
+            "description": "Session Class",
+            "homepage": "http://www.richardcastera.com",
+            "keywords": [
+                "php",
+                "session"
+            ],
+            "time": "2013-09-28T21:19:58+00:00"
         },
         {
             "name": "slim/php-view",
