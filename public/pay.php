@@ -2,7 +2,30 @@
 
 var_dump("Pay");
 
-require __DIR__ . '/../vendor/autoload.php';
+// require __DIR__ . '/../vendor/autoload.php';
+
+function https_post($url, $data = null)
+{
+    $curl = curl_init();
+
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+
+    if( ! empty($data) ) 
+    {
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+    }
+
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
+    $output = curl_exec($curl);
+
+    curl_close($curl);
+    
+    return $output;
+}
 
 $server     = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 $randstr    = 'sdfew8j2f0g938fk5de825ddfgr2sxz6';
@@ -53,11 +76,8 @@ $xml = "<xml>
 <sign>{$sign}</sign>
 </xml>";
 
-$client = new \GuzzleHttp\Client();
-$res    = $client->request('POST', $server, ['body' => $xml]);
-echo $res->getStatusCode();
-// 200
-echo $res->getHeaderLine('content-type');
-// 'application/json; charset=utf8'
-echo $res->getBody();
-// '{"id": 1420053, "name": "guzzle", ...}'
+var_dump($xml);
+
+$res    = https_post($server, $xml);
+
+var_dump($res);
