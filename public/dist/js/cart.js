@@ -49,7 +49,9 @@ $(function() {
         $.post('/addOrder', function(response) {
             console.log(response);
             console.log(typeof response);
-            // console.log(response.code);
+            var json = JSON.parse(response);
+            console.log(typeof json);
+            console.log(json.code);
 
             // if (response.code != 0) {
             //     alert(response.msg);
