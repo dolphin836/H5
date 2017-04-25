@@ -30,3 +30,9 @@ $container['db'] = function($c) {
         'charset' => 'utf8',
     ]);
 };
+
+// session
+// $container['session'] = function($c) {
+//     return new rcastera\Browser\Session\Session();
+// };
+

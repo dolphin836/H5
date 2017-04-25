@@ -8,6 +8,30 @@ body {
 	text-align: center;
 }
 
+.weui-btn_tag {
+	line-height: 2;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
+.red {
+	color: #F43530;
+}
+
+.cart-count {
+	position: absolute;
+	top: 2px;
+	left: 55%;
+}
+
+.f16 {
+	font-size: 16px;
+}
+
+.f14 {
+	font-size: 14px;
+}
+
 .cart {
 	background: url(../img/spritesheet.png) no-repeat;
 	background-position: -0px -0px;

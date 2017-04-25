@@ -8,7 +8,11 @@ return [
         'template' => [
             'template_path' => __DIR__ . '/../template/',
         ],
-
+        // weixin
+        'weixin' => [
+            'appID' => 'wx3f57772b43b05ba5',
+            'appSecret' => '98926008d074d0ead28018fa8c686d32'
+        ],
         // Monolog settings
         'logger' => [
             'name' => 'slim-app',

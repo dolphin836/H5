@@ -4,8 +4,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
         <title><?php echo $this->e($title); ?></title>
-        <link href="<?php echo $server . '/dist/css/weui.css'; ?>" rel="stylesheet">
-        <link href="<?php echo $server . '/dist/css/style.css'; ?>" rel="stylesheet">
+        <link href="//res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css" rel="stylesheet">
+        <link href="<?php echo $server . 'dist/css/style.css'; ?>" rel="stylesheet">
     </head>
     <body>
         <div class="weui-tab">
@@ -17,8 +17,9 @@
                     <img src="<?php echo $server . 'dist/img/discover.png'; ?>" alt="" class="weui-tabbar__icon">
                     <p class="weui-tabbar__label">所有项目</p>
                 </a>
-                <a href="<?php echo $server . 'cart.html'; ?>" class="weui-tabbar__item">
+                <a href="<?php echo $server . 'cart.html'; ?>" class="weui-tabbar__item" style="position:relative;">
                     <img src="<?php echo $server . 'dist/img/cart.png'; ?>" alt="" class="weui-tabbar__icon">
+                    <span class="weui-badge cart-count" id="cart-count" style="display:<?php echo ($cartCount ? 'block' : 'none'); ?>"><?php echo $cartCount; ?></span>
                     <p class="weui-tabbar__label">购物车</p>
                 </a>
                 <a href="<?php echo $server . 'account.html'; ?>" class="weui-tabbar__item">
@@ -27,5 +28,11 @@
                 </a>
             </div>
         </div>
+
+		<?php if(isset($scripts)): ?>
+			<?php foreach ($scripts as $script): ?>
+			<script src="<?php echo $script; ?>"></script>
+			<?php endforeach; ?>
+		<?php endif; ?>
     </body>
 </html>
