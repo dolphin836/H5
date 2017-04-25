@@ -30,53 +30,109 @@ foreach ($routes as $route) {
 
 $app->post('/addOrder', function($request, $response, $args) {
     // file_get_contents('php://input')
-    
-    // $server     = "https://api.mch.weixin.qq.com/pay/unifiedorder";
-    // $randstr    = 'sdfew8j2f0g938fk5de825ddfgr2sxz6';
-    // $orderNo    = md5(time());
-    // $ip_address = '192.168.1.1';
-    // $openid     = $_SESSION['uuid'];
 
-    // $request = array(
-    //     'appid' => 'wx3f57772b43b05ba5',
-    //     'mch_id' => '1460504502',
-    //     'device_info' => 'WEB',
-    //     'nonce_str' => $randstr,
-    //     'body' => '金宁文化旅游股份有限公司-支付测试',
-    //     'out_trade_no' => $orderNo,
-    //     'total_fee' => 1,
-    //     'spbill_create_ip' => $ip_address,
-    //     'notify_url' => 'http://mobie.hbdx.cc',
-    //     'trade_type' => 'JSAPI',
-    //     'openid' => $openid
-    // );
+    function sign($data = array())
+    {
+        $key = $this->get('settings')['weixin']['api_key'];
+        ksort($data);
+        $str = urldecode(http_build_query($data));
+        $strTemp = $str . "&key=" . $key;
+        return strtoupper(md5($strTemp));
+    }
 
-    // $key = "a5xKnFv8n0IacRZlper2fJqQXK62Kq82";
+    function randstr($length = 8)
+    {
+        $base = "QWERTYUIPASDFGHJKLZXCVBNM123456789";
+        $max = strlen($base) - 1;
+        $encrypt_key = '';
 
-    // ksort($request);
+        while (strlen($encrypt_key) < $length) {
+            $encrypt_key .= $base{mt_rand(0, $max)};
+        }
+        
+        return $encrypt_key;
+    } 
 
-    // $str = urldecode(http_build_query($request));
+    $json       = array();
 
-    // $strTemp = $str . "&key=" . $key;
+    $server     = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+    $randstr    = randstr(32);
+    $orderNo    = md5(time());
+    $ip_address = '192.168.1.1';
+    $openid     = $_SESSION['uuid'];
 
-    // $sign = strtoupper(md5($strTemp));
+    $request = array(
+        'appid' => $this->get('settings')['weixin']['appID'],
+        'mch_id' => $this->get('settings')['weixin']['mch_id'],
+        'device_info' => 'WEB',
+        'nonce_str' => $randstr,
+        'body' => '支付测试',
+        'out_trade_no' => $orderNo,
+        'total_fee' => 1,
+        'spbill_create_ip' => $ip_address,
+        'notify_url' => $this->get('settings')['weixin']['buck_url'],
+        'trade_type' => 'JSAPI',
+        'openid' => $openid
+    );
 
-    // $xml = "<xml>
-    // <appid>wxeb58e2715cd8a221</appid>
-    // <mch_id>1276370801</mch_id>
-    // <device_info>WEB</device_info>
-    // <nonce_str>{$randstr}</nonce_str>
-    // <body>南京商法通法律咨询服务有限公司-支付测试</body>
-    // <out_trade_no>{$orderNo}</out_trade_no>
-    // <total_fee>1</total_fee>
-    // <spbill_create_ip>{$ip_address}</spbill_create_ip>
-    // <notify_url>http://www.blb.com.cn/pay/callback.php</notify_url>
-    // <trade_type>JSAPI</trade_type>
-    // <openid>{$openid}</openid>
-    // <sign>{$sign}</sign>
-    // </xml>";
+    $sign = sign($request);
 
+    $xml = "<xml>
+<appid>{$this->get('settings')['weixin']['appID']}</appid>
+<mch_id>{$this->get('settings')['weixin']['mch_id']}</mch_id>
+<device_info>WEB</device_info>
+<nonce_str>{$randstr}</nonce_str>
+<body>支付测试</body>
+<out_trade_no>{$orderNo}</out_trade_no>
+<total_fee>1</total_fee>
+<spbill_create_ip>{$ip_address}</spbill_create_ip>
+<notify_url>{$this->get('settings')['weixin']['buck_url']}</notify_url>
+<trade_type>JSAPI</trade_type>
+<openid>{$openid}</openid>
+<sign>{$sign}</sign>
+</xml>";
 
+    Requests::register_autoloader();
+
+    $req = Requests::post($server, array(), $xml);
+
+    if ($req->status_code != 200) {
+        $json['code']        = 1;
+        $json['msg']         = 'Requests Fail.';
+        $response = $response->withJson($json);
+        echo $response;
+        exit;
+    }
+
+    $reader = new Sabre\Xml\Reader();
+    $reader->xml($req->body);
+    $result = $reader->parse();
+
+    $prepay = "prepay_id=";
+
+    foreach ($result['value'] as $key => $value) {
+        if ($value['name'] == '{}prepay_id') {
+            $prepay .= $value['value'];
+        }
+    }
+
+    $data = array(
+            'appId' => $this->get('settings')['weixin']['appID'],
+        'timeStamp' => time(),
+            'nonceStr' => randstr(32),
+            'package' => $prepay,
+            'signType' => 'MD5'
+    ); 
+
+    $sign2           = sign($data);
+
+    $data['paySign'] = $sign2;
+
+    $json['code']    = 0;
+    $json['msg']     = 'Requests Success.';
+    $json['data']    = $data;
+    $response = $response->withJson($json);
+    echo $response;
 });
 
 $app->post('/addCart', function($request, $response, $args) {

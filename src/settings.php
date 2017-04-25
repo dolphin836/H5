@@ -13,7 +13,8 @@ return [
             'appID' => 'wx3f57772b43b05ba5',
             'appSecret' => '98926008d074d0ead28018fa8c686d32',
             'mch_id' => '1460504502',
-            'api_key' => 'a5xKnFv8n0IacRZlper2fJqQXK62Kq82'
+            'api_key' => 'a5xKnFv8n0IacRZlper2fJqQXK62Kq82',
+            'buck_url' => 'http://mobie.hbdx.cc/'
         ],
         // Monolog settings
         'logger' => [
