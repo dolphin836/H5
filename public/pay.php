@@ -2,30 +2,11 @@
 
 var_dump("Pay");
 
-// require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
-function https_post($url, $data = null)
-{
-    $curl = curl_init();
+$json    = array();
 
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
-
-    if( ! empty($data) ) 
-    {
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-    }
-
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
-    $output = curl_exec($curl);
-
-    curl_close($curl);
-    
-    return $output;
-}
+Requests::register_autoloader();
 
 $server     = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 $randstr    = 'sdfew8j2f0g938fk5de825ddfgr2sxz6';
@@ -78,6 +59,46 @@ $xml = "<xml>
 
 var_dump($xml);
 
-$res    = https_post($server, $xml);
+$request = Requests::post($server, array(), $xml);
 
-var_dump($res);
+if ($request->status_code != 200) {
+    $json['code'] = 2;
+    $json['msg']  = '请求预支付订单失败';
+
+    echo json_encode($json);
+}
+
+$reader = new Sabre\Xml\Reader();
+$reader->xml($request->body);
+$result = $reader->parse();
+
+$prepay = "prepay_id=";
+
+foreach ($result['value'] as $key => $value) {
+    if ($value['name'] == '{}prepay_id') {
+        $prepay .= $value['value'];
+    }
+}
+
+$data = array(
+    'appId' => 'wx3f57772b43b05ba5',
+    'timeStamp' => time(),
+    'nonceStr' => $randstr,
+    'package' => $prepay,
+    'signType' => 'MD5');
+
+ksort($data);
+
+$str2 = urldecode(http_build_query($data));
+
+$strTemp = $str2 . "&key=" . $key;
+
+$sign2 = strtoupper(md5($strTemp));
+
+$data['paySign'] = $sign2;
+
+$json['code'] = 0;
+$json['msg']  = '请求预支付交易单成功';
+$json['data'] = $data;
+
+echo json_encode($json);
