@@ -62,13 +62,14 @@ $app->post('/addOrder', function($request, $response, $args) {
     }
 
     $cart     = $_SESSION['cart'];
+    // $this->logger->addInfo("Cart:", $cart);
     $total    = 0;
     foreach($cart as $c) {
-        $results        = $this->app->db->select('product', ['name', 'image', 'price'], ['id[=]' => $c['id']]);
+        $results        = $this->db->select('product', ['name', 'image', 'price'], ['id[=]' => $c['id']]);
         $price          = 0;
         if ( ! empty($c['option']) ) {
             foreach ($c['option'] as $v_id) {
-                $o_val = $this->app->db->select('product_option_value', ['description', 'add_price'], ['id[=]' => $v_id]);
+                $o_val = $this->db->select('product_option_value', ['description', 'add_price'], ['id[=]' => $v_id]);
                 $price = $price + (int)$o_val[0]['add_price'];
             }
         }
