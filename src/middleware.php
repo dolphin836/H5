@@ -48,7 +48,7 @@ $app->add(function ($request, $response, $next) {
 
     $this->logger->addInfo($userAgent);
 
-    if ( strpos($userAgent, 'MicroMessenger') !== false ) {
+    if ( strpos($userAgent, 'MicroMessenger') !== false && ! isset($_SESSION['uuid']) ) {
         $this->logger->addInfo('is weixin');
     }
     
