@@ -31,9 +31,8 @@ foreach ($routes as $route) {
 $app->post('/addOrder', function($request, $response, $args) {
     // file_get_contents('php://input')
 
-    function sign($data = array())
+    function sign($data = array(), $key)
     {
-        $key = $this->get('settings')['weixin']['api_key'];
         ksort($data);
         $str = urldecode(http_build_query($data));
         $strTemp = $str . "&key=" . $key;
@@ -59,7 +58,8 @@ $app->post('/addOrder', function($request, $response, $args) {
     $randstr    = randstr(32);
     $orderNo    = md5(time());
     $ip_address = '192.168.1.1';
-    $openid     = $_SESSION['uuid'];
+    // $openid     = $_SESSION['uuid'];
+    $openid     = '111';
 
     $request = array(
         'appid' => $this->get('settings')['weixin']['appID'],
@@ -75,7 +75,7 @@ $app->post('/addOrder', function($request, $response, $args) {
         'openid' => $openid
     );
 
-    $sign = sign($request);
+    $sign = sign($request, $this->get('settings')['weixin']['api_key']);
 
     $xml = "<xml>
 <appid>{$this->get('settings')['weixin']['appID']}</appid>
@@ -124,7 +124,7 @@ $app->post('/addOrder', function($request, $response, $args) {
             'signType' => 'MD5'
     ); 
 
-    $sign2           = sign($data);
+    $sign2           = sign($data, $this->get('settings')['weixin']['api_key']);
 
     $data['paySign'] = $sign2;
 
