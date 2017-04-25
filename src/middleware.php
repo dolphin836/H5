@@ -5,31 +5,24 @@ $app->add(function ($request, $response, $next) {
     
     if ($httpQuery != '') {
         $query      = explode('&', $httpQuery);
-        $this->logger->addInfo('query:', $query);
 
         foreach ($query as $q) {
             $str    = explode('=', $q);
-            $this->logger->addInfo('str:', $str);
-            $this->logger->addInfo('key:'  . $str[0]);
-            $this->logger->addInfo('code:' . $str[1]);
+
             if ($str[0]  == 'code' && ! isset($_SESSION['uuid']) ) { // 检测到 code 参数并且未登录 
                 $weixin     = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" . $this->get('settings')['weixin']['appID'] . "&secret=" . $this->get('settings')['weixin']['appSecret'] . "&code=" . $str[1] . "&grant_type=authorization_code"; 
                 $data       = file_get_contents($weixin);
                 $data       = json_decode($data);
                 $access_token = $data->access_token;
-                $this->logger->addInfo('access_token:' . $access_token);
                 $open_id    = $data->openid;
-                $this->logger->addInfo('open_id:' . $open_id);
                 $user       = $this->db->select('user', ['uuid'], ['openid[=]' => $open_id]);
-                $this->logger->addInfo('user:', $user);
+                
                 if ( empty($user) ) { // 注册新用户
                     $weixin2    = "https://api.weixin.qq.com/sns/userinfo?access_token=" . $access_token . "&openid=" . $open_id . "&lang=zh_CN";
                     $userinfo   = file_get_contents($weixin2);
                     $userinfo   = json_decode($userinfo);
                     $nickname   = $userinfo->nickname;
-                    $this->logger->addInfo('nickname:' . $nickname);
                     $headimgurl = $userinfo->headimgurl;
-                    $this->logger->addInfo('headimgurl:' . $headimgurl);
 
                     $password    = "12345678";
                     $en_password = password_hash($password, PASSWORD_DEFAULT);
@@ -45,8 +38,6 @@ $app->add(function ($request, $response, $next) {
                         "register_time" => time(),
                            "login_time" => time()
                     ]);
-
-                    $this->logger->addInfo('user_id:' . $user_id);
                 }
 
                 $_SESSION['uuid'] = $open_id;
@@ -57,16 +48,11 @@ $app->add(function ($request, $response, $next) {
     $headers   = $request->getHeader('HTTP_USER_AGENT'); // 根据 User Agent 识别微信内置浏览器，做身份验证
     $userAgent = $headers[0];
 
-    $this->logger->addInfo($userAgent);
-
     if ( strpos($userAgent, 'MicroMessenger') !== false && ! isset($_SESSION['uuid']) ) {
-        $this->logger->addInfo('is weixin');
         $host = $request->getUri()->getHost();
         $path = $request->getUri()->getPath();
         $back = urlencode('http://' . $host . $path);
-        $this->logger->addInfo($back);
         $url  = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" . $this->get('settings')['weixin']['appID'] . "&redirect_uri=" . $back . "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
-        $this->logger->addInfo($url);
         $newResponse = $response->withHeader('Location', $url);
 
         return $newResponse;
@@ -76,7 +62,6 @@ $app->add(function ($request, $response, $next) {
 
     if (isset($serverParams['REMOTE_ADDR'])) {
         $ipAddress = $serverParams['REMOTE_ADDR'];
-        $this->logger->addInfo("IP address is " . $ipAddress);
     }
     
     $response = $next($request, $response);

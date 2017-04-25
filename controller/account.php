@@ -29,7 +29,5 @@ class Account extends Controller
     public function logout()
     {
         unset($_SESSION['uuid']);
-
-        return $this->response->withHeader('Location', $this->server);
     }
 }
