@@ -61,7 +61,7 @@ class Cart extends Controller
         $discount  = number_format ($discount, 2);
         $pay       = number_format ($pay, 2);
 
-        echo $this->app->template->render('cart', ['server' => $this->server, 'cartCount' => $cartCount, 'scripts' => $scripts, 'products' => $products, 'total' => $total, 'discount' => $discount, 'pay' => $pay]);
+        echo $this->app->template->render('cart', ['server' => $this->server, 'item' => 'cart', 'cartCount' => $cartCount, 'scripts' => $scripts, 'products' => $products, 'total' => $total, 'discount' => $discount, 'pay' => $pay]);
     }
 
     public function clean()

@@ -32,26 +32,50 @@ body {
 	font-size: 14px;
 }
 
-.cart {
-	background: url(../img/spritesheet.png) no-repeat;
-	background-position: -0px -0px;
-	background-position: -0px -0px;
-	width: 24px;
-	height: 24px;
+.nav-item {
+	padding-top: 27px;
 }
 
-.discover {
-	background: url(../img/spritesheet.png) no-repeat;
-	background-position: -0px -0px;
-	background-position: -24px -0px;
-	width: 24px;
-	height: 24px;
+.nav-item-discover {
+	background: url(../img/discover.png) no-repeat;
+	background-position: 50% 3px;
 }
 
-.account {
-	background: url(../img/spritesheet.png) no-repeat;
-	background-position: -0px -0px;
-	background-position: -0px -24px;
-	width: 24px;
-	height: 24px;
+.weui-bar__item_on .nav-item-discover {
+	background: url(../img/discover_on.png) no-repeat;
+	background-position: 50% 3px;
+}
+
+.nav-item-cart {
+	background: url(../img/cart.png) no-repeat;
+	background-position: 50% 3px;
+}
+
+.weui-bar__item_on .nav-item-cart {
+	background: url(../img/cart_on.png) no-repeat;
+	background-position: 50% 3px;	
+}
+
+.nav-item-ticket {
+	background: url(../img/ticket.png) no-repeat;
+	background-position: 50% 3px;
+}
+
+.weui-bar__item_on .nav-item-ticket {
+	background: url(../img/ticket_on.png) no-repeat;
+	background-position: 50% 3px;
+}
+
+.nav-item-account {
+	background: url(../img/account.png) no-repeat;
+	background-position: 50% 3px;
+}
+
+.weui-bar__item_on .nav-item-account {
+	background: url(../img/account_on.png) no-repeat;
+	background-position: 50% 3px;
+}
+
+.user_image {
+	border-radius: 30px;
 }

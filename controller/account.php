@@ -16,9 +16,9 @@ class Account extends Controller
 
     public function index()
     {
-        var_dump($_SESSION['uuid']);
+        // var_dump($_SESSION['uuid']);
 
-        echo $this->app->template->render('account', ['server' => $this->server]);
+        echo $this->app->template->render('account', ['server' => $this->server, 'item' => 'account', 'cartCount' => $this->cartCount]);
     }
 
     public function login()

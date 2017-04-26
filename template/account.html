@@ -1,10 +1,72 @@
-<?php $this->layout('template', ['title' => '个人中心', 'server' => $server]); ?>
+<?php $this->layout('template', ['title' => '个人中心', 'server' => $server, 'item' => $item, 'cartCount' => $cartCount]); ?>
 
-<div class="weui-flex">
-    <div>
-        <a href="<?php echo $server . 'account/logout.html'; ?>" class="weui-btn weui-btn_plain-primary">退出</a>
+<div class="weui-panel weui-panel_access">
+    <div class="weui-panel__bd">
+        <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+            <div class="weui-media-box__hd">
+                <img class="weui-media-box__thumb user_image" src="<?php echo $server . 'dist/img/user.jpg' ?>" alt="">
+            </div>
+            <div class="weui-media-box__bd">
+                <h4 class="weui-media-box__title">海兵大侠</h4>
+                <!--<p class="weui-media-box__desc">15240248952</p>-->
+            </div>
+        </a>
     </div>
-    <div class="weui-flex__item">
-        <a href="<?php echo $server . 'account/login.html'; ?>" class="weui-btn weui-btn_warn">登录</a>
+</div>
+
+<div class="weui-panel">
+    <div class="weui-panel__bd">
+        <div class="weui-media-box weui-media-box_small-appmsg">
+            <div class="weui-cells">
+                <a class="weui-cell weui-cell_access" href="javascript:;">
+                    <div class="weui-cell__bd weui-cell_primary">
+                        <p>个人信息</p>
+                    </div>
+                    <span class="weui-cell__ft"></span>
+                </a>
+                <a class="weui-cell weui-cell_access" href="javascript:;">
+                    <div class="weui-cell__bd weui-cell_primary">
+                        <p>绑定手机</p>
+                    </div>
+                    <span class="weui-cell__ft"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="weui-panel">
+    <div class="weui-panel__bd">
+        <div class="weui-media-box weui-media-box_small-appmsg">
+            <div class="weui-cells">
+                <a class="weui-cell weui-cell_access" href="javascript:;">
+                    <div class="weui-cell__bd weui-cell_primary">
+                        <p>我的订单</p>
+                    </div>
+                    <span class="weui-cell__ft"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="weui-panel">
+    <div class="weui-panel__bd">
+        <div class="weui-media-box weui-media-box_small-appmsg">
+            <div class="weui-cells">
+                <a class="weui-cell weui-cell_access" href="javascript:;">
+                    <div class="weui-cell__bd weui-cell_primary">
+                        <p>意见反馈</p>
+                    </div>
+                    <span class="weui-cell__ft"></span>
+                </a>
+                <a class="weui-cell weui-cell_access" href="javascript:;">
+                    <div class="weui-cell__bd weui-cell_primary">
+                        <p>退出登录</p>
+                    </div>
+                    <span class="weui-cell__ft"></span>
+                </a>
+            </div>
+        </div>
     </div>
 </div>
