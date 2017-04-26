@@ -24,8 +24,8 @@ return [
         ],
         // default
         'default' => [
-            'server' => 'http://h5.dolphin.com/',
-            'image_server' => 'http://h5.dolphin.com/'
+            'server' => 'http://mobie.hbdx.cc/',
+            'image_server' => 'http://mobie.hbdx.cc/'
         ],
     ],
 ];
