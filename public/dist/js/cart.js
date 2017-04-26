@@ -1,7 +1,9 @@
 $(function() {
     var $cart_clean       = $('#cart-clean'),
         $cart_remove      = $('.cart-remove'),
-        $checkout         = $('#checkout');
+        $checkout         = $('#checkout'),
+        $pay_again        = $('#pay-again'),
+        $pay_back         = $('#pay-back');
 
     // 清空购物车
     $cart_clean
@@ -21,9 +23,9 @@ $(function() {
         })
     ;
     // 结算
-    $checkout
+    $pay_again
         .on('click', function (e) {
-        
+            location.reload();
         })
     ;
 
@@ -70,6 +72,7 @@ $(function() {
                 function(res) {     
                     if (res.err_msg == "get_brand_wcpay_request:ok" ) {
                         //TO DO
+                        $pay_back.fadeIn(200);
                     }
                 }
             );
