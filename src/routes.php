@@ -117,7 +117,7 @@ $app->post('/addOrder', function($request, $response, $args) {
         'device_info' => 'WEB',
         'nonce_str' => $randstr,
         'body' => $body,
-        'out_trade_no' => $order_id,
+        'out_trade_no' => $code,
         'total_fee' => $pay_fen,
         'spbill_create_ip' => $ip_address,
         'notify_url' => $this->get('settings')['weixin']['buck_url'],
@@ -134,7 +134,7 @@ $app->post('/addOrder', function($request, $response, $args) {
     <device_info>WEB</device_info>
     <nonce_str>{$randstr}</nonce_str>
     <body>{$body}</body>
-    <out_trade_no>{$order_id}</out_trade_no>
+    <out_trade_no>{$code}</out_trade_no>
     <total_fee>{$pay_fen}</total_fee>
     <spbill_create_ip>{$ip_address}</spbill_create_ip>
     <notify_url>{$this->get('settings')['weixin']['buck_url']}</notify_url>
