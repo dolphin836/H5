@@ -9,8 +9,10 @@ $routes = array(
     array('get',  'account.html'),
     array('get',  'cart/clean[/{id}]'),
     array('get',  'product/view/{id:[0-9]+}.html'),
+    array('any',  'order/callback'),
     array('post', 'cart/add'),
-    array('post', 'order/add')
+    array('post', 'order/add'),
+    
 );
 
 foreach ($routes as $route) {
@@ -36,8 +38,4 @@ foreach ($routes as $route) {
         $i->$m();
     });
 }
-
-$app->any('/order/callback', function ($request, $response, $args) {
-    $this->logger->addInfo("11111111111111");
-});
 
