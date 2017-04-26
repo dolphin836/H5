@@ -45,8 +45,12 @@ class Order extends Controller
             $info[$k] = $value['value'];
         }
 
+        $this->app->logger->addInfo("info:" . $info);
+
 		if ($info['return_code'] == 'SUCCESS') {
+            $this->app->logger->addInfo("return_code:" . $info['return_code']);
 			if ($info['result_code'] == 'SUCCESS') {
+                $this->app->logger->addInfo("result_code:" . $info['result_code']);
                 $openid         = $info['openid'];
                 $is_subscribe   = $info['is_subscribe']; //Y 已关注 N 未关注
                 $transaction_id = $info['transaction_id']; //微信支付订单号
@@ -55,7 +59,7 @@ class Order extends Controller
                 $sign           = $info['sign'];
 
                 $order = $this->app->db->select('order', ['id'], ['code[=]' => $order_code, 'uuid[=]' => $openid, 'total[=]' => (float)$total_fee]);
-
+                $this->app->logger->addInfo("order:" . $order);
                 if ( ! empty($order) ) {
                     $this->app->db->update("order", [
                         "payment_number" => $transaction_id,
