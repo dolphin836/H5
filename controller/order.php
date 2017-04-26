@@ -42,10 +42,11 @@ class Order extends Controller
             $this->app->logger->addInfo("11111key:" . $value['name']);
             $this->app->logger->addInfo("22222value:" . $value['value']);
             $k        = strstr($value['name'], '{}');
+            $this->app->logger->addInfo("info k:" . $k);
             $info[$k] = $value['value'];
         }
 
-        $this->app->logger->addInfo("info:" . $info);
+        $this->app->logger->addInfo("info:" , $info);
 
 		if ($info['return_code'] == 'SUCCESS') {
             $this->app->logger->addInfo("return_code:" . $info['return_code']);
