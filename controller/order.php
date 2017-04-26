@@ -31,61 +31,48 @@ class Order extends Controller
 
     public function callback()
     {
-        $this->app->logger->addInfo("333333333333333333");
-        $this->app->logger->addInfo("callback input:" . file_get_contents('php://input'));
-
         $data   = file_get_contents('php://input');
 
         $this->reader->xml($data);
         $result = $this->reader->parse();
 
-        // foreach ($result as $key => $value) {
-        //     $this->app->logger->addInfo("key:" . $key);
-        //     $this->app->logger->addInfo("value:" . $value);
-        //     $this->app->logger->addInfo("value:", $value);
-        // }
+        $info   = array();
 
         foreach ($result['value'] as $key => $value) {
-            // if ($value['name'] == '{}prepay_id') {
-            //     $prepay .= $value['value'];
-            // }
             $this->app->logger->addInfo("11111key:" . $value['name']);
             $this->app->logger->addInfo("22222value:" . $value['value']);
+            $k        = strstr($value['name'], '{}');
+            $info[$k] = $value['value'];
         }
 
-        // <xml>
-        // <appid><![CDATA[wx3f57772b43b05ba5]]></appid>
-        // <bank_type><![CDATA[ICBC_DEBIT]]></bank_type>
-        // <cash_fee><![CDATA[1]]></cash_fee>
-        // <device_info><![CDATA[WEB]]></device_info>
-        // <fee_type><![CDATA[CNY]]></fee_type>
-        // <is_subscribe><![CDATA[Y]]></is_subscribe>
-        // <mch_id><![CDATA[1460504502]]></mch_id>
-        // <nonce_str><![CDATA[usfP7pFm9MSWYWode3cpVkocYbZobolX]]></nonce_str>
-        // <openid><![CDATA[oNP02wK_vjLWB_iRRf6qbqmDXBiE]]></openid>
-        // <out_trade_no><![CDATA[14932008790942280030148944254020]]></out_trade_no>
-        // <result_code><![CDATA[SUCCESS]]></result_code>
-        // <return_code><![CDATA[SUCCESS]]></return_code>
-        // <sign><![CDATA[05EE9D960E5DBC54CFD81C55820D0FFC]]></sign>
-        // <time_end><![CDATA[20170426180124]]></time_end>
-        // <total_fee>1</total_fee>
-        // <trade_type><![CDATA[JSAPI]]></trade_type>
-        // <transaction_id><![CDATA[4006682001201704268437423788]]></transaction_id>
-        // </xml>
+		if ($info['return_code'] == 'SUCCESS') {
+			if ($info['result_code'] == 'SUCCESS') {
+                $openid         = $info['openid'];
+                $is_subscribe   = $info['is_subscribe']; //Y 已关注 N 未关注
+                $transaction_id = $info['transaction_id']; //微信支付订单号
+                $order_code     = $info['out_trade_no'];
+                $total_fee      = (int)$info['total_fee'] / 100;
+                $sign           = $info['sign'];
 
-		// if ( isset( $input_data['type'] ) ) {
-			
-        //     if( $input_data['type'] == 'charge.succeeded' )
-        //     {
-        //         if ($input_data['data']['object']['paid'] == 'true') {
-        //             $order_code = $input_data['data']['object']['order_no'];
-        //             $this->app->logger->addInfo("order_code:" . $order_code);
-        //         }
-        //     }
-        // }
+                $order = $this->app->db->select('order', ['id'], ['code[=]' => $order_code, 'uuid[=]' => $openid, 'total[=]' => (float)$total_fee]);
 
-        // $xml = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
-        // echo $xml;
+                if ( ! empty($order) ) {
+                    $this->app->db->update("order", [
+                        "payment_number" => $transaction_id,
+                        "status"         => 1,
+                        "payed_time"     => time()
+                    ], [
+                        "code[=]" => $order_code
+                    ]);   
+                }
+
+                unset($_SESSION['cart']);
+                unset($_SESSION['cartCount']);
+            }
+        }
+
+        $xml = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
+        echo $xml;
     }
 
 
