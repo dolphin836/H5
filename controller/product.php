@@ -33,7 +33,7 @@ class Product extends Controller
             $cartCount = $_SESSION['cartCount'];
         }
 
-        echo $this->app->template->render('product', ['server' => $this->server, 'cartCount' => $cartCount, 'products' => $products]);
+        echo $this->app->template->render('product', ['server' => $this->server, 'item' => 'discover', 'cartCount' => $cartCount, 'products' => $products]);
     }
 
     public function view()
@@ -74,6 +74,6 @@ class Product extends Controller
             $cartCount = $_SESSION['cartCount'];
         }
 
-        echo $this->app->template->render('view', ['server' => $this->server, 'scripts' => $scripts, 'cartCount' => $cartCount, 'product' => $product]);
+        echo $this->app->template->render('view', ['server' => $this->server, 'item' => 'discover', 'scripts' => $scripts, 'cartCount' => $cartCount, 'product' => $product]);
     }
 }

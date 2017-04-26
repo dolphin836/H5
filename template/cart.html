@@ -1,4 +1,4 @@
-<?php $this->layout('template', ['title' => '购物车', 'server' => $server, 'cartCount' => $cartCount, 'scripts' => $scripts]); ?>
+<?php $this->layout('template', ['title' => '购物车', 'server' => $server, 'item' => $item, 'cartCount' => $cartCount, 'scripts' => $scripts]); ?>
 
 <div class="weui-panel weui-panel_access">
     <div class="weui-panel__bd">
@@ -44,7 +44,7 @@
     </div>
 
     <div class="weui-form-preview__ft">
-        <a class="weui-form-preview__btn weui-form-preview__btn_default" href="../index.html">继续购物</a>
+        <a class="weui-form-preview__btn weui-form-preview__btn_default" href="../index.html">继续选购</a>
         <button class="weui-form-preview__btn weui-form-preview__btn_primary" id="checkout">提交订单</button>
     </div>
 

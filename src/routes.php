@@ -1,7 +1,7 @@
 <?php
 
 $routes = array(
-    '', 'index.html', 'cart.html', 'cart/add', 'cart/clean[/{id}]', 'account.html', 'checkout.html', 'product/view/{id:[0-9]+}.html', 'account/login.html', 'account/logout.html'
+    '', 'index.html', 'success.html', 'ticket.html', 'cart.html', 'cart/add', 'cart/clean[/{id}]', 'account.html', 'checkout.html', 'product/view/{id:[0-9]+}.html', 'account/login.html', 'account/logout.html'
 );
 
 foreach ($routes as $route) {

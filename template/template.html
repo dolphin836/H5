@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
         <title><?php echo $this->e($title); ?></title>
         <link href="//res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css" rel="stylesheet">
-        <link href="<?php echo $server . 'dist/css/style.css'; ?>" rel="stylesheet">
+        <link href="<?php echo $server . 'dist/css/style.css?2222222'; ?>" rel="stylesheet">
     </head>
     <body>
         <div class="weui-tab">
@@ -13,18 +13,18 @@
                 <?php echo $this->section('content'); ?>
             </div>
             <div class="weui-tabbar">
-                <a href="<?php echo $server . 'index.html'; ?>" class="weui-tabbar__item weui-bar__item_on">
-                    <img src="<?php echo $server . 'dist/img/discover.png'; ?>" alt="" class="weui-tabbar__icon">
-                    <p class="weui-tabbar__label">所有项目</p>
+                <a href="<?php echo $server . 'index.html'; ?>" class="weui-tabbar__item <?php echo ($item == 'discover' ? 'weui-bar__item_on' : ''); ?>">
+                    <p class="weui-tabbar__label nav-item-discover nav-item">所有项目</p>
                 </a>
-                <a href="<?php echo $server . 'cart.html'; ?>" class="weui-tabbar__item" style="position:relative;">
-                    <img src="<?php echo $server . 'dist/img/cart.png'; ?>" alt="" class="weui-tabbar__icon">
+                <a href="<?php echo $server . 'cart.html'; ?>" class="weui-tabbar__item <?php echo ($item == 'cart' ? 'weui-bar__item_on' : ''); ?>" style="position:relative;">
                     <span class="weui-badge cart-count" id="cart-count" style="display:<?php echo ($cartCount ? 'block' : 'none'); ?>"><?php echo $cartCount; ?></span>
-                    <p class="weui-tabbar__label">购物车</p>
+                    <p class="weui-tabbar__label nav-item nav-item-cart">购物车</p>
                 </a>
-                <a href="<?php echo $server . 'account.html'; ?>" class="weui-tabbar__item">
-                    <img src="<?php echo $server . 'dist/img/account.png'; ?>" alt="" class="weui-tabbar__icon">
-                    <p class="weui-tabbar__label">我的订单</p>
+                <a href="<?php echo $server . 'ticket.html'; ?>" class="weui-tabbar__item <?php echo ($item == 'ticket' ? 'weui-bar__item_on' : ''); ?>">
+                    <p class="weui-tabbar__label nav-item nav-item-ticket">我的票码</p>
+                </a>
+                <a href="<?php echo $server . 'account.html'; ?>" class="weui-tabbar__item <?php echo ($item == 'account' ? 'weui-bar__item_on' : ''); ?>">
+                    <p class="weui-tabbar__label nav-item nav-item-account">个人中心</p>
                 </a>
             </div>
         </div>
