@@ -101,32 +101,32 @@ class Order extends Controller
         $body       = '金宁户外运动';
 
         $order = array(
-            'appid' => $this->get('settings')['weixin']['appID'],
-            'mch_id' => $this->get('settings')['weixin']['mch_id'],
+            'appid' => $this->app->get('settings')['weixin']['appID'],
+            'mch_id' => $this->app->get('settings')['weixin']['mch_id'],
             'device_info' => 'WEB',
             'nonce_str' => $randstr,
             'body' => $body,
             'out_trade_no' => $code,
             'total_fee' => $pay_fen,
             'spbill_create_ip' => $ip_address,
-            'notify_url' => $this->get('settings')['weixin']['buck_url'],
+            'notify_url' => $this->app->get('settings')['weixin']['buck_url'],
             'trade_type' => 'JSAPI',
             'openid' => $openid
         );
 
-        $sign = $this->sign($order, $this->get('settings')['weixin']['api_key']);
+        $sign = $this->sign($order, $this->app->get('settings')['weixin']['api_key']);
         $this->app->logger->addInfo($sign);
 
         $xml = "<xml>
-        <appid>{$this->get('settings')['weixin']['appID']}</appid>
-        <mch_id>{$this->get('settings')['weixin']['mch_id']}</mch_id>
+        <appid>{$this->app->get('settings')['weixin']['appID']}</appid>
+        <mch_id>{$this->app->get('settings')['weixin']['mch_id']}</mch_id>
         <device_info>WEB</device_info>
         <nonce_str>{$randstr}</nonce_str>
         <body>{$body}</body>
         <out_trade_no>{$code}</out_trade_no>
         <total_fee>{$pay_fen}</total_fee>
         <spbill_create_ip>{$ip_address}</spbill_create_ip>
-        <notify_url>{$this->get('settings')['weixin']['buck_url']}</notify_url>
+        <notify_url>{$this->app->get('settings')['weixin']['buck_url']}</notify_url>
         <trade_type>JSAPI</trade_type>
         <openid>{$openid}</openid>
         <sign>{$sign}</sign>
@@ -156,14 +156,14 @@ class Order extends Controller
         }
 
         $data = array(
-                'appId' => $this->get('settings')['weixin']['appID'],
+                'appId' => $this->app->get('settings')['weixin']['appID'],
             'timeStamp' => time(),
              'nonceStr' => randstr(32),
               'package' => $prepay,
              'signType' => 'MD5'
         ); 
 
-        $sign2           = $this->sign($data, $this->get('settings')['weixin']['api_key']);
+        $sign2           = $this->sign($data, $this->app->get('settings')['weixin']['api_key']);
 
         $data['paySign'] = $sign2;
 
