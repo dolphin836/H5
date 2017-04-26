@@ -134,7 +134,7 @@ class Order extends Controller
 
         $req = Requests::post($server, array(), $xml);
         $this->app->logger->addInfo($req->status_code);
-        $this->app->logger->addInfo($req->body);
+        
 
         if ($req->status_code != 200) {
             $json['code']        = 1;
@@ -155,15 +155,19 @@ class Order extends Controller
             }
         }
 
+        $this->app->logger->addInfo("prepay:" . $prepay);
+
         $data = array(
                 'appId' => $this->app->get('settings')['weixin']['appID'],
             'timeStamp' => time(),
-             'nonceStr' => randstr(32),
+             'nonceStr' => $this->GeraHash(32),
               'package' => $prepay,
              'signType' => 'MD5'
         ); 
 
         $sign2           = $this->sign($data, $this->app->get('settings')['weixin']['api_key']);
+
+        $this->app->logger->addInfo("sign2:" . $sign2);
 
         $data['paySign'] = $sign2;
 
