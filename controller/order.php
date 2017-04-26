@@ -31,8 +31,9 @@ class Order extends Controller
 
     public function callback()
     {
+        $this->app->logger->addInfo("333333333333333333");
         $this->app->logger->addInfo("callback input:" . file_get_contents('php://input'));
-        
+
         $input_data = json_decode(file_get_contents('php://input'), true);
 
 		if ( isset( $input_data['type'] ) ) {
