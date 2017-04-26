@@ -40,10 +40,30 @@ class Order extends Controller
         $result = $this->reader->parse();
 
         foreach ($result as $key => $value) {
-            $this->app->logger->addInfo("key:" . key);
-            $this->app->logger->addInfo("value:" . value);
-            $this->app->logger->addInfo("value:", value);
+            $this->app->logger->addInfo("key:" . $key);
+            $this->app->logger->addInfo("value:" . $value);
+            $this->app->logger->addInfo("value:", $value);
         }
+
+        // <xml>
+        // <appid><![CDATA[wx3f57772b43b05ba5]]></appid>
+        // <bank_type><![CDATA[ICBC_DEBIT]]></bank_type>
+        // <cash_fee><![CDATA[1]]></cash_fee>
+        // <device_info><![CDATA[WEB]]></device_info>
+        // <fee_type><![CDATA[CNY]]></fee_type>
+        // <is_subscribe><![CDATA[Y]]></is_subscribe>
+        // <mch_id><![CDATA[1460504502]]></mch_id>
+        // <nonce_str><![CDATA[usfP7pFm9MSWYWode3cpVkocYbZobolX]]></nonce_str>
+        // <openid><![CDATA[oNP02wK_vjLWB_iRRf6qbqmDXBiE]]></openid>
+        // <out_trade_no><![CDATA[14932008790942280030148944254020]]></out_trade_no>
+        // <result_code><![CDATA[SUCCESS]]></result_code>
+        // <return_code><![CDATA[SUCCESS]]></return_code>
+        // <sign><![CDATA[05EE9D960E5DBC54CFD81C55820D0FFC]]></sign>
+        // <time_end><![CDATA[20170426180124]]></time_end>
+        // <total_fee>1</total_fee>
+        // <trade_type><![CDATA[JSAPI]]></trade_type>
+        // <transaction_id><![CDATA[4006682001201704268437423788]]></transaction_id>
+        // </xml>
 
 		// if ( isset( $input_data['type'] ) ) {
 			
@@ -56,6 +76,8 @@ class Order extends Controller
         //     }
         // }
 
+        // $xml = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
+        // echo $xml;
     }
 
 
