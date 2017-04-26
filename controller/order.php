@@ -32,7 +32,7 @@ class Order extends Controller
 
     public function add()
     {
-         $json       = array();
+        $json = array();
 
         if ( ! isset($_SESSION['cart']) ) {
             $json['code']        = 2;
@@ -58,6 +58,8 @@ class Order extends Controller
             }
         }
 
+        $this->app->logger->addInfo("total:" . $total);
+
         $discount  = $total * 0.1;
         $pay       = $total - $discount;
         // $pay_fen   = $pay * 100;
@@ -68,8 +70,7 @@ class Order extends Controller
 
         $order_id = $this->app->db->insert("order", [
                     "code" => $code,
-                    // "uuid" => $_SESSION['uuid'],
-                    "uuid" => '1111',
+                    "uuid" => $_SESSION['uuid'],
                    "total" => $pay, //实际支付金额
                "sub_total" => $total, //订单小计
                "red_total" => $discount, //优惠的金额
@@ -79,7 +80,7 @@ class Order extends Controller
               "payed_time" => time()
         ]);
 
-        $this->app->logger->addInfo("order_id" . $order_id);
+        $this->app->logger->addInfo("order_id : " . $order_id);
 
         $server     = "https://api.mch.weixin.qq.com/pay/unifiedorder";
         $randstr    = $this->GeraHash(32);
@@ -91,6 +92,8 @@ class Order extends Controller
         if (isset($serverParams['REMOTE_ADDR'])) {
             $ip_address = $serverParams['REMOTE_ADDR'];
         }
+
+        $this->app->logger->addInfo("ip_address :" . $ip_address);
 
         $openid     = $_SESSION['uuid'];
         
