@@ -48,6 +48,8 @@ $(function() {
     });
 
     $('#weixinPay').on('click', function() {// 发起微信支付
+        hideActionSheet();
+
         $.post('/addOrder', function(response) {
             var response = $.parseJSON(response);
             console.log(response);
