@@ -39,19 +39,15 @@ class Order extends Controller
         $info   = array();
 
         foreach ($result['value'] as $key => $value) {
-            $this->app->logger->addInfo("11111key:" . $value['name']);
-            $this->app->logger->addInfo("22222value:" . $value['value']);
             $k        = substr($value['name'], 2);
-            $this->app->logger->addInfo("info k:" . $k);
             $info[$k] = $value['value'];
         }
 
         $this->app->logger->addInfo("info:" , $info);
 
 		if ($info['return_code'] == 'SUCCESS') {
-            $this->app->logger->addInfo("return_code:" . $info['return_code']);
+
 			if ($info['result_code'] == 'SUCCESS') {
-                $this->app->logger->addInfo("result_code:" . $info['result_code']);
                 $openid         = $info['openid'];
                 $is_subscribe   = $info['is_subscribe']; //Y 已关注 N 未关注
                 $transaction_id = $info['transaction_id']; //微信支付订单号
@@ -60,19 +56,40 @@ class Order extends Controller
                 $sign           = $info['sign'];
 
                 $order = $this->app->db->select('order', ['id'], ['code[=]' => $order_code, 'uuid[=]' => $openid]);
-                $this->app->logger->addInfo("order:" , $order);
+
                 if ( ! empty($order) ) {
+                    // 更新订单 - sign 和 金额没有做验证 有安全问题
                     $this->app->db->update("order", [
                         "payment_number" => $transaction_id,
                         "status"         => 1,
                         "payed_time"     => time()
                     ], [
                         "code[=]" => $order_code
-                    ]);   
+                    ]);
+                    
+                    $order_id = $order[0]['id'];
+                    $this->app->logger->addInfo("order_id:" . $order_id);
+                    // 生成票码
+                    $product  = $this->app->db->select('order_product', ['id', 'product_id', 'product_name', 'product_price', 'product_count'], ['order_id[=]' => $order_id]);
+                    $this->app->logger->addInfo("product:", $product);
+                    foreach ($product as $pro) {
+                        for ($i = 0; $i < $pro['product_count']; $i++) {
+                            $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
+                            $this->app->db->insert("ticket", [
+                                         "code" => $code,
+                                         "uuid" => $openid,
+                                     "order_id" => $order_id,
+                                   "product_id" => $pro['product_id'],
+                                 "product_name" => $pro['product_name'],
+                                "product_price" => $pro['product_price'],
+                                  "create_time" => time(),
+                                 "modifie_time" => time()
+                            ]);
+                        }
+                    }
+                    // 消息推送
                 }
 
-                unset($_SESSION['cart']);
-                unset($_SESSION['cartCount']);
             }
         }
 

@@ -13,6 +13,9 @@ class Success extends Controller
 
     public function index()
     {
+        unset($_SESSION['cart']);
+        unset($_SESSION['cartCount']);
+
         $cartCount = 0;
         if ( isset($_SESSION['cartCount']) ) {
             $cartCount = $_SESSION['cartCount'];
