@@ -41,7 +41,7 @@ class Order extends Controller
         foreach ($result['value'] as $key => $value) {
             $this->app->logger->addInfo("11111key:" . $value['name']);
             $this->app->logger->addInfo("22222value:" . $value['value']);
-            $k        = strstr($value['name'], '{}');
+            $k        = substr($value['name'], 2);
             $this->app->logger->addInfo("info k:" . $k);
             $info[$k] = $value['value'];
         }
