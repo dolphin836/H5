@@ -39,18 +39,18 @@ class Order extends Controller
         $this->reader->xml($data);
         $result = $this->reader->parse();
 
-        foreach ($result as $key => $value) {
-            $this->app->logger->addInfo("key:" . $key);
-            $this->app->logger->addInfo("value:" . $value);
-            $this->app->logger->addInfo("value:", $value);
-        }
+        // foreach ($result as $key => $value) {
+        //     $this->app->logger->addInfo("key:" . $key);
+        //     $this->app->logger->addInfo("value:" . $value);
+        //     $this->app->logger->addInfo("value:", $value);
+        // }
 
         foreach ($result['value'] as $key => $value) {
             // if ($value['name'] == '{}prepay_id') {
             //     $prepay .= $value['value'];
             // }
-            $this->app->logger->addInfo("key:" . $value['name']);
-            $this->app->logger->addInfo("value:" . $value['value']);
+            $this->app->logger->addInfo("11111key:" . $value['name']);
+            $this->app->logger->addInfo("22222value:" . $value['value']);
         }
 
         // <xml>
