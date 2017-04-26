@@ -147,6 +147,7 @@ $app->post('/addOrder', function($request, $response, $args) {
 
     $req = Requests::post($server, array(), $xml);
     $this->logger->addInfo($req->status_code);
+    $this->logger->addInfo($req->body);
 
     if ($req->status_code != 200) {
         $json['code']        = 1;
@@ -158,6 +159,7 @@ $app->post('/addOrder', function($request, $response, $args) {
     $reader = new Sabre\Xml\Reader();
     $reader->xml($req->body);
     $result = $reader->parse();
+    $this->logger->addInfo('xml result', $result['value']);
 
     $prepay = "prepay_id=";
 
@@ -168,11 +170,11 @@ $app->post('/addOrder', function($request, $response, $args) {
     }
 
     $data = array(
-            'appId' => $this->get('settings')['weixin']['appID'],
-        'timeStamp' => time(),
-            'nonceStr' => randstr(32),
-            'package' => $prepay,
-            'signType' => 'MD5'
+             'appId' => $this->get('settings')['weixin']['appID'],
+         'timeStamp' => time(),
+          'nonceStr' => randstr(32),
+           'package' => $prepay,
+          'signType' => 'MD5'
     ); 
 
     $sign2           = sign($data, $this->get('settings')['weixin']['api_key']);
