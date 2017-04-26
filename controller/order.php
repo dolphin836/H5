@@ -43,18 +43,28 @@ class Order extends Controller
 
         $cart     = $_SESSION['cart'];
         $total    = 0;
+        $order_product = array();
         foreach($cart as $c) {
             $results        = $this->app->db->select('product', ['name', 'image', 'price'], ['id[=]' => $c['id']]);
             $price          = 0;
+            $product_option_name = '';
             if ( ! empty($c['option']) ) {
                 foreach ($c['option'] as $v_id) {
                     $o_val = $this->app->db->select('product_option_value', ['description', 'add_price'], ['id[=]' => $v_id]);
                     $price = $price + (int)$o_val[0]['add_price'];
+                    $product_option_name = $product_option_name . '-' . $o_val[0]['description'];
                 }
             }
+
             foreach ($results as $result) {
                 $price     += (int)$result['price'];
-                $total     += $price;
+                $total     += $price * (int)$c['quantity'];
+                $order_product[] = array(
+                    'product_id' => $c['id'],
+                    'product_name' => $result['name'] . $product_option_name,
+                    'product_price' => (float)$result['price'],
+                    'product_count' => (int)$c['quantity']
+                );
             }
         }
 
@@ -68,7 +78,7 @@ class Order extends Controller
         $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
         $this->app->logger->addInfo("code:" . $code);
 
-        $order_id = $this->app->db->insert("order", [
+        $this->app->db->insert("order", [
                     "code" => $code,
                     "uuid" => $_SESSION['uuid'],
                    "total" => $pay, //实际支付金额
@@ -80,7 +90,19 @@ class Order extends Controller
               "payed_time" => time()
         ]);
 
+        $order_id = $this->db->id();
+
         $this->app->logger->addInfo("order_id : " . $order_id);
+
+        foreach ($order_product as $product) {
+            $this->app->db->insert("order_product", [
+                     "order_id" => $order_id,
+                   "product_id" => $product['product_id'],
+                 "product_name" => $product['product_name'],
+                "product_price" => $product['product_price'],
+                "product_count" => $product['product_count']
+            ]);
+        }
 
         $server     = "https://api.mch.weixin.qq.com/pay/unifiedorder";
         $randstr    = $this->GeraHash(32);
