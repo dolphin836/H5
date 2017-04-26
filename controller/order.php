@@ -34,18 +34,27 @@ class Order extends Controller
         $this->app->logger->addInfo("333333333333333333");
         $this->app->logger->addInfo("callback input:" . file_get_contents('php://input'));
 
-        $input_data = json_decode(file_get_contents('php://input'), true);
+        $data   = file_get_contents('php://input');
 
-		if ( isset( $input_data['type'] ) ) {
-			
-            if( $input_data['type'] == 'charge.succeeded' )
-            {
-                if ($input_data['data']['object']['paid'] == 'true') {
-                    $order_code = $input_data['data']['object']['order_no'];
-                    $this->app->logger->addInfo("order_code:" . $order_code);
-                }
-            }
+        $this->reader->xml($data);
+        $result = $this->reader->parse();
+
+        foreach ($result as $key => $value) {
+            $this->app->logger->addInfo("key:" . key);
+            $this->app->logger->addInfo("value:" . value);
+            $this->app->logger->addInfo("value:", value);
         }
+
+		// if ( isset( $input_data['type'] ) ) {
+			
+        //     if( $input_data['type'] == 'charge.succeeded' )
+        //     {
+        //         if ($input_data['data']['object']['paid'] == 'true') {
+        //             $order_code = $input_data['data']['object']['order_no'];
+        //             $this->app->logger->addInfo("order_code:" . $order_code);
+        //         }
+        //     }
+        // }
 
     }
 
