@@ -75,5 +75,10 @@ class Cart extends Controller
         }
     }
 
+    public function add()
+    {
+        var_dump('cart add');
+    }
+
 
 }

@@ -1,7 +1,7 @@
 <?php
 
 $routes = array(
-    '', 'index.html', 'cart.html', 'cart/clean[/{id}]', 'account.html', 'checkout.html', 'product/view/{id:[0-9]+}.html', 'account/login.html', 'account/logout.html'
+    '', 'index.html', 'cart.html', 'cart/add', 'cart/clean[/{id}]', 'account.html', 'checkout.html', 'product/view/{id:[0-9]+}.html', 'account/login.html', 'account/logout.html'
 );
 
 foreach ($routes as $route) {
@@ -29,7 +29,6 @@ foreach ($routes as $route) {
 }
 
 $app->post('/addOrder', function($request, $response, $args) {
-    // file_get_contents('php://input')
 
     function sign($data = array(), $key)
     {
@@ -62,7 +61,6 @@ $app->post('/addOrder', function($request, $response, $args) {
     }
 
     $cart     = $_SESSION['cart'];
-    // $this->logger->addInfo("Cart:", $cart);
     $total    = 0;
     foreach($cart as $c) {
         $results        = $this->db->select('product', ['name', 'image', 'price'], ['id[=]' => $c['id']]);
@@ -81,7 +79,8 @@ $app->post('/addOrder', function($request, $response, $args) {
 
     $discount  = $total * 0.1;
     $pay       = $total - $discount;
-    $pay_fen   = $pay * 100;
+    // $pay_fen   = $pay * 100;
+    $pay_fen   = 1;
 
     $code      = randstr(32); //生成订单号
 
