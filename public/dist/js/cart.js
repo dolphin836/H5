@@ -48,6 +48,7 @@ $(function() {
     $('#weixinPay').on('click', function() {// 发起微信支付
         $.post('/addOrder', function(response) {
             var response = $.parseJSON(response);
+            console.log(response);
 
             if (response.code != 0) {
                 alert(response.msg);
@@ -55,6 +56,7 @@ $(function() {
             }
 
             var data = response.data;
+            console.log(data);
 
             WeixinJSBridge.invoke(
                 'getBrandWCPayRequest', {

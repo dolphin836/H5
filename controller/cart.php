@@ -33,7 +33,7 @@ class Cart extends Controller
                 }
                 foreach ($results as $result) {
                     $price     += (int)$result['price'];
-                    $total     += $price;
+                    $total     += $price * (int)$c['quantity'];
                     $products[] = array(
                         'cover' => $this->image_server . $result['image'],
                         'name' => $result['name'],
