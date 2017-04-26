@@ -2,6 +2,10 @@ html,
 body {
 	height: 100%;
 	background: #fbf9fe;
+	max-width: 600px;
+	margin: 0 auto;
+	border-left: 1px solid #dcdcdc;
+	border-right: 1px solid #dcdcdc;
 }
 
 .text-center {

@@ -50,7 +50,7 @@ $(function() {
     $('#weixinPay').on('click', function() {// 发起微信支付
         hideActionSheet();
 
-        $.post('/addOrder', function(response) {
+        $.post('/order/add', function(response) {
             var response = $.parseJSON(response);
             console.log(response);
 

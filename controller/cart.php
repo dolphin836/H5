@@ -52,7 +52,7 @@ class Cart extends Controller
         }
 
         $scripts[] = $this->server . 'dist/js/' . 'zepto.min.js';
-        $scripts[] = $this->server . 'dist/js/' . 'cart.js';
+        $scripts[] = $this->server . 'dist/js/' . 'cart.js?34444';
 
         $discount  = $total * 0.1;
         $pay       = $total - $discount;
@@ -77,7 +77,63 @@ class Cart extends Controller
 
     public function add()
     {
-        var_dump('cart add');
+        $json = array();
+        $data = $this->request->getParsedBody();
+
+        if ( ! isset($data['id']) || ! isset($data['quantity']) ) {
+            $json['code'] = 1;
+            $json['msg']  = 'Error：Args Miss.';
+            $this->response = $this->response->withJson($json);
+            echo $this->response;
+        }
+
+        $product             = array();
+        $product['id']       = (int)$data['id'];
+        $product['quantity'] = (int)$data['quantity'];
+        $product['option']   = array();
+
+        foreach ($data as $key => $value) {
+            if ( $key != 'id' && $key != 'quantity' ) {
+                $product['option'][] = $value;
+            }
+        }
+
+        if ( ! isset($_SESSION['cart']) ) {
+            $_SESSION['cart']      = array($product);
+            $_SESSION['cartCount'] = $product['quantity'];
+        } else {
+            $cart = $_SESSION['cart'];
+            $key  = -1;
+            foreach ($cart as $k => $c) {
+                if ( empty($c['option']) ) {
+                    $is_option = 1;
+                } else {
+                    $is_option = 1;
+                    foreach ($c['option'] as $o_v_id) {
+                        if ( ! in_array($o_v_id, $product['option']) ) {
+                            $is_option = 0;
+                        }
+                    }
+                }
+                
+                if ( ($c['id'] == $product['id']) && $is_option ) {
+                    $key = $k;
+                }
+            }
+
+            if ($key < 0) {
+                $_SESSION['cart'][] = $product;
+            } else {  
+                $_SESSION['cart'][$key]['quantity'] += $product['quantity'];
+            }
+
+            $_SESSION['cartCount'] += $product['quantity'];
+        }
+
+        $json['code']        = 0;
+        $json['msg']         = 'Add Cart Success.';
+        $this->response = $this->response->withJson($json);
+        echo $this->response;
     }
 
 
