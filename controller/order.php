@@ -59,8 +59,8 @@ class Order extends Controller
                 $total_fee      = (int)$info['total_fee'] / 100;
                 $sign           = $info['sign'];
 
-                $order = $this->app->db->select('order', ['id'], ['code[=]' => $order_code, 'uuid[=]' => $openid, 'total[=]' => (float)$total_fee]);
-                $this->app->logger->addInfo("order:" . $order);
+                $order = $this->app->db->select('order', ['id'], ['code[=]' => $order_code, 'uuid[=]' => $openid]);
+                $this->app->logger->addInfo("order:" , $order);
                 if ( ! empty($order) ) {
                     $this->app->db->update("order", [
                         "payment_number" => $transaction_id,
