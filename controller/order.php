@@ -90,7 +90,7 @@ class Order extends Controller
               "payed_time" => time()
         ]);
 
-        $order_id = $this->db->id();
+        $order_id = $this->app->db->id();
 
         $this->app->logger->addInfo("order_id : " . $order_id);
 
