@@ -67,7 +67,7 @@ class Product extends Controller
         }
 
         $scripts[] = $this->server . 'dist/js/' . 'zepto.min.js';
-        $scripts[] = $this->server . 'dist/js/' . 'view.js';
+        $scripts[] = $this->server . 'dist/js/' . 'view.js?1111';
 
         $cartCount = 0;
         if ( isset($_SESSION['cartCount']) ) {

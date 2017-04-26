@@ -33,7 +33,7 @@ $(function() {
     // 加入购物车
     $addCart
         .on('click', function (e) {
-            $.post('/addCart', $('#product').serialize(), function(response) {
+            $.post('/cart/add', $('#product').serialize(), function(response) {
                 console.log(response);
                 $count = parseInt($cart_count.html()) + parseInt($product_quantity.val());
                 if ($count >= 100) {
