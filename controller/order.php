@@ -45,6 +45,14 @@ class Order extends Controller
             $this->app->logger->addInfo("value:", $value);
         }
 
+        foreach ($result['value'] as $key => $value) {
+            // if ($value['name'] == '{}prepay_id') {
+            //     $prepay .= $value['value'];
+            // }
+            $this->app->logger->addInfo("key:" . $value['name']);
+            $this->app->logger->addInfo("value:" . $value['value']);
+        }
+
         // <xml>
         // <appid><![CDATA[wx3f57772b43b05ba5]]></appid>
         // <bank_type><![CDATA[ICBC_DEBIT]]></bank_type>
