@@ -29,6 +29,25 @@ class Order extends Controller
         return strtoupper(md5($strTemp));
     }
 
+    public function callback()
+    {
+        $this->app->logger->addInfo("callback input:" . file_get_contents('php://input'));
+        
+        $input_data = json_decode(file_get_contents('php://input'), true);
+
+		if ( isset( $input_data['type'] ) ) {
+			
+            if( $input_data['type'] == 'charge.succeeded' )
+            {
+                if ($input_data['data']['object']['paid'] == 'true') {
+                    $order_code = $input_data['data']['object']['order_no'];
+                    $this->app->logger->addInfo("order_code:" . $order_code);
+                }
+            }
+        }
+
+    }
+
 
     public function add()
     {
@@ -62,7 +81,7 @@ class Order extends Controller
                 $order_product[] = array(
                     'product_id' => $c['id'],
                     'product_name' => $result['name'] . $product_option_name,
-                    'product_price' => (float)$result['price'],
+                    'product_price' => (float)$price,
                     'product_count' => (int)$c['quantity']
                 );
             }
