@@ -84,6 +84,13 @@ class Ticket extends Controller
 
     public function check()
     {
+        $workuser   = $this->app->db->select('user', ['type'], ['uuid[=]' => $_SESSION['uuid']]);
+
+        if ( empty($workuser) || $workuser[0]['type'] != '1' ) {
+            var_dump("无效的验票人员");
+            exit;
+        }
+
         $data   = array();
         $code   = $this->args['code'];
 
@@ -110,6 +117,13 @@ class Ticket extends Controller
 
     public function pass()
     {
+        $workuser   = $this->app->db->select('user', ['type'], ['uuid[=]' => $_SESSION['uuid']]);
+
+        if ( empty($workuser) || $workuser[0]['type'] != '1' ) {
+            var_dump("无效的验票人员");
+            exit;
+        }
+
         $data   = array();
         $code   = $this->args['code'];
 
