@@ -37,9 +37,6 @@ class Ticket extends Controller
             }
         }
 
-        var_dump($ticket_open);
-        var_dump($ticket_close);
-
         $scripts[] = $this->server . 'dist/js/' . 'zepto.min.js';
         $scripts[] = $this->server . 'dist/js/' . 'ticket.js';
 
