@@ -28,12 +28,7 @@ class Product extends Controller
             );
         }
 
-        $cartCount = 0;
-        if ( isset($_SESSION['cartCount']) ) {
-            $cartCount = $_SESSION['cartCount'];
-        }
-
-        echo $this->app->template->render('product', ['server' => $this->server, 'item' => 'discover', 'cartCount' => $cartCount, 'products' => $products]);
+        echo $this->app->template->render('product', ['server' => $this->server, 'item' => 'discover', 'cartCount' => $this->cartCount, 'products' => $products]);
     }
 
     public function view()
@@ -69,11 +64,6 @@ class Product extends Controller
         $scripts[] = $this->server . 'dist/js/' . 'zepto.min.js';
         $scripts[] = $this->server . 'dist/js/' . 'view.js?1111';
 
-        $cartCount = 0;
-        if ( isset($_SESSION['cartCount']) ) {
-            $cartCount = $_SESSION['cartCount'];
-        }
-
-        echo $this->app->template->render('view', ['server' => $this->server, 'item' => 'discover', 'scripts' => $scripts, 'cartCount' => $cartCount, 'product' => $product]);
+        echo $this->app->template->render('view', ['server' => $this->server, 'item' => 'discover', 'scripts' => $scripts, 'cartCount' => $this->cartCount, 'product' => $product]);
     }
 }

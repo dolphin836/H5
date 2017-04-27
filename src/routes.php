@@ -8,6 +8,8 @@ $routes = array(
     array('get',  'success.html'),
     array('get',  'account.html'),
     array('get',  'cart/clean[/{id}]'),
+    array('get',  'ticket/view/{id:[0-9]+}.html'),
+    array('get',  'ticket/check/{code:[0-9]+}'),
     array('get',  'product/view/{id:[0-9]+}.html'),
     array('any',  'order/callback'),
     array('post', 'cart/add'),
