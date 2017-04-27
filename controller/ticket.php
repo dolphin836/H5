@@ -44,7 +44,10 @@ class Ticket extends Controller
             }
         }
 
-        echo $this->app->template->render('ticket', ['server' => $this->server, 'item' => 'ticket', 'cartCount' => $this->cartCount, 'ticket_open' => $ticket_open, 'ticket_close' => $ticket_close]);
+        $scripts[] = $this->server . 'dist/js/' . 'zepto.min.js';
+        $scripts[] = $this->server . 'dist/js/' . 'ticket.js';
+
+        echo $this->app->template->render('ticket', ['server' => $this->server, 'item' => 'ticket', 'cartCount' => $this->cartCount, 'scripts' => $scripts, 'ticket_open' => $ticket_open, 'ticket_close' => $ticket_close]);
     }
 
     public function view()
