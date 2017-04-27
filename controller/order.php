@@ -55,7 +55,7 @@ class Order extends Controller
                 $total_fee      = (int)$info['total_fee'] / 100;
                 $sign           = $info['sign'];
 
-                $order = $this->app->db->select('order', ['id'], ['code[=]' => $order_code, 'uuid[=]' => $openid]);
+                $order = $this->app->db->select('order', ['id'], ['code[=]' => $order_code, 'uuid[=]' => $openid, 'status[=]' => 0]);
 
                 if ( ! empty($order) ) {
                     // 更新订单 - sign 和 金额没有做验证 有安全问题
