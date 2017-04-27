@@ -44,10 +44,7 @@ class Ticket extends Controller
             }
         }
 
-        $scripts[] = $this->server . 'dist/js/' . 'zepto.min.js';
-        $scripts[] = $this->server . 'dist/js/' . 'ticket.js?5555';
-
-        echo $this->app->template->render('ticket', ['server' => $this->server, 'item' => 'ticket', 'cartCount' => $this->cartCount, 'scripts' => $scripts, 'ticket_open' => $ticket_open, 'ticket_close' => $ticket_close]);
+        echo $this->app->template->render('ticket', ['server' => $this->server, 'item' => 'ticket', 'cartCount' => $this->cartCount, 'ticket_open' => $ticket_open, 'ticket_close' => $ticket_close]);
     }
 
     public function view()
@@ -79,12 +76,32 @@ class Ticket extends Controller
                        'qr' => $this->server . $QR
         );
 
-        echo $this->app->template->render('check', ['server' => $this->server, 'item' => 'ticket', 'cartCount' => $this->cartCount, 'ticket' => $ticket]);
+        echo $this->app->template->render('ticket_view', ['server' => $this->server, 'item' => 'ticket', 'cartCount' => $this->cartCount, 'ticket' => $ticket]);
     }
 
     public function check()
     {
-        $code = $this->args['code'];
-        var_dump($code);
+        $data   = array();
+        $code   = $this->args['code'];
+
+        $ticket = $this->app->db->select('ticket', ['uuid', 'product_name', 'product_price', 'create_time'], ['code[=]' => $code, 'status[=]' => 0]);
+
+        if ( empty($ticket) ) {
+            var_dump("没有查询到有效的票码");
+            exit;
+        }
+
+        $data['code']           = $code;
+        $data['product_name']   = $ticket[0]['product_name'];
+        $data['product_price']  = $ticket[0]['product_price'];
+        $data['create_time']    = date("Y-m-d H:i:s", $ticket[0]['create_time']);
+
+        $uuid   = $ticket[0]['uuid'];
+
+        $user   = $this->app->db->select('user', ['nickname', 'telephone'], ['uuid[=]' => $uuid]);
+        $data['user_name']      = $user[0]['nickname'];
+        $data['user_telephone'] = $user[0]['telephone'];
+
+        echo $this->app->template->render('ticket_check', ['server' => $this->server, 'item' => 'ticket', 'cartCount' => $this->cartCount, 'data' => $data]);
     }
 }
