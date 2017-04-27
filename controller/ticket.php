@@ -104,4 +104,27 @@ class Ticket extends Controller
 
         echo $this->app->template->render('ticket_check', ['server' => $this->server, 'item' => 'ticket', 'cartCount' => $this->cartCount, 'data' => $data]);
     }
+
+    public function pass()
+    {
+        $data   = array();
+        $code   = $this->args['code'];
+
+        $ticket = $this->app->db->select('ticket', ['uuid', 'product_name', 'product_price', 'create_time'], ['code[=]' => $code, 'status[=]' => 0]);
+
+        if ( empty($ticket) ) {
+            var_dump("没有查询到有效的票码");
+            exit;
+        }
+
+        $this->app->db->update("ticket", [
+                    "suid" => $_SESSION['uuid'],
+                  "status" => 1,
+            "modifie_time" => time()
+        ], [
+            "code[=]" => $code
+        ]);
+
+        echo $this->app->template->render('ticket_success', ['server' => $this->server, 'item' => 'ticket', 'cartCount' => $this->cartCount]);
+    }
 }
