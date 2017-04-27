@@ -25,6 +25,7 @@ class Ticket extends Controller
         foreach ($results as $result) {
             if ($result['status'] == 0) {
                 $ticket_open[]  = array(
+                          'id'  => $result['id'],
                         'code'  => $result['code'],
                  'product_name' => $result['product_name'],
                 'product_price' => $result['product_price'],
@@ -33,6 +34,7 @@ class Ticket extends Controller
                 );
             } else {
                $ticket_close[]  = array(
+                          'id'  => $result['id'],
                         'code'  => $result['code'],
                  'product_name' => $result['product_name'],
                 'product_price' => $result['product_price'],
