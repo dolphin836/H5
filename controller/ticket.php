@@ -14,7 +14,7 @@ class Ticket extends Controller
     public function index()
     {
         $results        = $this->app->db->select('ticket', ['id', 'code', 'product_name', 'product_price', 'status', 'create_time'], ['uuid[=]' => $_SESSION['uuid']]);
-        var_dump($results);
+        
         $ticket_open    = array();
         $ticket_close   = array();
         foreach ($results as $result) {
@@ -36,6 +36,9 @@ class Ticket extends Controller
                 );
             }
         }
+
+        var_dump($ticket_open);
+        var_dump($ticket_close);
 
         $scripts[] = $this->server . 'dist/js/' . 'zepto.min.js';
         $scripts[] = $this->server . 'dist/js/' . 'ticket.js';
