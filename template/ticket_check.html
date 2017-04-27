@@ -1,10 +1,13 @@
 <?php $this->layout('template', ['title' => '检票', 'server' => $server, 'item' => $item, 'cartCount' => $cartCount]); ?>
 
 <div class="panel">
+    <h2 class="text-center">票码信息</h2>
     <h3 class="text-center"><?php echo $data['product_name']; ?></h3>
     <h5 class="text-center"><?php echo $data['product_price']; ?></h5>
     <h5 class="text-center"><?php echo $data['create_time']; ?></h5>
     <h5 class="text-center"><?php echo $data['code']; ?></h5>
+    <h2 class="text-center">用户信息</h2>
     <h3 class="text-center"><?php echo $data['user_name']; ?></h3>
     <h3 class="text-center"><?php echo $data['user_telephone']; ?></h3>
+    <a href="/ticket/pass/<?php echo $data['code']; ?>">确认使用</a>
 </div>
