@@ -83,3 +83,12 @@ body {
 .user_image {
 	border-radius: 30px;
 }
+
+.panel {
+	background: white;
+	margin-top: 40px;
+	margin-left: 10px;
+	margin-right: 10px;
+	padding-top: 30px;
+	border-radius: 4px;
+}

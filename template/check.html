@@ -1,0 +1,12 @@
+<?php $this->layout('template', ['title' => '我的票码', 'server' => $server, 'item' => $item, 'cartCount' => $cartCount]); ?>
+
+
+
+
+<div class="panel">
+    <h3 class="text-center"><?php echo $ticket['product_name']; ?></h3>
+    <h5 class="text-center"><?php echo $ticket['product_price']; ?></h5>
+    <!--<div id="qrcode"></div>-->
+    <img src="<?php echo $ticket['qr']; ?>">
+    <h5 class="text-center"><?php echo $ticket['code']; ?></h5>
+</div>
