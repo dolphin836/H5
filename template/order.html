@@ -1,0 +1,19 @@
+<?php $this->layout('template', ['title' => '我的订单', 'server' => $server, 'item' => $item, 'cartCount' => $cartCount]); ?>
+
+
+<div class="weui-panel">
+    <div class="weui-panel__bd">
+        <div class="weui-media-box weui-media-box_small-appmsg">
+            <div class="weui-cells">
+                <?php foreach($order as $o): ?>
+                <a class="weui-cell weui-cell_access" href="javascript:;">
+                    <div class="weui-cell__bd weui-cell_primary">
+                        <p>订单编号：<?php echo $o['code']; ?></p>
+                    </div>
+                    <span class="weui-cell__ft"></span>
+                </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+</div>

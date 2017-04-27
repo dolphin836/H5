@@ -16,18 +16,26 @@ class Account extends Controller
 
     public function index()
     {
-        // var_dump($_SESSION['uuid']);
+        if ( ! isset($_SESSION['uuid']) ) {
+            var_dump("请先登录");
+            exit;
+        }
 
-        echo $this->app->template->render('account', ['server' => $this->server, 'item' => 'account', 'cartCount' => $this->cartCount]);
+        $user   = $this->app->db->select('user', ['nickname', 'telephone', 'image', 'transaction', 'total', 'type'], ['uuid[=]' => $_SESSION['uuid']]);
+
+        echo $this->app->template->render('account', ['server' => $this->server, 'item' => 'account', 'cartCount' => $this->cartCount, 'user' => $user[0]]);
     }
 
-    public function login()
+    public function order()
     {
-        var_dump("Login Success.");
+        if ( ! isset($_SESSION['uuid']) ) {
+            var_dump("请先登录");
+            exit;
+        }
+
+        $order   = $this->app->db->select('order', ['code', 'total', 'sub_total', 'red_total', 'payment_code', 'payment_number', 'status', 'create_time', 'payed_time'], ['uuid[=]' => $_SESSION['uuid']]);
+
+        echo $this->app->template->render('order', ['server' => $this->server, 'item' => 'account', 'cartCount' => $this->cartCount, 'order' => $order[0]]);
     }
 
-    public function logout()
-    {
-        unset($_SESSION['uuid']);
-    }
 }
