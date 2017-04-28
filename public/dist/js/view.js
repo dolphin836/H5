@@ -2,7 +2,7 @@ $(function() {
     var $checkout         = $('#checkout'),
         $addCart          = $('#addCart'),
         $add_cart_success = $('#add-cart-success'),
-        $cart_count       = $('#cart-count'),
+        $cart_count       = $('#cart-count-2'),
         $product_quantity = $("input[name=quantity]"),
         $option_value     = $("input[type=radio]"),
         $product_price    = $("#product_price");
