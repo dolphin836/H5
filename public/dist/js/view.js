@@ -17,8 +17,8 @@ $(function() {
     $option_value
         .on('click', function (e) {
             var option_price = parseInt(this.getAttribute("title"));
-            $product_price.html(base_price + option_price + '.00');
-            $product_discount.html((base_price + option_price) * 0.88  + '.00');
+            $product_price.html(base_price + option_price);
+            $product_discount.html((base_price + option_price) * 0.88);
         })
     ;
     // 选择数量
