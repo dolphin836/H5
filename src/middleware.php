@@ -58,10 +58,8 @@ $app->add(function ($request, $response, $next) {
 
             return $newResponse;
         }
-    } else {
-        exit("请在微信内使用。");
-    }
-    
+    } 
+
     $response = $next($request, $response);
 
     return $response;

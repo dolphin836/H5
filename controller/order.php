@@ -33,8 +33,6 @@ class Order extends Controller
     {
         $data   = file_get_contents('php://input');
 
-        $this->app->logger->addInfo("callbackcallbackcallbackcallbackcallback", $data);
-
         $this->reader->xml($data);
         $result = $this->reader->parse();
 
@@ -44,8 +42,6 @@ class Order extends Controller
             $k        = substr($value['name'], 2);
             $info[$k] = $value['value'];
         }
-
-        $this->app->logger->addInfo("info:" , $info);
 
 		if ($info['return_code'] == 'SUCCESS') {
 
@@ -58,7 +54,7 @@ class Order extends Controller
                 $sign           = $info['sign'];
 
                 $order = $this->app->db->select('order', ['id'], ['code[=]' => $order_code, 'uuid[=]' => $openid, 'status[=]' => 0]);
-                $this->app->logger->addInfo("order:" , $order);
+
                 if ( ! empty($order) ) {
                     // 更新订单 - sign 和 金额没有做验证 有安全问题
                     $this->app->db->update("order", [
@@ -70,10 +66,10 @@ class Order extends Controller
                     ]);
                     
                     $order_id = $order[0]['id'];
-                    $this->app->logger->addInfo("order_id:" . $order_id);
+
                     // 生成票码
                     $product  = $this->app->db->select('order_product', ['id', 'product_id', 'product_name', 'product_price', 'product_count'], ['order_id[=]' => $order_id]);
-                    $this->app->logger->addInfo("product:", $product);
+
                     foreach ($product as $pro) {
                         for ($i = 0; $i < $pro['product_count']; $i++) {
                             $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
@@ -213,8 +209,6 @@ class Order extends Controller
         <openid>{$openid}</openid>
         <sign>{$sign}</sign>
         </xml>";
-
-        $this->app->logger->addInfo("create order xml:" . $xml);
 
         $req = Requests::post($server, array(), $xml);
         
