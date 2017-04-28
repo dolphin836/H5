@@ -31,12 +31,28 @@ class Order extends Controller
 
     public function callback()
     {
-        $data   = file_get_contents('php://input');
+        // $data   = file_get_contents('php://input');
+
+         $data = "<xml>
+        <appid>1111</appid>
+        <mch_id>222</mch_id>
+        <device_info>WEB</device_info>
+        <nonce_str>33</nonce_str>
+        <body>44</body>
+        <out_trade_no>55</out_trade_no>
+        <total_fee>66</total_fee>
+        <spbill_create_ip>77</spbill_create_ip>
+        <notify_url>88</notify_url>
+        <trade_type>JSAPI</trade_type>
+        <openid>99</openid>
+        <sign>11</sign>
+        </xml>";
 
         $this->app->logger->addInfo("callbackcallbackcallbackcallbackcallback");
         $reader       = new Sabre\Xml\Reader();
         $reader->xml($data);
         $result = $reader->parse();
+        var_dump($result);
 
         $info   = array();
 
