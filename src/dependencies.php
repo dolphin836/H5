@@ -23,10 +23,10 @@ $container['logger'] = function ($c) {
 $container['db'] = function($c) {
     return new Medoo\Medoo([
         'database_type' => 'mysql',
-        'database_name' => 'db20170425',
-        'server' => 'rm-bp10x0o229wcgrg52.mysql.rds.aliyuncs.com',
-        'username' => 'db_user_001',
-        'password' => '295y9G@w5V$JCX*F',
+        'database_name' => 'tan',
+        'server' => 'localhost',
+        'username' => 'root',
+        'password' => '',
         'charset' => 'utf8',
     ]);
 };
