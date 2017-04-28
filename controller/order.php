@@ -13,7 +13,7 @@ class Order extends Controller
         $this->image_server = $this->app->get('settings')['default']['image_server'];
         $this->server       = $this->app->get('settings')['default']['server'];
 
-        $this->reader       = new Sabre\Xml\Reader();
+        // $this->reader       = new Sabre\Xml\Reader();
 
         Requests::register_autoloader();
     }
@@ -33,10 +33,10 @@ class Order extends Controller
     {
         $data   = file_get_contents('php://input');
 
-         $this->app->logger->addInfo("callbackcallbackcallbackcallbackcallback");
-
-        $this->reader->xml($data);
-        $result = $this->reader->parse();
+        $this->app->logger->addInfo("callbackcallbackcallbackcallbackcallback");
+        $reader       = new Sabre\Xml\Reader();
+        $reader->xml($data);
+        $result = $reader->parse();
 
         $info   = array();
 
@@ -223,8 +223,9 @@ class Order extends Controller
             exit;
         }
 
-        $this->reader->xml($req->body);
-        $result = $this->reader->parse();
+        $reader       = new Sabre\Xml\Reader();
+        $reader->xml($req->body);
+        $result = $reader->parse();
 
         $prepay = "prepay_id=";
 
