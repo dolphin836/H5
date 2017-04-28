@@ -31,8 +31,3 @@ $container['db'] = function($c) {
     ]);
 };
 
-// session
-// $container['session'] = function($c) {
-//     return new rcastera\Browser\Session\Session();
-// };
-
