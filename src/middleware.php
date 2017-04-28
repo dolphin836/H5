@@ -58,6 +58,7 @@ $app->add(function ($request, $response, $next) {
 
             return $newResponse;
         }
+
     } 
 
     $response = $next($request, $response);
