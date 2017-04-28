@@ -33,6 +33,8 @@ class Order extends Controller
     {
         $data   = file_get_contents('php://input');
 
+         $this->app->logger->addInfo("callbackcallbackcallbackcallbackcallback");
+
         $this->reader->xml($data);
         $result = $this->reader->parse();
 
@@ -56,7 +58,7 @@ class Order extends Controller
                 $sign           = $info['sign'];
 
                 $order = $this->app->db->select('order', ['id'], ['code[=]' => $order_code, 'uuid[=]' => $openid, 'status[=]' => 0]);
-
+                $this->app->logger->addInfo("order:" , $order);
                 if ( ! empty($order) ) {
                     // 更新订单 - sign 和 金额没有做验证 有安全问题
                     $this->app->db->update("order", [
@@ -136,14 +138,12 @@ class Order extends Controller
             }
         }
 
-        $this->app->logger->addInfo("total:" . $total);
 
         $discount  = $total * $this->app->get('settings')['default']['discount'];
         $pay       = $total - $discount;
         $pay_fen   = $pay * 100;
 
         $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
-        $this->app->logger->addInfo("code:" . $code);
 
         $this->app->db->insert("order", [
                     "code" => $code,
@@ -159,8 +159,6 @@ class Order extends Controller
 
         $order_id = $this->app->db->id();
 
-        $this->app->logger->addInfo("order_id : " . $order_id);
-
         foreach ($order_product as $product) {
             $this->app->db->insert("order_product", [
                      "order_id" => $order_id,
@@ -173,7 +171,6 @@ class Order extends Controller
 
         $server     = "https://api.mch.weixin.qq.com/pay/unifiedorder";
         $randstr    = $this->GeraHash(32);
-        $this->app->logger->addInfo($randstr);
 
         $ip_address = '';
         $serverParams = $this->request->getServerParams(); // 获取客户端 IP adress
@@ -182,11 +179,8 @@ class Order extends Controller
             $ip_address = $serverParams['REMOTE_ADDR'];
         }
 
-        $this->app->logger->addInfo("ip_address :" . $ip_address);
-
         $openid     = $_SESSION['uuid'];
         
-        $this->app->logger->addInfo($openid);
         $body       = '金宁户外运动';
 
         $order = array(
@@ -204,7 +198,6 @@ class Order extends Controller
         );
 
         $sign = $this->sign($order, $this->app->get('settings')['weixin']['api_key']);
-        $this->app->logger->addInfo($sign);
 
         $xml = "<xml>
         <appid>{$this->app->get('settings')['weixin']['appID']}</appid>
@@ -222,9 +215,7 @@ class Order extends Controller
         </xml>";
 
         $req = Requests::post($server, array(), $xml);
-        $this->app->logger->addInfo($req->status_code);
         
-
         if ($req->status_code != 200) {
             $json['code']        = 1;
             $json['msg']         = 'Requests Fail.';
@@ -234,7 +225,6 @@ class Order extends Controller
 
         $this->reader->xml($req->body);
         $result = $this->reader->parse();
-        $this->app->logger->addInfo('xml result', $result['value']);
 
         $prepay = "prepay_id=";
 
@@ -243,8 +233,6 @@ class Order extends Controller
                 $prepay .= $value['value'];
             }
         }
-
-        $this->app->logger->addInfo("prepay:" . $prepay);
 
         $data = array(
                 'appId' => $this->app->get('settings')['weixin']['appID'],
@@ -255,8 +243,6 @@ class Order extends Controller
         ); 
 
         $sign2           = $this->sign($data, $this->app->get('settings')['weixin']['api_key']);
-
-        $this->app->logger->addInfo("sign2:" . $sign2);
 
         $data['paySign'] = $sign2;
 

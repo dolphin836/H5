@@ -53,7 +53,6 @@ $(function() {
 
         $.post('/order/add', function(response) {
             var response = $.parseJSON(response);
-            console.log(response);
 
             if (response.code != 0) {
                 alert(response.msg);
@@ -61,7 +60,6 @@ $(function() {
             }
 
             var data = response.data;
-            console.log(data);
 
             WeixinJSBridge.invoke(
                 'getBrandWCPayRequest', {
