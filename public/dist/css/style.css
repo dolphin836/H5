@@ -16,6 +16,10 @@ body {
 	color: #F43530;
 }
 
+.green {
+	color: #0BB20C;
+}
+
 .cart-count {
 	position: absolute;
 	top: 2px;
@@ -137,4 +141,41 @@ body {
 	font-size: 12px;
 	color: #999;
 	cursor: pointer;
+}
+
+.ticket_use {
+	background: url(../img/use.png) no-repeat;
+	background-position: 100% 0;
+	border-top: 1px solid #09bb07;
+	border-bottom: 1px solid #09bb07;
+}
+
+.ticket_used {
+	background: url(../img/used.png) no-repeat;
+	background-position: 100% 0;
+	border-top: 1px solid #8a8a8a;
+	border-bottom: 1px solid #8a8a8a;
+}
+
+.pay_status_0 {
+	background: url(../img/pay.png) no-repeat;
+	background-position: 0 20px;
+	padding-left: 63px;
+}
+
+.pay_status_1 {
+	background: url(../img/payd.png) no-repeat;
+	background-position: 0 20px;
+	padding-left: 63px;
+}
+
+.pay_status_0 .weui-media-box__desc,
+.pay_status_1 .weui-media-box__desc {
+	color: #707070;
+}
+
+.qrcode {
+	border: 1px solid #b5b5b5;
+	border-radius: 8px;
+	margin-top: 20px;
 }

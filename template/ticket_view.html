@@ -5,8 +5,12 @@
 
 <div class="panel">
     <h3 class="text-center"><?php echo $ticket['product_name']; ?></h3>
-    <h5 class="text-center"><?php echo $ticket['product_price']; ?></h5>
-    <!--<div id="qrcode"></div>-->
-    <img src="<?php echo $ticket['qr']; ?>">
-    <h5 class="text-center"><?php echo $ticket['code']; ?></h5>
+    <h5 class="text-center">￥<?php echo $ticket['product_price']; ?></h5>
+    <div class="text-center">
+        <img src="<?php echo $ticket['qr']; ?>" class="qrcode">
+    </div>
+    <h5 class="text-center">编码：<?php echo $ticket['code']; ?></h5>
+    <div class="weui-media-box__info" style="padding-bottom:20px;">
+        <h5 class="text-center">请向现场工作人员展示您的二维码完成验票！</h5>
+    </div>
 </div>

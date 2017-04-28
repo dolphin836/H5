@@ -18,7 +18,7 @@ class Ticket extends Controller
 
     public function index()
     {
-        $results        = $this->app->db->select('ticket', ['id', 'code', 'product_name', 'product_price', 'status', 'create_time'], ['uuid[=]' => $_SESSION['uuid']]);
+        $results        = $this->app->db->select('ticket', ['id', 'code', 'product_name', 'product_price', 'status', 'create_time', 'modifie_time'], ['uuid[=]' => $_SESSION['uuid']]);
         
         $ticket_open    = array();
         $ticket_close   = array();
@@ -39,7 +39,7 @@ class Ticket extends Controller
                  'product_name' => $result['product_name'],
                 'product_price' => $result['product_price'],
                        'status' => $result['status'],
-                  'create_time' => date("Y-m-d H:i:s", $result['create_time'])
+                  'modifie_time' => date("Y-m-d H:i:s", $result['modifie_time'])
                 );
             }
         }
@@ -108,11 +108,14 @@ class Ticket extends Controller
 
         $uuid   = $ticket[0]['uuid'];
 
-        $user   = $this->app->db->select('user', ['nickname', 'telephone'], ['uuid[=]' => $uuid]);
+        $user   = $this->app->db->select('user', ['nickname', 'telephone', 'image'], ['uuid[=]' => $uuid]);
         $data['user_name']      = $user[0]['nickname'];
         $data['user_telephone'] = $user[0]['telephone'];
+        $data['user_image']     = $user[0]['image'];
 
-        echo $this->app->template->render('ticket_check', ['server' => $this->server, 'item' => 'ticket', 'cartCount' => $this->cartCount, 'data' => $data]);
+        $default_user_image  = $this->image_server . 'default_user_image.png';
+
+        echo $this->app->template->render('ticket_check', ['server' => $this->server, 'item' => 'ticket', 'cartCount' => $this->cartCount, 'data' => $data, 'default_user_image' => $default_user_image]);
     }
 
     public function pass()

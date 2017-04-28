@@ -1,13 +1,20 @@
 <?php $this->layout('template', ['title' => '检票', 'server' => $server, 'item' => $item, 'cartCount' => $cartCount]); ?>
 
 <div class="panel">
-    <h2 class="text-center">票码信息</h2>
-    <h3 class="text-center"><?php echo $data['product_name']; ?></h3>
-    <h5 class="text-center"><?php echo $data['product_price']; ?></h5>
-    <h5 class="text-center"><?php echo $data['create_time']; ?></h5>
-    <h5 class="text-center"><?php echo $data['code']; ?></h5>
-    <h2 class="text-center">用户信息</h2>
-    <h3 class="text-center"><?php echo $data['user_name']; ?></h3>
-    <h3 class="text-center"><?php echo $data['user_telephone']; ?></h3>
-    <a href="/ticket/pass/<?php echo $data['code']; ?>">确认使用</a>
+    <h2 style="padding-left:15px;">确认票码信息</h2>
+    <h3 class="text-center green"><?php echo $data['product_name']; ?></h3>
+    <h5 class="text-center red">￥<?php echo $data['product_price']; ?></h5>
+    <h5 class="text-center weui-media-box__desc"><?php echo $data['create_time']; ?></h5>
+    <h5 class="text-center weui-media-box__desc"><?php echo $data['code']; ?></h5>
+    <h2 style="margin-top:20px;padding-left:15px;">确认用户信息</h2>
+    <div class="text-center">
+        <img style="width:60px;height:60px;border-radius:30px;" src="<?php echo ($data['user_image'] == '' ? $default_user_image : $data['user_image']); ?>" alt="">
+    </div>
+    <h3 class="text-center weui-media-box__desc"><?php echo $data['user_name']; ?></h3>
+    <h3 class="text-center weui-media-box__desc"><?php echo $data['user_telephone']; ?></h3>
+
+    <div class="weui-form-preview__ft" style="margin-top:20px;">
+        <a class="weui-form-preview__btn weui-form-preview__btn_default" href="#">取消</a>
+        <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="/ticket/pass/<?php echo $data['code']; ?>">确认</a>
+    </div>
 </div>

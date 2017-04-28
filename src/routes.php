@@ -9,6 +9,7 @@ $routes = array(
     array('get',  'account.html'),
     array('get',  'cart/clean[/{id}]'),
     array('get',  'account/order.html'),
+    array('get',  'account/login'),
     array('get',  'ticket/view/{id:[0-9]+}.html'),
     array('get',  'ticket/check/{code:[0-9]+}'),
     array('get',  'ticket/pass/{code:[0-9]+}'),

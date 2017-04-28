@@ -23,7 +23,9 @@ class Account extends Controller
 
         $user   = $this->app->db->select('user', ['nickname', 'telephone', 'image', 'transaction', 'total', 'type'], ['uuid[=]' => $_SESSION['uuid']]);
 
-        echo $this->app->template->render('account', ['server' => $this->server, 'item' => 'account', 'cartCount' => $this->cartCount, 'user' => $user[0]]);
+        $default_user_image  = $this->image_server . 'default_user_image.png';
+
+        echo $this->app->template->render('account', ['server' => $this->server, 'item' => 'account', 'cartCount' => $this->cartCount, 'user' => $user[0], 'default_user_image' => $default_user_image]);
     }
 
     public function order()
@@ -36,6 +38,11 @@ class Account extends Controller
         $order   = $this->app->db->select('order', ['code', 'total', 'sub_total', 'red_total', 'payment_code', 'payment_number', 'status', 'create_time', 'payed_time'], ['uuid[=]' => $_SESSION['uuid']]);
 
         echo $this->app->template->render('order', ['server' => $this->server, 'item' => 'account', 'cartCount' => $this->cartCount, 'order' => $order]);
+    }
+
+    public function login()
+    {
+        $_SESSION['uuid'] = 'oNP02wK_vjLWB_iRRf6qbqmDXBiE';
     }
 
 }
