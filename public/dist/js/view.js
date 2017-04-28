@@ -17,12 +17,9 @@ $(function() {
     $option_value
         .on('click', function (e) {
             var option_price = parseInt(this.getAttribute("title"));
-            console.log(option_price);
             var real_price   = base_price + option_price;
-            console.log(real_price);
             $product_price.html(real_price + '.00');
             var dis_price = real_price * 0.88;
-            console.log(dis_price);
             $product_discount.html(dis_price.toFixed(2));
         })
     ;
