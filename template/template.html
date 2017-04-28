@@ -12,7 +12,7 @@
             <div class="weui-tab__panel">
                 <?php echo $this->section('content'); ?>
             </div>
-            <div class="weui-tabbar" style="<?php echo ($item == 'view' ? 'display:none' : 'block'); ?>;">
+            <div class="weui-tabbar" style="<?php echo ($item == 'view' ? 'display:none;' : ''); ?>;">
                 <a href="<?php echo $server . 'index.html'; ?>" class="weui-tabbar__item <?php echo ($item == 'discover' ? 'weui-bar__item_on' : ''); ?>">
                     <p class="weui-tabbar__label nav-item-discover nav-item">所有项目</p>
                 </a>
@@ -28,7 +28,7 @@
                 </a>
             </div>
 
-            <div class="weui-tabbar">
+            <div class="weui-tabbar" style="<?php echo ($item == 'view' ? '' : 'display:none;'); ?>;">
                 <a href="<?php echo $server . 'index.html'; ?>" class="weui-tabbar__item <?php echo ($item == 'discover' ? 'weui-bar__item_on' : ''); ?>">
                     <p class="weui-tabbar__label nav-item-discover nav-item">所有项目</p>
                 </a>
