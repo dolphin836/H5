@@ -48,18 +48,14 @@ $app->add(function ($request, $response, $next) {
     $headers   = $request->getHeader('HTTP_USER_AGENT'); // 根据 User Agent 识别微信内置浏览器，做身份验证
     $userAgent = $headers[0];
 
-    if ( strpos($userAgent, 'MicroMessenger') !== false ) {
-        if ( ! isset($_SESSION['uuid']) ) {
-            $host = $request->getUri()->getHost();
-            $path = $request->getUri()->getPath();
-            $back = urlencode('http://' . $host . $path);
-            $url  = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" . $this->get('settings')['weixin']['appID'] . "&redirect_uri=" . $back . "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
-            $newResponse = $response->withHeader('Location', $url);
+    if ( strpos($userAgent, 'MicroMessenger') !== false && ! isset($_SESSION['uuid']) ) {
+        $host = $request->getUri()->getHost();
+        $path = $request->getUri()->getPath();
+        $back = urlencode('http://' . $host . $path);
+        $url  = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" . $this->get('settings')['weixin']['appID'] . "&redirect_uri=" . $back . "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+        $newResponse = $response->withHeader('Location', $url);
 
-            return $newResponse;
-        }
-    } else {
-        exit("请在微信内使用。");
+        return $newResponse;
     }
     
     $response = $next($request, $response);
