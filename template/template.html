@@ -29,10 +29,10 @@
             </div>
 
             <div class="weui-tabbar" style="<?php echo ($item == 'view' ? '' : 'display:none;'); ?>;">
-                <a href="<?php echo $server . 'index.html'; ?>" class="weui-tabbar__item <?php echo ($item == 'discover' ? 'weui-bar__item_on' : ''); ?>">
+                <a href="<?php echo $server . 'index.html'; ?>" class="weui-tabbar__item weui-bar__item_on">
                     <p class="weui-tabbar__label nav-item-discover nav-item">所有项目</p>
                 </a>
-                <a href="<?php echo $server . 'cart.html'; ?>" class="weui-tabbar__item <?php echo ($item == 'cart' ? 'weui-bar__item_on' : ''); ?>" style="position:relative;">
+                <a href="<?php echo $server . 'cart.html'; ?>" class="weui-tabbar__item" style="position:relative;">
                     <span class="weui-badge cart-count" id="cart-count" style="display:<?php echo ($cartCount ? 'block' : 'none'); ?>"><?php echo $cartCount; ?></span>
                     <p class="weui-tabbar__label nav-item nav-item-cart">购物车</p>
                 </a>
