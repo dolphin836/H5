@@ -1,33 +1,40 @@
 $(function() {
-    var $sliderTrack      = $('#sliderTrack'),
-        $sliderHandler    = $('#sliderHandler'),
-        $sliderValue      = $('#sliderValue'),
-        $checkout         = $('#checkout'),
+    var $checkout         = $('#checkout'),
         $addCart          = $('#addCart'),
         $add_cart_success = $('#add-cart-success'),
         $cart_count       = $('#cart-count'),
-        $product_quantity = $("input[name=quantity]");
+        $product_quantity = $("input[name=quantity]"),
+        $option_value     = $("input[type=radio]"),
+        $product_price    = $("#product_price");
 
-    var totalLen  = $('#sliderInner').width(),
-        startLeft = 0,
-        startX    = 0;
+    var base_price = parseInt($product_price.html());
+
+    var $decrease  = $('#decrease'),
+        $increase  = $('#increase'),
+        $number    = $('#quantity-number');
+
+    // $option_value
+    //     .on('click', function (e) {
+
+    //     })
+    // ;
     // 选择数量
-    $sliderHandler
-        .on('touchstart', function (e) {
-            startLeft = parseInt($sliderHandler.css('left')) * totalLen / 100;
-            startX    = e.changedTouches[0].clientX;
+    $decrease
+        .on('click', function (e) {
+            var count = parseInt($product_quantity.val());
+            if (count > 1) {
+                count--;
+            }
+            $product_quantity.val(count);
+            $number.html(count);
         })
-        .on('touchmove', function(e){
-            var dist = startLeft + e.changedTouches[0].clientX - startX,
-                percent;
-            dist     = dist < 0 ? 0 : dist > totalLen ? totalLen : dist;
-            percent  =  parseInt(dist / totalLen * 100);
-            $sliderTrack.css('width', percent + '%');
-            $sliderHandler.css('left', percent + '%');
-            $sliderValue.text(percent);
-            $product_quantity.val(percent);
-
-            e.preventDefault();
+    ;
+    $increase
+        .on('click', function (e) {
+            var count = parseInt($product_quantity.val());
+            count++;
+            $product_quantity.val(count);
+            $number.html(count);
         })
     ;
     // 加入购物车

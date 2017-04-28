@@ -20,7 +20,7 @@ class Cart extends Controller
         $total    = 0;
         if ( isset($_SESSION['cart']) ) {
             $cart     = $_SESSION['cart'];
-            foreach($cart as $c) {
+            foreach($cart as $key => $c) {
                 $results        = $this->app->db->select('product', ['name', 'image', 'price'], ['id[=]' => $c['id']]);
                 $price          = 0;
                 $text           = array();
@@ -34,7 +34,7 @@ class Cart extends Controller
                 foreach ($results as $result) {
                     $price     += (int)$result['price'];
                     $total     += $price * (int)$c['quantity'];
-                    $products[] = array(
+                    $products[$key] = array(
                         'cover' => $this->image_server . $result['image'],
                         'name' => $result['name'],
                         'text' => $text,
@@ -52,9 +52,9 @@ class Cart extends Controller
         }
 
         $scripts[] = $this->server . 'dist/js/' . 'zepto.min.js';
-        $scripts[] = $this->server . 'dist/js/' . 'cart.js?34444';
+        $scripts[] = $this->server . 'dist/js/' . 'cart.js';
 
-        $discount  = $total * 0.1;
+        $discount  = $total * $this->app->get('settings')['default']['discount'];
         $pay       = $total - $discount;
 
         $total     = number_format ($total, 2);

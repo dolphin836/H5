@@ -1126,7 +1126,7 @@ button.weui-vcode-btn {
   }
 }
 .weui-article {
-  padding: 20px 15px;
+  padding: 5px 15px;
   font-size: 15px;
 }
 .weui-article section {
@@ -1405,7 +1405,7 @@ a.weui-media-box:active {
 }
 .weui-media-box__title {
   font-weight: 400;
-  font-size: 17px;
+  font-size: 18px;
   width: auto;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1413,11 +1413,13 @@ a.weui-media-box:active {
   word-wrap: normal;
   word-wrap: break-word;
   word-break: break-all;
+  line-height: 18px;
+  margin-bottom: 10px;
 }
 .weui-media-box__desc {
   color: #999999;
   font-size: 13px;
-  line-height: 1.2;
+  line-height: 1.6;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -1426,9 +1428,8 @@ a.weui-media-box:active {
 }
 .weui-media-box__info {
   margin-top: 15px;
-  padding-bottom: 5px;
   font-size: 13px;
-  color: #CECECE;
+  color: #09BB07;
   line-height: 1em;
   list-style: none;
   overflow: hidden;
@@ -1454,15 +1455,16 @@ a.weui-media-box:active {
 }
 .weui-media-box_appmsg .weui-media-box__hd {
   margin-right: .8em;
-  width: 60px;
-  height: 60px;
-  line-height: 60px;
+  width: 128px;
+  height: 96px;
+  line-height: 96px;
   text-align: center;
 }
 .weui-media-box_appmsg .weui-media-box__thumb {
   width: 100%;
   max-height: 100%;
   vertical-align: top;
+  border-radius: 4px;
 }
 .weui-media-box_appmsg .weui-media-box__bd {
   -webkit-box-flex: 1;

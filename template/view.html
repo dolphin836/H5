@@ -1,63 +1,62 @@
 <?php $this->layout('template', ['title' => $product['name'], 'server' => $server, 'item' => $item, 'cartCount' => $cartCount, 'scripts' => $scripts]); ?>
 
+
+<img src="<?php echo $product['cover']; ?>" alt="<?php echo $product['name']; ?>" style="width:100%;">
 <article class="weui-article">
     <form id="product">
         <input type="hidden" name="id" value="<?php echo $product['id']; ?>">
-        <img src="<?php echo $product['cover']; ?>" alt="<?php echo $product['name']; ?>">
-        <h1><?php echo $product['name']; ?></h1>
-        <h2>价格：<?php echo $product['price']; ?></h2>
-
+        <h1 style="margin-bottom:0.5em;color:#000;"><b><?php echo $product['name']; ?></b></h1>
+        <h3><?php echo $product['abstract']; ?></h3>
+        <h3 style="color:#09BB07;">
+            ￥<span id="product_price" style="text-decoration:line-through;"><?php echo $product['price']; ?></span>
+            <span style="padding-left:10px;">优惠价：￥<?php echo number_format($product['discount'], 2); ?></span>
+        </h3>
 
         <?php foreach($product['options'] as $option): ?>
         <div class="weui-cells__title"><?php echo $option['name'] ?></div>
-        <div class="weui-cells weui-cells_radio">
             <?php foreach($option['value'] as $value): ?>
-            <label class="weui-cell weui-check__label">
-                <div class="weui-cell__bd">
-                    <p><?php echo $value['description'] ?></p>
-                </div>
-                <div class="weui-cell__ft">
-                    <input type="radio" class="weui-check" name="optionRadio<?php echo $option['id']; ?>" value="<?php echo $value['id']; ?>" <?php echo ($value['is_checked'] ? 'checked' : ''); ?>>
-                    <span class="weui-icon-checked"></span>
-                </div>
+            <label class="radio-inline" style="margin-left:15px;">
+                <input type="radio" name="optionRadio<?php echo $option['id']; ?>" value="<?php echo $value['id']; ?>" <?php echo ($value['is_checked'] ? 'checked' : ''); ?>> <?php echo $value['description'] ?> <?php echo ((int)$value['add_price'] ? '+' . $value['add_price'] : ''); ?>
             </label>
             <?php endforeach; ?>
-        </div>
         <?php endforeach; ?>
-        
-        <h3>数量</h3>
-
-        <div class="weui-slider-box">
-            <div class="weui-slider">
-                <div id="sliderInner" class="weui-slider__inner">
-                    <div id="sliderTrack" style="width: 1%;" class="weui-slider__track"></div>
-                    <div id="sliderHandler" style="left: 1%;" class="weui-slider__handler"></div>
-                </div>
-            </div>
-            <div id="sliderValue" class="weui-slider-box__value">1</div>
-            <input type="hidden" name="quantity" value="1">
-        </div>
+        <input type="hidden" name="quantity" value="1">
     </form>
 
+    <div class="weui-cells__title">数量</div>
+    <div class="weui-flex" style="margin-left:15px;width:120px;">
+        <div class="weui-flex__item">
+            <button id="decrease" class="quantity-decrease">-</button>
+        </div>
+        <div class="weui-flex__item">
+            <p class="quantity-number" id="quantity-number">1</p>
+            
+        </div>
+        <div class="weui-flex__item">
+            <button id="increase" class="quantity-increase">+</buttona>
+        </div>
+    </div>
 
-    
-    <section>
-        <h2 class="title"><?php echo $product['abstract']; ?></h2>
-        <section>
-            <?php echo $product['context']; ?>
-        </section>
+    <section style="margin-top: 20px;">
+        <?php echo $product['context']; ?>
     </section>
 </article>
 
 
-
-<div class="weui-flex">
-    <div>
-        <buttona id="addCart" class="weui-btn weui-btn_plain-primary">加入购物车</button>
-    </div>
-    <div class="weui-flex__item">
-        <button id="checkout" class="weui-btn weui-btn_warn">立即购买</button>
-    </div>
+<div class="weui-tabbar">
+    <a href="<?php echo $server . 'index.html'; ?>" class="weui-tabbar__item <?php echo ($item == 'discover' ? 'weui-bar__item_on' : ''); ?>">
+        <p class="weui-tabbar__label nav-item-discover nav-item">所有项目</p>
+    </a>
+    <a href="<?php echo $server . 'cart.html'; ?>" class="weui-tabbar__item <?php echo ($item == 'cart' ? 'weui-bar__item_on' : ''); ?>" style="position:relative;">
+        <span class="weui-badge cart-count" id="cart-count" style="display:<?php echo ($cartCount ? 'block' : 'none'); ?>"><?php echo $cartCount; ?></span>
+        <p class="weui-tabbar__label nav-item nav-item-cart">购物车</p>
+    </a>
+    <a href="javascript:" id="addCart" class="weui-tabbar__item addCart">
+        <p class="weui-tabbar__label">加入购物车</p>
+    </a>
+    <a href="javascript:" id="checkout" class="weui-tabbar__item checkout">
+        <p class="weui-tabbar__label">立即购买</p>
+    </a>
 </div>
 
 <div id="add-cart-success" style="display: none;">

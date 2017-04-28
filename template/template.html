@@ -4,15 +4,15 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
         <title><?php echo $this->e($title); ?></title>
-        <link href="//res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css" rel="stylesheet">
-        <link href="<?php echo $server . 'dist/css/style.css?666'; ?>" rel="stylesheet">
+        <link href="<?php echo $server . 'dist/css/weui.css'; ?>" rel="stylesheet">
+        <link href="<?php echo $server . 'dist/css/style.css'; ?>" rel="stylesheet">
     </head>
     <body>
         <div class="weui-tab">
             <div class="weui-tab__panel">
                 <?php echo $this->section('content'); ?>
             </div>
-            <div class="weui-tabbar">
+            <div class="weui-tabbar" style="<?php echo ($item == 'view' ? 'display:none' : 'block'); ?>;">
                 <a href="<?php echo $server . 'index.html'; ?>" class="weui-tabbar__item <?php echo ($item == 'discover' ? 'weui-bar__item_on' : ''); ?>">
                     <p class="weui-tabbar__label nav-item-discover nav-item">所有项目</p>
                 </a>

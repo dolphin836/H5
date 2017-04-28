@@ -1,60 +1,61 @@
 <?php $this->layout('template', ['title' => '购物车', 'server' => $server, 'item' => $item, 'cartCount' => $cartCount, 'scripts' => $scripts]); ?>
 
+
+<?php if ( empty($products) ): ?>
+<div class="weui-msg">
+    <div class="weui-msg__icon-area"><i class="weui-icon-waiting weui-icon_msg"></i></div>
+    <div class="weui-msg__text-area">
+        <h2 class="weui-msg__title">您的购物车空空如也</h2>
+    </div>
+    <div class="weui-msg__opr-area">
+        <p class="weui-btn-area">
+            <a href="/index.html" class="weui-btn weui-btn_primary">继续选购</a>
+        </p>
+    </div>
+</div>
+<?php else: ?>
 <div class="weui-panel weui-panel_access">
     <div class="weui-panel__bd">
-        <?php if ( empty($products) ): ?>
-        <h1>购物车为空！</h1>
-        <?php else: ?>
-        <!--<button class="weui-btn weui-btn_plain-primary" id="cart-clean">清空购物车</button>-->
         <?php foreach ($products as $key => $product): ?>
         <div class="weui-media-box weui-media-box_appmsg">
             <div class="weui-media-box__hd">
                 <img class="weui-media-box__thumb" src="<?php echo $product['cover']; ?>" alt="<?php echo $product['name']; ?>">
             </div>
             <div class="weui-media-box__bd">
-                <h4 class="weui-media-box__title"><?php echo $product['name']; ?></h4>
+                <h4 class="weui-media-box__title"><?php echo $product['name']; ?><span class="cart-remove" title="<?php echo $key; ?>">移除</span></h4>
+                <p class="weui-media-box__desc">
                 <?php foreach($product['text'] as $text): ?>
-                <button class="weui-btn weui-btn_mini weui-btn_plain-primary weui-btn_tag"><?php echo $text; ?></button>
+                    <?php echo $text; ?>&nbsp;&nbsp;
                 <?php endforeach; ?>
+                </p>
                 <h5 class="weui-media-box__desc red">价格：<span class="f14">¥</span><?php echo $product['price']; ?></h5>
                 <p class="weui-media-box__desc">数量：<?php echo $product['quantity']; ?></p>
             </div>
-            <div class="weui-media-box__bd" style="text-align: right;">
-                <i class="weui-icon-cancel cart-remove" title="<?php echo $key; ?>"></i>
-            </div>
-
         </div>
         <?php endforeach; ?>
-
-<div class="weui-form-preview">
-
-    <div class="weui-form-preview__bd">
-        <p>
-            <label class="weui-form-preview__label">商品金额</label>
-            <span class="weui-form-preview__value"><span class="f14">¥</span><?php echo $total; ?></span>
-        </p>
-        <p>
-            <label class="weui-form-preview__label">优惠金额</label>
-            <span class="weui-form-preview__value"><span class="f14">¥</span><?php echo $discount; ?></span>
-        </p>
-    </div>
-    <div class="weui-form-preview__hd">
-        <label class="weui-form-preview__label">实际支付金额</label>
-        <em class="weui-form-preview__value red"><span class="f16">¥</span><?php echo $pay; ?></em>
-    </div>
-
-    <div class="weui-form-preview__ft">
-        <a class="weui-form-preview__btn weui-form-preview__btn_default" href="../index.html">继续选购</a>
-        <button class="weui-form-preview__btn weui-form-preview__btn_primary" id="checkout">提交订单</button>
-    </div>
-
-</div>
-
-
-        <?php endif; ?>
+        <div class="weui-form-preview">
+            <div class="weui-form-preview__bd">
+                <p>
+                    <label class="weui-form-preview__label">商品金额</label>
+                    <span class="weui-form-preview__value"><span class="f14">¥</span><?php echo $total; ?></span>
+                </p>
+                <p>
+                    <label class="weui-form-preview__label">优惠金额</label>
+                    <span class="weui-form-preview__value"><span class="f14">¥</span><?php echo $discount; ?></span>
+                </p>
+            </div>
+            <div class="weui-form-preview__hd">
+                <label class="weui-form-preview__label">实际支付金额</label>
+                <em class="weui-form-preview__value red"><span class="f16">¥</span><?php echo $pay; ?></em>
+            </div>
+            <div class="weui-form-preview__ft">
+                <a class="weui-form-preview__btn weui-form-preview__btn_default" href="../index.html">继续选购</a>
+                <button class="weui-form-preview__btn weui-form-preview__btn_primary" id="checkout">提交订单</button>
+            </div>
+        </div>
     </div>
 </div>
-
+ <?php endif; ?>
 
 <!--BEGIN actionSheet-->
 <div>

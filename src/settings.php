@@ -26,6 +26,7 @@ return [
         'default' => [
             'server' => 'http://mobie.hbdx.cc/',
             'image_server' => 'http://mobie.hbdx.cc/'
+            'discount' => 0.12
         ],
     ],
 ];

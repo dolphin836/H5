@@ -17,7 +17,7 @@ $(function() {
     $cart_remove
         .on('click', function (e) {
             var server = '/cart/clean/' + this.getAttribute("title");
-            $.get(server, function(response){
+            $.get(server, function(response) {
                 location.reload();
             })
         })

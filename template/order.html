@@ -1,6 +1,20 @@
 <?php $this->layout('template', ['title' => '我的订单', 'server' => $server, 'item' => $item, 'cartCount' => $cartCount]); ?>
 
 
+
+<?php if (empty($order)): ?>
+<div class="weui-msg">
+    <div class="weui-msg__icon-area"><i class="weui-icon-waiting weui-icon_msg"></i></div>
+    <div class="weui-msg__text-area">
+        <h2 class="weui-msg__title">您还没有订单哦~</h2>
+    </div>
+    <div class="weui-msg__opr-area">
+        <p class="weui-btn-area">
+            <a href="/index.html" class="weui-btn weui-btn_primary">继续选购</a>
+        </p>
+    </div>
+</div>
+<?php else: ?>
 <div class="weui-panel">
     <div class="weui-panel__bd">
         <div class="weui-media-box weui-media-box_small-appmsg">
@@ -17,3 +31,4 @@
         </div>
     </div>
 </div>
+<?php endif; ?>

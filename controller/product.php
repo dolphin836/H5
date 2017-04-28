@@ -56,14 +56,17 @@ class Product extends Controller
                  'name' => $result['name'],
              'abstract' => $result['abstract'],
                 'price' => $result['price'],
+             'discount' => $result['price'] * (1 - $this->app->get('settings')['default']['discount']),
               'context' => $Parsedown->text($result['context']),
               'options' => $product_option
             );
         }
 
-        $scripts[] = $this->server . 'dist/js/' . 'zepto.min.js';
-        $scripts[] = $this->server . 'dist/js/' . 'view.js?1111';
+        // $discount  = (1 - $this->app->get('settings')['default']['discount']) * 10;
 
-        echo $this->app->template->render('view', ['server' => $this->server, 'item' => 'discover', 'scripts' => $scripts, 'cartCount' => $this->cartCount, 'product' => $product]);
+        $scripts[] = $this->server . 'dist/js/' . 'zepto.min.js';
+        $scripts[] = $this->server . 'dist/js/' . 'view.js';
+
+        echo $this->app->template->render('view', ['server' => $this->server, 'item' => 'view', 'scripts' => $scripts, 'cartCount' => $this->cartCount, 'product' => $product]);
     }
 }
