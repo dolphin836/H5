@@ -214,6 +214,8 @@ class Order extends Controller
         <sign>{$sign}</sign>
         </xml>";
 
+        $this->app->logger->addInfo("create order xml:" . $xml);
+
         $req = Requests::post($server, array(), $xml);
         
         if ($req->status_code != 200) {
