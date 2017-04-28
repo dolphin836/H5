@@ -33,7 +33,7 @@ class Order extends Controller
     {
         $data   = file_get_contents('php://input');
 
-        $this->app->logger->addInfo("callbackcallbackcallbackcallbackcallback", $data);
+        $this->app->logger->addInfo("callbackcallbackcallbackcallbackcallback" . $data);
 
         $this->reader->xml($data);
         $result = $this->reader->parse();
