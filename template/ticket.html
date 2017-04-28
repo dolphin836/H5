@@ -12,7 +12,17 @@
     <div class="weui-tab__panel">
         <div class="weui-tab__panel_page">
             <?php if (empty($ticket_open)): ?>
-            <h1>没有待使用的票</h1>
+            <div class="weui-msg">
+                <div class="weui-msg__icon-area"><i class="weui-icon-waiting weui-icon_msg"></i></div>
+                <div class="weui-msg__text-area">
+                    <h2 class="weui-msg__title">您没有待使用的票码</h2>
+                </div>
+                <div class="weui-msg__opr-area">
+                    <p class="weui-btn-area">
+                        <a href="/index.html" class="weui-btn weui-btn_primary">继续选购</a>
+                    </p>
+                </div>
+            </div>
             <?php else: ?>
             <?php foreach($ticket_open as $ticket): ?>
             <div class="weui-panel weui-panel_access" style="margin-top:20px;">
@@ -28,11 +38,21 @@
             </div>
             <?php endforeach; ?>
             <?php endif; ?>
-
         </div>
+
         <div class="weui-tab__panel_page" style="display:none">
             <?php if (empty($ticket_close)): ?>
-            <h1>没有已使用的票</h1>
+            <div class="weui-msg">
+                <div class="weui-msg__icon-area"><i class="weui-icon-waiting weui-icon_msg"></i></div>
+                <div class="weui-msg__text-area">
+                    <h2 class="weui-msg__title">您没有待使用的票码</h2>
+                </div>
+                <div class="weui-msg__opr-area">
+                    <p class="weui-btn-area">
+                        <a href="/index.html" class="weui-btn weui-btn_primary">继续选购</a>
+                    </p>
+                </div>
+            </div>
             <?php else: ?>
             <?php foreach($ticket_close as $ticket): ?>
             <div class="weui-panel weui-panel_access" style="margin-top:20px;">

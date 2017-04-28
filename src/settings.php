@@ -25,7 +25,8 @@ return [
         // default
         'default' => [
             'server' => 'http://h5.dolphin.com/',
-            'image_server' => 'http://h5.dolphin.com/'
+            'image_server' => 'http://h5.dolphin.com/',
+            'discount' => 0.12
         ],
     ],
 ];

@@ -138,10 +138,9 @@ class Order extends Controller
 
         $this->app->logger->addInfo("total:" . $total);
 
-        $discount  = $total * 0.1;
+        $discount  = $total * $this->app->get('settings')['default']['discount'];
         $pay       = $total - $discount;
-        // $pay_fen   = $pay * 100;
-        $pay_fen   = 1;
+        $pay_fen   = $pay * 100;
 
         $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
         $this->app->logger->addInfo("code:" . $code);
