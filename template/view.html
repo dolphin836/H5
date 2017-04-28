@@ -9,14 +9,14 @@
         <h3><?php echo $product['abstract']; ?></h3>
         <h3 style="color:#09BB07;">
             ￥<span id="product_price" style="text-decoration:line-through;"><?php echo $product['price']; ?></span>
-            <span style="padding-left:10px;">优惠价：￥<?php echo number_format($product['discount'], 2); ?></span>
+            <span style="padding-left:10px;">优惠价：￥<span id="product_discount"><?php echo number_format($product['discount'], 2); ?></span></span>
         </h3>
 
         <?php foreach($product['options'] as $option): ?>
         <div class="weui-cells__title"><?php echo $option['name'] ?></div>
             <?php foreach($option['value'] as $value): ?>
             <label class="radio-inline" style="margin-left:15px;">
-                <input type="radio" name="optionRadio<?php echo $option['id']; ?>" value="<?php echo $value['id']; ?>" <?php echo ($value['is_checked'] ? 'checked' : ''); ?>> <?php echo $value['description'] ?> <?php echo ((int)$value['add_price'] ? '+' . $value['add_price'] : ''); ?>
+                <input type="radio" title="<?php echo $value['add_price']; ?>" name="optionRadio<?php echo $option['id']; ?>" value="<?php echo $value['id']; ?>" <?php echo ($value['is_checked'] ? 'checked' : ''); ?>> <?php echo $value['description'] ?> <?php echo ((int)$value['add_price'] ? '+' . $value['add_price'] : ''); ?>
             </label>
             <?php endforeach; ?>
         <?php endforeach; ?>

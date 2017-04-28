@@ -5,7 +5,8 @@ $(function() {
         $cart_count       = $('#cart-count-2'),
         $product_quantity = $("input[name=quantity]"),
         $option_value     = $("input[type=radio]"),
-        $product_price    = $("#product_price");
+        $product_price    = $("#product_price"),
+        $product_discount = $("#product_discount");
 
     var base_price = parseInt($product_price.html());
 
@@ -13,11 +14,13 @@ $(function() {
         $increase  = $('#increase'),
         $number    = $('#quantity-number');
 
-    // $option_value
-    //     .on('click', function (e) {
-
-    //     })
-    // ;
+    $option_value
+        .on('click', function (e) {
+            var option_price = parseInt(this.getAttribute("title"));
+            $product_price.html(base_price + option_price + '.00');
+            $product_discount.html((base_price + option_price) * 0.88  + '.00');
+        })
+    ;
     // 选择数量
     $decrease
         .on('click', function (e) {
