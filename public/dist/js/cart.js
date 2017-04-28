@@ -49,6 +49,7 @@ $(function() {
 
     $('#weixinPay').on('click', function() {// 发起微信支付
         hideActionSheet();
+        $pay_back.fadeIn(200);
 
         $.post('/order/add', function(response) {
             var response = $.parseJSON(response);
@@ -74,7 +75,7 @@ $(function() {
                 function(res) {     
                     if (res.err_msg == "get_brand_wcpay_request:ok" ) {
                         //TO DO
-                        $pay_back.fadeIn(200);
+                        location.href = '/success.html';
                     }
                 }
             );
