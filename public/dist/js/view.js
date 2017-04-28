@@ -41,7 +41,6 @@ $(function() {
     $addCart
         .on('click', function (e) {
             $.post('/cart/add', $('#product').serialize(), function(response) {
-                console.log(response);
                 $count = parseInt($cart_count.html()) + parseInt($product_quantity.val());
                 if ($count >= 100) {
                     $count = '99+';
