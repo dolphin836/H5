@@ -86,7 +86,7 @@ class Ticket extends Controller
     {
         $workuser   = $this->app->db->select('user', ['type'], ['uuid[=]' => $_SESSION['uuid']]);
 
-        if ( empty($workuser) || $workuser[0]['type'] != '1' ) {
+        if ( empty($workuser) || $workuser[0]['type'] != '2' ) {
             var_dump("无效的验票人员");
             exit;
         }
@@ -119,7 +119,7 @@ class Ticket extends Controller
     {
         $workuser   = $this->app->db->select('user', ['type'], ['uuid[=]' => $_SESSION['uuid']]);
 
-        if ( empty($workuser) || $workuser[0]['type'] != '1' ) {
+        if ( empty($workuser) || $workuser[0]['type'] != '2' ) {
             var_dump("无效的验票人员");
             exit;
         }
