@@ -2,3 +2,6 @@
 /logs/*
 !/logs/README.md
 db.sql
+/src/settings.php
+/src/dependencies.php
+/public/dist/qrcode/*
