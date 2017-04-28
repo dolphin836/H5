@@ -1,6 +1,7 @@
 <?php
 
 require 'controller.php';
+require "wechat.class.php";
 
 class Order extends Controller
 {
@@ -86,6 +87,30 @@ class Order extends Controller
                         }
                     }
                     // 消息推送
+                    $options = array(
+                            'token'=> $this->app->get('settings')['weixin']['token'],
+                            'encodingaeskey'=> $this->app->get('settings')['weixin']['encodingaeskey'],
+                            'appid'=> $this->app->get('settings')['weixin']['appID'],
+                            'appsecret'=> $this->app->get('settings')['weixin']['appSecret']
+                    );
+
+                    $weObj = new Wechat($options);
+
+                    $json = array(
+                        "touser" => $openid,
+                   "template_id" => "9-ZOLKYAqs-31qanynTFg5-D_uhnPFkJylh9PQ-rho4",
+                           "url" => "http://mobie.hbdx.cc/ticket.html",
+                          "data" => array(
+                         "first" => array("value" => "您好，您的订单已付款成功", "color" => "#173177"),
+                      "keyword1" => array("value" => $order_code, "color" => "#173177"),
+                      "keyword2" => array("value" => date("Y-m-d H:i:s", time()), "color" => "#173177"),
+                      "keyword3" => array("value" => '￥'. $total_fee, "color" => "#173177"),
+                      "keyword4" => array("value" => "微信支付", "color" => "#173177"),
+                        "remark" => array("value" => "感谢您的惠顾", "color" => "#173177"),
+                        )
+                    );
+
+                    $weObj->sendTemplateMessage($json);
                 }
 
             }
