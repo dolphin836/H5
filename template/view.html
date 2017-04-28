@@ -42,23 +42,6 @@
     </section>
 </article>
 
-
-<div class="weui-tabbar">
-    <a href="<?php echo $server . 'index.html'; ?>" class="weui-tabbar__item <?php echo ($item == 'discover' ? 'weui-bar__item_on' : ''); ?>">
-        <p class="weui-tabbar__label nav-item-discover nav-item">所有项目</p>
-    </a>
-    <a href="<?php echo $server . 'cart.html'; ?>" class="weui-tabbar__item <?php echo ($item == 'cart' ? 'weui-bar__item_on' : ''); ?>" style="position:relative;">
-        <span class="weui-badge cart-count" id="cart-count" style="display:<?php echo ($cartCount ? 'block' : 'none'); ?>"><?php echo $cartCount; ?></span>
-        <p class="weui-tabbar__label nav-item nav-item-cart">购物车</p>
-    </a>
-    <a href="javascript:" id="addCart" class="weui-tabbar__item addCart">
-        <p class="weui-tabbar__label">加入购物车</p>
-    </a>
-    <a href="javascript:" id="checkout" class="weui-tabbar__item checkout">
-        <p class="weui-tabbar__label">立即购买</p>
-    </a>
-</div>
-
 <div id="add-cart-success" style="display: none;">
     <div class="weui-mask_transparent"></div>
     <div class="weui-toast">
