@@ -16,7 +16,7 @@
         <div class="weui-cells__title"><?php echo $option['name'] ?></div>
             <?php foreach($option['value'] as $value): ?>
             <label class="radio-inline" style="margin-left:15px;">
-                <input type="radio" title="<?php echo $value['add_price']; ?>" name="optionRadio<?php echo $option['id']; ?>" value="<?php echo $value['id']; ?>" <?php echo ($value['is_checked'] ? 'checked' : ''); ?>> <?php echo $value['description'] ?> <?php echo ((int)$value['add_price'] ? '+' . $value['add_price'] : ''); ?>
+                <input type="radio" title="<?php echo $value['add_price']; ?>" name="optionRadio<?php echo $option['id']; ?>" value="<?php echo $value['id']; ?>" <?php echo ($value['is_checked'] ? 'checked' : ''); ?>> <?php echo $value['description'] ?> <?php // echo ((int)$value['add_price'] ? '+' . $value['add_price'] : ''); ?>
             </label>
             <?php endforeach; ?>
         <?php endforeach; ?>

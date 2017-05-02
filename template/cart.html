@@ -17,7 +17,7 @@
 <div class="weui-panel weui-panel_access">
     <div class="weui-panel__bd">
         <?php foreach ($products as $key => $product): ?>
-        <div class="weui-media-box weui-media-box_appmsg">
+        <a href="<?php echo $product['view']; ?>" class="weui-media-box weui-media-box_appmsg">
             <div class="weui-media-box__hd">
                 <img class="weui-media-box__thumb" src="<?php echo $product['cover']; ?>" alt="<?php echo $product['name']; ?>">
             </div>
@@ -31,7 +31,7 @@
                 <h5 class="weui-media-box__desc red">价格：<span class="f14">¥</span><?php echo $product['price']; ?></h5>
                 <p class="weui-media-box__desc">数量：<?php echo $product['quantity']; ?></p>
             </div>
-        </div>
+        </a>
         <?php endforeach; ?>
         <div class="weui-form-preview">
             <div class="weui-form-preview__bd">
