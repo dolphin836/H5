@@ -8,8 +8,8 @@
         <h1 style="margin-bottom:0.5em;color:#000;"><b><?php echo $product['name']; ?></b></h1>
         <h3><?php echo $product['abstract']; ?></h3>
         <h3 style="color:#09BB07;">
-            ￥<span id="product_price" style="text-decoration:line-through;"><?php echo $product['price']; ?></span>
-            <span style="padding-left:10px;">优惠价：￥<span id="product_discount"><?php echo number_format($product['discount'], 2); ?></span></span>
+            ￥<span id="product_price"><?php echo $product['price']; ?></span>
+            <span style="padding-left:10px;display:none;">优惠价：￥<span id="product_discount"><?php echo number_format($product['discount'], 2); ?></span></span>
         </h3>
 
         <?php foreach($product['options'] as $option): ?>
