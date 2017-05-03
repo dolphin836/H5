@@ -6,7 +6,6 @@ $container = $app->getContainer();
 // view renderer
 $container['template'] = function ($c) {
     $settings = $c->get('settings')['template'];
-    // return new Slim\Views\PhpRenderer($settings['template_path']);
     return new League\Plates\Engine($settings['template_path'], 'html');
 };
 
@@ -21,13 +20,14 @@ $container['logger'] = function ($c) {
 
 // db
 $container['db'] = function($c) {
+    $settings = $c->get('settings')['database'];
     return new Medoo\Medoo([
         'database_type' => 'mysql',
-        'database_name' => 'db20170425',
-        'server' => 'rm-bp10x0o229wcgrg52.mysql.rds.aliyuncs.com',
-        'username' => 'db_user_001',
-        'password' => '295y9G@w5V$JCX*F',
-        'charset' => 'utf8',
+        'database_name' => $settings['name'],
+               'server' => $settings['server'],
+             'username' => $settings['username'],
+             'password' => $settings['password'],
+              'charset' => 'utf8',
     ]);
 };
 

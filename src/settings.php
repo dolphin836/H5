@@ -1,34 +1,40 @@
 <?php
 return [
     'settings' => [
-        'displayErrorDetails' => true, // set to false in production
-        'addContentLengthHeader' => false, // Allow the web server to send the content-length header
-
+        'displayErrorDetails' => true,
+        'addContentLengthHeader' => false,
         // Renderer settings
         'template' => [
-            'template_path' => __DIR__ . '/../template/',
+            'template_path' => __DIR__ . '/../template/'
         ],
         // weixin
         'weixin' => [
-            'appID' => 'wx3f57772b43b05ba5',
-            'appSecret' => '98926008d074d0ead28018fa8c686d32',
-            'mch_id' => '1460504502',
-            'api_key' => 'a5xKnFv8n0IacRZlper2fJqQXK62Kq82',
-            'buck_url' => 'http://mobie.hbdx.cc/order/callback',
-            'token' => '5MhSkoNZCxC8GNhmMlwITdNyXuebyxeF',
-            'encodingaeskey' => 'tldoRFpZaPndNYMkEY00nmoGCZsKm5W79N9oJBAns8F'
+                     'appID' => getenv('WEIXIN_APPID'),
+                 'appSecret' => getenv('WEIXIN_SECRET'),
+                    'mch_id' => getenv('WEIXIN_MCHID'),
+                   'api_key' => getenv('WEIXIN_APIKEY'),
+                  'buck_url' => getenv('WEIXIN_BACK'),
+                     'token' => getenv('WEIXIN_TOKEN'),
+            'encodingaeskey' => getenv('WEIXIN_ENCODE')
         ],
         // Monolog settings
         'logger' => [
-            'name' => 'slim-app',
-            'path' => __DIR__ . '/../logs/app.log',
-            'level' => \Monolog\Logger::DEBUG,
+             'name' => 'slim-app',
+             'path' => __DIR__ . '/../logs/app.log',
+            'level' => \Monolog\Logger::DEBUG
         ],
         // default
         'default' => [
-            'server' => 'http://mobie.hbdx.cc/',
-            'image_server' => 'http://img.hbdx.cc/',
-            'discount' => 0
+                  'server' => getenv('DOMAIN'),
+            'image_server' => getenv('IMG_DOMAIN'),
+                'discount' => 0
+        ],
+        // db
+        'database' => [
+              'server' => getenv('DB_SERVER'),
+            'username' => getenv('DB_USERNAME'),
+            'password' => getenv('DB_PASSWORD'),
+                'name' => getenv('DB_NAME')
         ],
     ],
 ];
