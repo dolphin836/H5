@@ -5,11 +5,11 @@ $app->add(function ($request, $response, $next) {
     $this->logger->addInfo("httpQuery:" . $httpQuery);
     if ($httpQuery != '') {
         $query      = explode('&', $httpQuery);
-        $this->logger->addInfo("query:" . $query);
+        $this->logger->addInfo("query:", $query);
         foreach ($query as $q) {
             $str    = explode('=', $q);
 
-            if ($str[0]  == 'code' && ! isset($_SESSION['uuid']) ) { // 检测到 code 参数并且未登录 
+            if ($str[0]  == 'code' && ! isset($_SESSION['uuid']) ) { // 检测到微信网页授权的 code 参数并且未登录 
                 $weixin     = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" . $this->get('settings')['weixin']['appID'] . "&secret=" . $this->get('settings')['weixin']['appSecret'] . "&code=" . $str[1] . "&grant_type=authorization_code"; 
                 $data       = file_get_contents($weixin);
                 $data       = json_decode($data);
@@ -41,6 +41,18 @@ $app->add(function ($request, $response, $next) {
                 }
 
                 $_SESSION['uuid'] = $open_id;
+            }
+
+            if ($str[0]  == 'auth_code' && ! isset($_SESSION['uuid']) ) { // 检测到支付宝网页授权的 auth_code
+                $auth_code = $str[1];
+                $zhi       = "https://openapi.alipay.com/gateway.do";
+                $content   = array(
+                    'grant_type' => 'authorization_code',
+                    'code' => $auth_code
+                );
+
+                $req = Requests::post($zhi, $content);
+                $this->logger->addInfo("req:", $req);
             }
         }
     }

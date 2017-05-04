@@ -17,6 +17,8 @@ $env->load();
 $settings = include __DIR__ . '/../src/settings.php';
 $app      = new \Slim\App($settings);
 
+Requests::register_autoloader();
+
 require __DIR__ . '/../src/dependencies.php';
 
 require __DIR__ . '/../src/middleware.php';
