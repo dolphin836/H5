@@ -44,7 +44,9 @@ $app->add(function ($request, $response, $next) {
             }
 
             if ($str[0]  == 'auth_code' && ! isset($_SESSION['uuid']) ) { // 检测到支付宝网页授权的 auth_code
+                $this->logger->addInfo("111111111111");
                 $auth_code = $str[1];
+                $this->logger->addInfo("auth_code:" . $auth_code);
                 $zhi       = "https://openapi.alipay.com/gateway.do";
                 $content   = array(
                     'grant_type' => 'authorization_code',
