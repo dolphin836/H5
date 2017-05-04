@@ -4,20 +4,6 @@ header("Content-type: text/html; charset=utf-8");
 // var_dump($_SERVER);
 require __DIR__ . '/../vendor/autoload.php';
 
-function sign($data)
-{
-    $priKey = file_get_contents('rsa_private_key.pem');
-    $res = openssl_get_privatekey($priKey);
-    
-    openssl_sign($data, $sign, $res, OPENSSL_ALGO_SHA256);
-    
-    openssl_free_key($res);
-    
-    $sign = base64_encode($sign);
-
-    return $sign;
-}
-
 Requests::register_autoloader();
 
 if (strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false && $_SERVER['QUERY_STRING'] == '' ) { // 支付宝浏览器
@@ -60,7 +46,17 @@ if (!empty($query) ) {
 
         var_dump($data);
 
-        $sign = sign($data);
+        $priKey = file_get_contents('rsa_private_key.pem');
+        var_dump($priKey);
+        $res    = openssl_pkey_get_private($priKey);
+        var_dump($res);
+        
+        openssl_sign($data, $sign, $res, OPENSSL_ALGO_SHA256);
+        
+        openssl_free_key($res);
+        
+        $sign = base64_encode($sign);
+
         var_dump($sign);
         $data['sign'] = $sign;
 
