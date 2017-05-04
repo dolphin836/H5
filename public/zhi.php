@@ -114,15 +114,13 @@ if (!empty($query) ) {
 
         $response2 = Requests::post($zhi, array(), $data2);
 
-        var_dump($response2);
-
         if ($response2->status_code != 200) {
             var_dump("Request Error.");
         }
 
-        $json2 = json_decode($response2->body);
+        // $json2 = json_decode($response2->body);
 
-        var_dump($json2);
+        var_dump($response2->body);
     }
 }
 
