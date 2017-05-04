@@ -87,7 +87,6 @@ if (!empty($query) ) {
         );
 
         $sign        = sign($data);
-        var_dump($sign);
         $data['sign'] = $sign;
 
         $response = Requests::post($zhi, array(), $data);
@@ -99,8 +98,6 @@ if (!empty($query) ) {
         $json = json_decode($response->body);
 
         $access_token = $json->alipay_system_oauth_token_response->access_token;
-
-        var_dump($access_token);
 
         $data2 = array(
             'app_id' => '2017050207083850',
@@ -117,6 +114,8 @@ if (!empty($query) ) {
 
         $response2 = Requests::post($zhi, array(), $data2);
 
+        var_dump($response2);
+
         if ($response2->status_code != 200) {
             var_dump("Request Error.");
         }
@@ -124,10 +123,6 @@ if (!empty($query) ) {
         $json2 = json_decode($response2->body);
 
         var_dump($json2);
-
     }
 }
-
-
-var_dump(11111);
 
