@@ -91,7 +91,7 @@ if (!empty($query) ) {
         $data['sign'] = $sign;
 
         $response = Requests::post($zhi, array(), $data);
-
+        var_dump($response);
         $json = json_decode($response->body);
         $access_token = $json->access_token;
 
