@@ -120,8 +120,11 @@ if (!empty($query) ) {
 
         $json2 = json_decode($response2->body);
 
-        $image   = $json2->alipay_user_userinfo_share_response->avatar;
-        $user_id = $json2->alipay_user_userinfo_share_response->user_id;
+        var_dump($json2);
+
+        $image     = $json2->alipay_user_userinfo_share_response->avatar;
+        $user_id   = $json2->alipay_user_userinfo_share_response->alipay_user_id;
+        $nick_name = $json2->alipay_user_userinfo_share_response->nick_name;
 
         echo "<img src='" . $image . "'>";
         echo "User ID : " . $user_id;
