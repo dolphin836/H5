@@ -35,7 +35,7 @@ if (!empty($query) ) {
 
         $data = array('grant_type' => 'authorization_code', 'code' => $auth_code);
         $response = Requests::post($zhi, array(), $data);
-        var_dump($response->body);
+        var_dump($response->status_code);
     }
 }
 
