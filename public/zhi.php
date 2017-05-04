@@ -87,12 +87,15 @@ if (!empty($query) ) {
         );
 
         $sign        = sign($data);
+        var_dump($sign);
         $data['sign'] = $sign;
 
         $response = Requests::post($zhi, array(), $data);
 
         $json = json_decode($response->body);
         $access_token = $json->access_token;
+
+        var_dump($access_token);
 
         $data2 = array(
             'app_id' => '2017050207083850',
