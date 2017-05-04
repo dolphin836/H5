@@ -36,5 +36,9 @@ return [
             'password' => getenv('DB_PASSWORD'),
                 'name' => getenv('DB_NAME')
         ],
+        // zhi
+        'zhi' => [
+            'appID' => getenv('ZHI_APPID')
+        ],
     ],
 ];

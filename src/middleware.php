@@ -2,10 +2,10 @@
 
 $app->add(function ($request, $response, $next) {
     $httpQuery      = $request->getUri()->getQuery(); // 获取微信的 code 或者推荐人的 code，做相应的处理
-    
+    $this->logger->addInfo("httpQuery:" . $httpQuery);
     if ($httpQuery != '') {
         $query      = explode('&', $httpQuery);
-
+        $this->logger->addInfo("query:" . $query);
         foreach ($query as $q) {
             $str    = explode('=', $q);
 
@@ -48,9 +48,7 @@ $app->add(function ($request, $response, $next) {
     $headers   = $request->getHeader('HTTP_USER_AGENT'); // 根据 User Agent 识别微信内置浏览器，做身份验证
     $userAgent = $headers[0];
 
-    $this->logger->addInfo($userAgent);
-
-    if ( strpos($userAgent, 'MicroMessenger') !== false ) {
+    if ( strpos($userAgent, 'MicroMessenger') !== false ) { // 微信浏览器
         if ( ! isset($_SESSION['uuid']) ) {
             $host = $request->getUri()->getHost();
             $path = $request->getUri()->getPath();
@@ -60,8 +58,19 @@ $app->add(function ($request, $response, $next) {
 
             return $newResponse;
         }
+    }
 
-    } 
+    if ( strpos($userAgent, 'AlipayClient') !== false ) { // 支付宝浏览器
+        if ( ! isset($_SESSION['uuid']) ) {
+            $host = $request->getUri()->getHost();
+            $path = $request->getUri()->getPath();
+            $back = urlencode('http://' . $host . $path);
+            $url  = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" . $this->get('settings')['zhi']['appID'] . "&scope=auth_userinfo&redirect_uri=" . $back;
+            $newResponse = $response->withHeader('Location', $url);
+
+            return $newResponse;
+        }
+    }
 
     $response = $next($request, $response);
 
