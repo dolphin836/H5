@@ -16,7 +16,7 @@ function checkEmpty($value)
     return false;
 }
 
-function sign($data = array)
+function sign($data = array())
 {
     ksort($data);
 
