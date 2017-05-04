@@ -95,10 +95,10 @@ if (!empty($query) ) {
         if ($response->status_code != 200) {
             var_dump("Request Error.");
         }
-        var_dump($response->body);
+
         $json = json_decode($response->body);
-        var_dump($json);
-        $access_token = $json->access_token;
+
+        $access_token = $json->alipay_system_oauth_token_response->access_token;
 
         var_dump($access_token);
 
