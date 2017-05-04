@@ -91,8 +91,13 @@ if (!empty($query) ) {
         $data['sign'] = $sign;
 
         $response = Requests::post($zhi, array(), $data);
-        var_dump($response);
+
+        if ($response->status_code != 200) {
+            var_dump("Request Error.");
+        }
+        var_dump($response->body);
         $json = json_decode($response->body);
+        var_dump($json);
         $access_token = $json->access_token;
 
         var_dump($access_token);
@@ -111,6 +116,10 @@ if (!empty($query) ) {
         $data2['sign'] = $sign;
 
         $response2 = Requests::post($zhi, array(), $data2);
+
+        if ($response2->status_code != 200) {
+            var_dump("Request Error.");
+        }
 
         $json2 = json_decode($response2->body);
 
