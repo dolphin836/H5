@@ -1,6 +1,6 @@
 <?php
 
-var_dump($_SERVER);
+// var_dump($_SERVER);
 
 if (strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false && $_SERVER['QUERY_STRING'] == '' ) { // 支付宝浏览器
         $back    = urlencode("http://m.outatv.com/zhi.php");
@@ -13,9 +13,12 @@ var_dump($_SERVER['QUERY_STRING']);
 
 $query      = explode('&', $_SERVER['QUERY_STRING']);
 
+var_dump($query);
+
 if (empty($query) ) {
     foreach ($query as $q) {
         $str    = explode('=', $q);
+        var_dump($str);
 
         if($str[0]  == 'auth_code') {
             $auth_code = $str[1];
