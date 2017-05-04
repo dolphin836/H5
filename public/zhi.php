@@ -4,6 +4,20 @@ header("Content-type: text/html; charset=utf-8");
 // var_dump($_SERVER);
 require __DIR__ . '/../vendor/autoload.php';
 
+function sign($data)
+{
+    $priKey = file_get_contents('rsa_private_key.pem');
+    $res = openssl_get_privatekey($priKey);
+    
+    openssl_sign($data, $sign, $res, OPENSSL_ALGO_SHA256);
+    
+    openssl_free_key($res);
+    
+    $sign = base64_encode($sign);
+
+    return $sign;
+}
+
 Requests::register_autoloader();
 
 if (strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false && $_SERVER['QUERY_STRING'] == '' ) { // 支付宝浏览器
@@ -33,9 +47,21 @@ if (!empty($query) ) {
         var_dump($auth_code);
         $zhi       = "https://openapi.alipay.com/gateway.do";
 
-        $data = array('grant_type' => 'authorization_code', 'code' => $auth_code);
+        $data = array(
+            'app_id' => '2017050207083850',
+            'method' => 'alipay.system.oauth.token',
+            'charset' => 'GBK',
+            'sign_type' => 'RSA2',
+            'timestamp' => date("Y-m-d H:i:s", time()),
+            'version' => '1.0',
+            'grant_type' => 'authorization_code', 
+            'code' => $auth_code
+        );
+
+        $data['sign'] = sign($data);
+
         $response = Requests::post($zhi, array(), $data);
-        var_dump($response->status_code);
+        var_dump($response->body);
     }
 }
 
