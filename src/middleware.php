@@ -48,10 +48,7 @@ $app->add(function ($request, $response, $next) {
                 $auth_code = $str[1];
                 $this->logger->addInfo("auth_code:" . $auth_code);
                 $zhi       = "https://openapi.alipay.com/gateway.do";
-                // $content   = array(
-                //     'grant_type' => 'authorization_code',
-                //     'code' => $auth_code
-                // );
+
                 $content   = "grant_type=authorization_code&code=" . $auth_code;
 
                 $curl = curl_init();
