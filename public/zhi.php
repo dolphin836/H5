@@ -51,7 +51,6 @@ if (!empty($query) ) {
             'app_id' => '2017050207083850',
             'method' => 'alipay.system.oauth.token',
             'charset' => 'GBK',
-            'sign_type' => 'RSA2',
             'timestamp' => date("Y-m-d H:i:s", time()),
             'version' => '1.0',
             'grant_type' => 'authorization_code', 
@@ -59,6 +58,7 @@ if (!empty($query) ) {
         );
 
         $data['sign'] = sign($data);
+        $data['sign_type'] = 'RSA2';
 
         $response = Requests::post($zhi, array(), $data);
         var_dump($response->body);
