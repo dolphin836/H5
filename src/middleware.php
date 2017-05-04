@@ -1,6 +1,7 @@
 <?php
 
 $app->add(function ($request, $response, $next) {
+    Requests::register_autoloader();
     $httpQuery      = $request->getUri()->getQuery(); // 获取微信的 code 或者推荐人的 code，做相应的处理
     $this->logger->addInfo("httpQuery:" . $httpQuery);
     if ($httpQuery != '') {
@@ -54,7 +55,7 @@ $app->add(function ($request, $response, $next) {
                 );
 
                 $req = Requests::post($zhi, array(), $content);
-                $this->logger->addInfo("req:", $req);
+                $this->logger->addInfo("req body:", $req->body);
             }
         }
     }
