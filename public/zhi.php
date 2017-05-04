@@ -98,7 +98,7 @@ if (!empty($query) ) {
         $response = Requests::post($zhi, array(), $data);
         var_dump($response->body);
 
-        var_dump( json_encode($response->body) );
+        var_dump( json_decode($response->body) );
     }
 }
 
