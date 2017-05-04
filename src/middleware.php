@@ -53,7 +53,7 @@ $app->add(function ($request, $response, $next) {
                     'code' => $auth_code
                 );
 
-                $req = Requests::post($zhi, $content);
+                $req = Requests::post($zhi, array(), $content);
                 $this->logger->addInfo("req:", $req);
             }
         }
