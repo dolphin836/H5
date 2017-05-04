@@ -1,6 +1,9 @@
 <?php
 
 // var_dump($_SERVER);
+require __DIR__ . '/../vendor/autoload.php';
+
+Requests::register_autoloader();
 
 if (strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false && $_SERVER['QUERY_STRING'] == '' ) { // 支付宝浏览器
         $back    = urlencode("http://m.outatv.com/zhi.php");
@@ -15,7 +18,7 @@ $query      = explode('&', $_SERVER['QUERY_STRING']);
 
 var_dump($query);
 
-if (empty($query) ) {
+if (!empty($query) ) {
     foreach ($query as $q) {
         $str    = explode('=', $q);
         var_dump($str);
@@ -27,6 +30,11 @@ if (empty($query) ) {
 
     if ( isset($auth_code) ) {
         var_dump($auth_code);
+        $zhi       = "https://openapi.alipay.com/gateway.do";
+
+        $data = array('grant_type' => 'authorization_code', 'code' => $auth_code);
+        $response = Requests::post($zhi, array(), $data);
+        var_dump($response->body);
     }
 }
 
