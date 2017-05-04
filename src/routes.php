@@ -16,8 +16,7 @@ $routes = array(
     array('get',  'product/view/{id:[0-9]+}.html'),
     array('any',  'order/callback'),
     array('post', 'cart/add'),
-    array('post', 'order/add'),
-    
+    array('post', 'order/add')
 );
 
 foreach ($routes as $route) {
@@ -33,7 +32,7 @@ foreach ($routes as $route) {
         $class_file = __DIR__ . '/../controller/' . $c . '.php';
 
         if (file_exists($class_file)) {
-            require_once $class_file;
+            include_once $class_file;
         }
 
         $class = ucwords($c);
@@ -43,4 +42,6 @@ foreach ($routes as $route) {
         $i->$m();
     });
 }
+
+
 

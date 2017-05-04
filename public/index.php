@@ -14,7 +14,7 @@ require __DIR__ . '/../vendor/autoload.php';
 $env = new Dotenv\Dotenv(__DIR__ . '/..');
 $env->load();
 
-$settings = require __DIR__ . '/../src/settings.php';
+$settings = include __DIR__ . '/../src/settings.php';
 $app      = new \Slim\App($settings);
 
 require __DIR__ . '/../src/dependencies.php';

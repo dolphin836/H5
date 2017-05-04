@@ -48,6 +48,8 @@ $app->add(function ($request, $response, $next) {
     $headers   = $request->getHeader('HTTP_USER_AGENT'); // 根据 User Agent 识别微信内置浏览器，做身份验证
     $userAgent = $headers[0];
 
+    $this->logger->addInfo($userAgent);
+
     if ( strpos($userAgent, 'MicroMessenger') !== false ) {
         if ( ! isset($_SESSION['uuid']) ) {
             $host = $request->getUri()->getHost();

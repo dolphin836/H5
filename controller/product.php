@@ -62,8 +62,6 @@ class Product extends Controller
             );
         }
 
-        // $discount  = (1 - $this->app->get('settings')['default']['discount']) * 10;
-
         $scripts[] = $this->server . 'dist/js/' . 'zepto.min.js';
         $scripts[] = $this->server . 'dist/js/' . 'view.js';
 
