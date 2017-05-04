@@ -47,11 +47,13 @@ if (!empty($query) ) {
         var_dump($data);
 
         $priKey = file_get_contents('rsa_private_key.pem');
-        var_dump($priKey);
+        // var_dump($priKey);
         $res    = openssl_pkey_get_private($priKey);
-        var_dump($res);
+        // var_dump($res);
         
-        openssl_sign($data, $sign, $res, OPENSSL_ALGO_SHA256);
+        $openssl = openssl_sign($data, $sign, $res, OPENSSL_ALGO_SHA256);
+
+        var_dump($openssl);
         
         openssl_free_key($res);
         
