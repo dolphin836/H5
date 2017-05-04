@@ -118,6 +118,8 @@ if (!empty($query) ) {
             var_dump("Request Error.");
         }
 
+        var_dump($response2->body);
+
         $json2 = json_decode($response2->body);
 
         var_dump($json2);
