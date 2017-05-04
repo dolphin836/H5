@@ -4,6 +4,18 @@ header("Content-type: text/html; charset=utf-8");
 // var_dump($_SERVER);
 require __DIR__ . '/../vendor/autoload.php';
 
+function checkEmpty($value) 
+{
+    if (!isset($value))
+        return true;
+    if ($value === null)
+        return true;
+    if (trim($value) === "")
+        return true;
+
+    return false;
+}
+
 Requests::register_autoloader();
 
 if (strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false && $_SERVER['QUERY_STRING'] == '' ) { // 支付宝浏览器
@@ -46,12 +58,33 @@ if (!empty($query) ) {
 
         var_dump($data);
 
+		ksort($data);
+
+		$stringToBeSigned = "";
+		$i = 0;
+		foreach ($data as $k => $v) {
+			if (false === checkEmpty($v) && "@" != substr($v, 0, 1)) {
+
+				if ($i == 0) {
+					$stringToBeSigned .= "$k" . "=" . "$v";
+				} else {
+					$stringToBeSigned .= "&" . "$k" . "=" . "$v";
+				}
+				$i++;
+			}
+		}
+
+		unset ($k, $v);
+
+        var_dump($stringToBeSigned);
+
+
         $priKey = file_get_contents('rsa_private_key.pem');
         // var_dump($priKey);
         $res    = openssl_pkey_get_private($priKey);
         // var_dump($res);
         
-        $openssl = openssl_sign($data, $sign, $res, OPENSSL_ALGO_SHA256);
+        $openssl = openssl_sign($stringToBeSigned, $sign, $res, OPENSSL_ALGO_SHA256);
 
         var_dump($openssl);
         
