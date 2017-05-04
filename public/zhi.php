@@ -118,9 +118,14 @@ if (!empty($query) ) {
             var_dump("Request Error.");
         }
 
-        // $json2 = json_decode($response2->body);
+        $json2 = json_decode($response2->body);
 
-        var_dump($response2->body);
+        $image   = $json2->alipay_user_userinfo_share_response->avatar;
+        $user_id = $json2->alipay_user_userinfo_share_response->user_id;
+
+        echo "<img src='" . $image . "'>";
+        echo "User ID : " . $user_id;
+        
     }
 }
 
