@@ -27,11 +27,16 @@ if (strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false && $_SERVER['Q
         header('Location: ' . $uri); 
 }
 
+var_dump($_SERVER['QUERY_STRING']);
+
 $query      = explode('&', $_SERVER['QUERY_STRING']);
+
+var_dump($query);
 
 if (!empty($query) ) {
     foreach ($query as $q) {
         $str    = explode('=', $q);
+        var_dump($str);
 
         if($str[0]  == 'auth_code') {
             $auth_code = $str[1];
@@ -39,6 +44,7 @@ if (!empty($query) ) {
     }
 
     if ( isset($auth_code) ) {
+        var_dump($auth_code);
         $zhi       = "https://openapi.alipay.com/gateway.do";
 
         $data = array(
@@ -59,8 +65,10 @@ if (!empty($query) ) {
         $data['sign'] = $sign;
 
         $response = Requests::post($zhi, array(), $data);
-        // var_dump($response->body);
+        var_dump($response->body);
     }
 }
 
+
+var_dump(11111);
 
