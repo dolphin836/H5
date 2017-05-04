@@ -1,7 +1,6 @@
 <?php
 
 $app->add(function ($request, $response, $next) {
-    Requests::register_autoloader();
     $httpQuery      = $request->getUri()->getQuery(); // 获取微信的 code 或者推荐人的 code，做相应的处理
     $this->logger->addInfo("httpQuery:" . $httpQuery);
     if ($httpQuery != '') {
@@ -54,8 +53,11 @@ $app->add(function ($request, $response, $next) {
                     'code' => $auth_code
                 );
 
-                $req = Requests::post($zhi, array(), $content);
-                $this->logger->addInfo("req body:", $req->body);
+                $data_url = http_build_query($content);
+                $data_len = strlen($data_url);
+
+                $req      = file_get_contents($zhi, false, stream_context_create(array ('http' => array ('method' => 'POST', 'header' => "Connection: close\r\nContent-Length: $data_len\r\n", 'content' => $data_url))));
+                $this->logger->addInfo("req:" . $req);
             }
         }
     }
