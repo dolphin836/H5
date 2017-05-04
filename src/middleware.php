@@ -48,16 +48,24 @@ $app->add(function ($request, $response, $next) {
                 $auth_code = $str[1];
                 $this->logger->addInfo("auth_code:" . $auth_code);
                 $zhi       = "https://openapi.alipay.com/gateway.do";
-                $content   = array(
-                    'grant_type' => 'authorization_code',
-                    'code' => $auth_code
-                );
+                // $content   = array(
+                //     'grant_type' => 'authorization_code',
+                //     'code' => $auth_code
+                // );
+                $content   = "grant_type=authorization_code&code=" . $auth_code;
 
-                $data_url = http_build_query($content);
-                $data_len = strlen($data_url);
+                $curl = curl_init();
 
-                $req      = file_get_contents($zhi, false, stream_context_create(array ('http' => array ('method' => 'POST', 'header' => "Connection: close\r\nContent-Length: $data_len\r\n", 'content' => $data_url))));
+                curl_setopt($curl, CURLOPT_URL, $zhi);
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($curl, CURLOPT_POST, true);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
+
+                $req = curl_exec($curl);
+
                 $this->logger->addInfo("req:" . $req);
+                
+                curl_close($curl);
             }
         }
     }
