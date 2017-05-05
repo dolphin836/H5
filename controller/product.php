@@ -16,7 +16,7 @@ class Product extends Controller
 
     public function index()
     {
-        $results        = $this->app->db->select('product', ['id', 'name', 'image', 'price', 'abstract'], ['published[=]' => 1]);
+        $results        = $this->app->db->select('product', ['id', 'name', 'image', 'price', 'abstract'], ['published[=]' => 1, 'ORDER' => ['sort' => 'DESC']]);
         $products       = array();
         foreach ($results as $result) {
             $products[] = array(
