@@ -31,6 +31,11 @@
             "Tests\\": "tests/"
         }
     },
+    "autoload": {
+        "psr-4": {
+            "Dolphin\\Tan\\": "app/"
+        }
+    },
 	"scripts": {
         "start": "php -S 0.0.0.0:8080 -t public public/index.php",
         "test": "phpunit"

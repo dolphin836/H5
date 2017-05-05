@@ -1,5 +1,13 @@
 <?php
 
+$str = '{"alipay_user_userinfo_share_response":{"user_type_value":"2","is_licence_auth":"F","is_certified":"T","is_certify_grade_a":"T","avatar":"https:\/\/tfs.alipayobjects.com\/images\/partner\/T1uJpXXoFaXXXXXXXX","city":"�Ϸ���","is_student_certified":"F","is_bank_auth":"T","is_mobile_auth":"T","nick_name":"������","alipay_user_id":"2088002116338312","user_id":"20880053158242791496244683117231","province":"����ʡ","user_status":"T","gender":"m","is_id_auth":"T"},"sign":"aue3cXvfxDbyrwunytuwcYjVJfwuUd1Gwa6026BJTIwF9BGaU7A0fIA/Qib8jZ2J44R/Ay7S9Jc5L5q2eN1xtfjPxvPDrcshZoDBDpxDSildDc7zmiRyEoSXmDSkSmnoohDRtuiPJnQ+fT8tr7sVEmkQlPa3VEZCDIyrWrJor7acwjdNQk/H4MOzK8wzudVM+G4Fy7RkgXBqGKVA3QduvnXGZxniKIAkiIh5DFGG1Ih4zHZkLgiKia+kAWZedyZEuHNf3VxW1uHYneFU0UlLFJT5p0SSlLrxwumYNW52HLjnO4evSFOUV9+l5zWIAGGSpIu224XPqFumwUhqtTNF1g=="}';
+
+$json = json_decode($str);
+
+var_dump($json);
+
+exit;
+
 header("Content-type: text/html; charset=utf-8"); 
 // var_dump($_SERVER);
 require __DIR__ . '/../vendor/autoload.php';

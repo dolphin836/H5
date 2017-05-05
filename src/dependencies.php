@@ -36,3 +36,17 @@ $container['csrf'] = function ($c) {
     return new \Slim\Csrf\Guard('dolphin');
 };
 
+// tool
+$container['tool'] = function ($c) {
+
+    class Tool {
+        public function sign()
+        {
+            return 'xxxxx';
+        }
+    }
+
+    $tool = new Tool();
+    return $tool;
+};
+

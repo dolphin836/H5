@@ -68,8 +68,9 @@ $(function() {
     // 立即购买
     $checkout
         .on('click', function (e) {
-            $addCart.click();
-            location.href = '../../cart.html';
+            $.post('/cart/add', $('#product').serialize(), function(response) {
+                location.href = '../../cart.html';
+            });
         })
     ;
 });

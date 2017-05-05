@@ -44,25 +44,9 @@ $app->add(function ($request, $response, $next) {
             }
 
             if ($str[0]  == 'auth_code' && ! isset($_SESSION['uuid']) ) { // 检测到支付宝网页授权的 auth_code
-                $this->logger->addInfo("111111111111");
                 $auth_code = $str[1];
                 $this->logger->addInfo("auth_code:" . $auth_code);
                 $zhi       = "https://openapi.alipay.com/gateway.do";
-
-                $content   = "grant_type=authorization_code&code=" . $auth_code;
-
-                $curl = curl_init();
-
-                curl_setopt($curl, CURLOPT_URL, $zhi);
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($curl, CURLOPT_POST, true);
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
-
-                $req = curl_exec($curl);
-
-                $this->logger->addInfo("req:" . $req);
-                
-                curl_close($curl);
             }
         }
     }
