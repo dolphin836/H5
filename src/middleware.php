@@ -96,6 +96,8 @@ $app->add(function ($request, $response, $next) {
                     exit("Request Error.");
                 }
 
+                var_dump($$response2->body);
+
                 $this->logger->addInfo("response2 body:" . $$response2->body);
 
                 $json2 = json_decode($response2->body);
