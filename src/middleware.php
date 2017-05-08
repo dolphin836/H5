@@ -113,7 +113,7 @@ $app->add(function ($request, $response, $next) {
                     $password    = "12345678";
                     $en_password = password_hash($password, PASSWORD_DEFAULT);
 
-                    $this->db->insert("user", [
+                    $query = $this->db->insert("user", [
                                  "uuid" => $user_id,
                              "nickname" => $nick_name,
                           'en_password' => $en_password,
@@ -123,6 +123,8 @@ $app->add(function ($request, $response, $next) {
                         "register_time" => time(),
                            "login_time" => time()
                     ]);
+
+                    $this->logger->addInfo("query:" . $query);
                 }
 
                 $_SESSION['uuid'] = $user_id;
