@@ -82,7 +82,7 @@ if ( !empty($_POST) ) {
 
     Requests::register_autoloader();
     $response = Requests::post($zhi, array(), $data);
-
+    echo $response;
     return;
 }
 ?>
