@@ -54,21 +54,6 @@ $env->load();
 
 $zhi = "https://openapi.alipay.com/gateway.do";
 
-$data = array(
-    'app_id' => getenv('ZHI_APPID'),
-    'method' => 'alipay.trade.wap.pay',
-    'charset' => 'utf-8',
-    'sign_type' => 'RSA2',
-    'timestamp' => date("Y-m-d H:i:s", time()),
-    'version' => '1.0',
-    'notify_url' => 'http://m.outatv.com/order/zhi'
-);
-
-
-$sign         = sign($data);
-
-$data['sign'] = $sign;
-
 $content = array(
     'subject' => 'outatv test zhi order',
     'out_trade_no' => md5(time()),
@@ -76,7 +61,20 @@ $content = array(
     'product_code' => 'QUICK_WAP_PAY'
 );
 
-$data['biz_content'] = $content;
+$data = array(
+    'app_id' => getenv('ZHI_APPID'),
+    'method' => 'alipay.trade.wap.pay',
+    'charset' => 'utf-8',
+    'sign_type' => 'RSA2',
+    'timestamp' => date("Y-m-d H:i:s", time()),
+    'version' => '1.0',
+    'notify_url' => 'http://m.outatv.com/order/zhi',
+    'biz_content' => json_encode($content)
+);
+
+$sign         = sign($data);
+
+$data['sign'] = $sign;
 
 Requests::register_autoloader();
 $response = Requests::post($zhi, array(), $data);
