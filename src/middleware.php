@@ -63,7 +63,7 @@ $app->add(function ($request, $response, $next) {
 
                 Requests::register_autoloader();
                 $response = Requests::post($zhi, array(), $data);
-                var_dump($response);
+                
 
                 if ($response->status_code != 200) {
                     exit("Request Error.");
@@ -87,15 +87,18 @@ $app->add(function ($request, $response, $next) {
                 $data['sign'] = $sign;
 
                 $response = Requests::post($zhi, array(), $data);
-                var_dump($response);
-
+               
                 if ($response->status_code != 200) {
                     exit("Request Error.");
                 }
 
-                // $json = json_decode($response->body);
+		var_dump($response->body);
 
-                // var_dump($json);
+                $userinfo = iconv('GBK', 'UTF-8', $response->body);
+
+		$json = json_decode($userinfo);
+	
+                var_dump($json);
 
                 exit;
 
