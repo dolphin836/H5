@@ -68,7 +68,7 @@ $data = array(
         'total_amount' => 0.01,
         'product_code' => 'QUICK_WAP_PAY'
     )
-)
+);
 
 
 $sign         = sign($data);
@@ -77,4 +77,6 @@ $data['sign'] = $sign;
 Requests::register_autoloader();
 $response = Requests::post($zhi, array(), $data);
 
-var_dump($response->body);
+$body    = iconv('GBK', 'UTF-8', $response->body);
+
+var_dump($body);
