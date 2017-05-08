@@ -76,7 +76,7 @@ $app->add(function ($request, $response, $next) {
 
                 $this->logger->addInfo("access_token:" . $access_token);
 
-                $data2 = array(
+                $data = array(
                         'app_id' => $this->get('settings')['zhi']['appID'],
                         'method' => 'alipay.user.userinfo.share',
                        'charset' => 'GBK',
@@ -86,27 +86,29 @@ $app->add(function ($request, $response, $next) {
                     'auth_token' => $access_token
                 );
 
-                $sign2         = $this->tool->sign($data2);
-                $this->logger->addInfo("sign2:" . $sign2);
-                $data2['sign'] = $sign2;
+                $sign         = $this->tool->sign($data);
+                $this->logger->addInfo("sign:" . $sign);
+                $data['sign'] = $sign;
 
-                $response2 = Requests::post($zhi, array(), $data2);
+                $response = Requests::post($zhi, array(), $data);
 
-                if ($response2->status_code != 200) {
+                if ($response->status_code != 200) {
                     exit("Request Error.");
                 }
 
-                var_dump($$response2->body);
+                var_dump($$response->body);
 
-                $this->logger->addInfo("response2 body:" . $$response2->body);
+                exit();
 
-                $json2 = json_decode($response2->body);
+                // $this->logger->addInfo("response2 body:" . $$response2->body);
 
-                $image     = $json2->alipay_user_userinfo_share_response->avatar;
-                $user_id   = $json2->alipay_user_userinfo_share_response->alipay_user_id;
-                $nick_name = $json2->alipay_user_userinfo_share_response->nick_name;
-                $this->logger->addInfo("user_id:" . $user_id);
-                $_SESSION['uuid'] = $user_id;
+                // $json2 = json_decode($response2->body);
+
+                // $image     = $json2->alipay_user_userinfo_share_response->avatar;
+                // $user_id   = $json2->alipay_user_userinfo_share_response->alipay_user_id;
+                // $nick_name = $json2->alipay_user_userinfo_share_response->nick_name;
+                // $this->logger->addInfo("user_id:" . $user_id);
+                // $_SESSION['uuid'] = $user_id;
             }
         }
     }
