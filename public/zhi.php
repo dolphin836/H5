@@ -70,7 +70,11 @@ $data = array(
     )
 );
 
+var_dump($data);
+
 $sign         = sign($data);
+
+var_dump($sign);
 $data['sign'] = $sign;
 
 Requests::register_autoloader();
