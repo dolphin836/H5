@@ -40,9 +40,51 @@ $container['csrf'] = function ($c) {
 $container['tool'] = function ($c) {
 
     class Tool {
-        public function sign()
+        private function checkEmpty($value) 
         {
-            return 'xxxxx';
+            if (!isset($value))
+                return true;
+            if ($value === null)
+                return true;
+            if (trim($value) === "")
+                return true;
+
+            return false;
+        }
+
+        public function sign($data = array())
+        {
+            ksort($data);
+
+            $stringToBeSigned = "";
+
+            $i = 0;
+
+            foreach ($data as $k => $v) {
+                if (false === $this->checkEmpty($v) && "@" != substr($v, 0, 1)) {
+                    if ($i == 0) {
+                        $stringToBeSigned .= "$k" . "=" . "$v";
+                    } else {
+                        $stringToBeSigned .= "&" . "$k" . "=" . "$v";
+                    }
+
+                    $i++;
+                }
+            }
+
+            unset($k, $v);
+
+            $priKey  = file_get_contents('rsa_private_key.pem');
+
+            $res     = openssl_pkey_get_private($priKey);
+
+            $openssl = openssl_sign($stringToBeSigned, $sign, $res, OPENSSL_ALGO_SHA256);
+
+            openssl_free_key($res);
+
+            $sign = base64_encode($sign);
+
+            return $sign;
         }
     }
 
