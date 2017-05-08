@@ -35,6 +35,7 @@ $app->add(function ($request, $response, $next) {
                              'password' => $password,
                                 "image" => $headimgurl,
                                  "type" => 1,
+                               "source" => 1,
                         "register_time" => time(),
                            "login_time" => time()
                     ]);
@@ -120,6 +121,7 @@ $app->add(function ($request, $response, $next) {
                              'password' => $password,
                                 "image" => $headimgurl,
                                  "type" => 1,
+                               "source" => 2,
                         "register_time" => time(),
                            "login_time" => time()
                     ]);
