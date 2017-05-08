@@ -79,6 +79,6 @@ $data['sign'] = $sign;
 Requests::register_autoloader();
 $response = Requests::post($zhi, array(), $data);
 
-$body    = iconv('GBK', 'UTF-8', $response->body);
+// $body    = iconv('GBK', 'UTF-8', $response->body);
 
-var_dump($body);
+var_dump($response);
