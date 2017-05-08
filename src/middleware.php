@@ -93,11 +93,15 @@ $app->add(function ($request, $response, $next) {
 
                 $json = json_decode($response->body);
 
-                $image     = $json->alipay_user_userinfo_share_response->avatar;
-                $user_id   = $json->alipay_user_userinfo_share_response->alipay_user_id;
-                $nick_name = $json->alipay_user_userinfo_share_response->nick_name;
+                var_dump($json);
 
-                $_SESSION['uuid'] = $user_id;
+                exit;
+
+                // $image     = $json->alipay_user_userinfo_share_response->avatar;
+                // $user_id   = $json->alipay_user_userinfo_share_response->alipay_user_id;
+                // $nick_name = $json->alipay_user_userinfo_share_response->nick_name;
+
+                // $_SESSION['uuid'] = $user_id;
             }
         }
     }
