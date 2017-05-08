@@ -73,15 +73,9 @@ $app->add(function ($request, $response, $next) {
 
                 $access_token = $json->alipay_system_oauth_token_response->access_token;
 
-                $this->logger->addInfo("access_token:" . $access_token);
-
                 $user_id      = $json->alipay_system_oauth_token_response->user_id;
 
-                $this->logger->addInfo("user_id:" . $user_id);
-
                 $user       = $this->db->select('user', ['id'], ['uuid[=]' => $user_id]);
-
-                $this->logger->addInfo("user:", $user);
 
                 if ( empty($user) ) { // 注册新用户
                     $data = array(
@@ -108,9 +102,7 @@ $app->add(function ($request, $response, $next) {
                     $json        = json_decode($userinfo);
         
                     $headimgurl  = $json->alipay_user_userinfo_share_response->avatar;
-                    $this->logger->addInfo("headimgurl:" . $headimgurl);
                     $nick_name   = $json->alipay_user_userinfo_share_response->nick_name;
-                    $this->logger->addInfo("nick_name:" . $nick_name);
                     $password    = "12345678";
                     $en_password = password_hash($password, PASSWORD_DEFAULT);
 
@@ -125,14 +117,9 @@ $app->add(function ($request, $response, $next) {
                         "register_time" => time(),
                            "login_time" => time()
                     ]);
-
-                    $this->logger->addInfo("query:" . $query);
                 }
 
                 $_SESSION['uuid'] = $user_id;
-                $newResponse = $response->withHeader('Location', 'http://m.outatv.com/');
-
-                return $newResponse;
             }
         }
     }
