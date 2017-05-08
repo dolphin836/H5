@@ -2,10 +2,10 @@
 
 $app->add(function ($request, $response, $next) {
     $httpQuery      = $request->getUri()->getQuery(); // 获取微信的 code 或者推荐人的 code，做相应的处理
-    $this->logger->addInfo("httpQuery:" . $httpQuery);
+
     if ($httpQuery != '') {
         $query      = explode('&', $httpQuery);
-        $this->logger->addInfo("query:", $query);
+
         foreach ($query as $q) {
             $str    = explode('=', $q);
 
@@ -45,7 +45,6 @@ $app->add(function ($request, $response, $next) {
 
             if ($str[0]  == 'auth_code' && ! isset($_SESSION['uuid']) ) { // 检测到支付宝网页授权的 auth_code
                 $auth_code = $str[1];
-                $this->logger->addInfo("auth_code:" . $auth_code);
                 $zhi       = "https://openapi.alipay.com/gateway.do";
 
                 $data = array(
@@ -60,7 +59,6 @@ $app->add(function ($request, $response, $next) {
                 );
 
                 $sign         = $this->tool->sign($data);
-                $this->logger->addInfo("sign:" . $sign);
                 $data['sign'] = $sign;
 
                 Requests::register_autoloader();
@@ -74,8 +72,6 @@ $app->add(function ($request, $response, $next) {
 
                 $access_token = $json->alipay_system_oauth_token_response->access_token;
 
-                $this->logger->addInfo("access_token:" . $access_token);
-
                 $data = array(
                         'app_id' => $this->get('settings')['zhi']['appID'],
                         'method' => 'alipay.user.userinfo.share',
@@ -87,7 +83,6 @@ $app->add(function ($request, $response, $next) {
                 );
 
                 $sign         = $this->tool->sign($data);
-                $this->logger->addInfo("sign:" . $sign);
                 $data['sign'] = $sign;
 
                 $response = Requests::post($zhi, array(), $data);
@@ -96,19 +91,13 @@ $app->add(function ($request, $response, $next) {
                     exit("Request Error.");
                 }
 
-                var_dump($response->body);
+                $json = json_decode($response->body);
 
-                exit();
+                $image     = $json->alipay_user_userinfo_share_response->avatar;
+                $user_id   = $json->alipay_user_userinfo_share_response->alipay_user_id;
+                $nick_name = $json->alipay_user_userinfo_share_response->nick_name;
 
-                // $this->logger->addInfo("response2 body:" . $$response2->body);
-
-                // $json2 = json_decode($response2->body);
-
-                // $image     = $json2->alipay_user_userinfo_share_response->avatar;
-                // $user_id   = $json2->alipay_user_userinfo_share_response->alipay_user_id;
-                // $nick_name = $json2->alipay_user_userinfo_share_response->nick_name;
-                // $this->logger->addInfo("user_id:" . $user_id);
-                // $_SESSION['uuid'] = $user_id;
+                $_SESSION['uuid'] = $user_id;
             }
         }
     }
