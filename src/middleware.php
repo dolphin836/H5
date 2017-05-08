@@ -96,7 +96,7 @@ $app->add(function ($request, $response, $next) {
                     exit("Request Error.");
                 }
 
-                var_dump($$response->body);
+                var_dump($response->body);
 
                 exit();
 
