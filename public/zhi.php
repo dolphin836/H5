@@ -61,21 +61,22 @@ $data = array(
     'sign_type' => 'RSA2',
     'timestamp' => date("Y-m-d H:i:s", time()),
     'version' => '1.0',
-    'notify_url' => 'http://m.outatv.com/order/zhi',
-    'biz_content' => array(
-        'subject' => 'outatv test zhi order',
-        'out_trade_no' => md5(time()),
-        'total_amount' => 0.01,
-        'product_code' => 'QUICK_WAP_PAY'
-    )
+    'notify_url' => 'http://m.outatv.com/order/zhi'
 );
 
-var_dump($data);
 
 $sign         = sign($data);
 
-var_dump($sign);
 $data['sign'] = $sign;
+
+$content = array(
+    'subject' => 'outatv test zhi order',
+    'out_trade_no' => md5(time()),
+    'total_amount' => 0.01,
+    'product_code' => 'QUICK_WAP_PAY'
+);
+
+$data['biz_content'] = $content;
 
 Requests::register_autoloader();
 $response = Requests::post($zhi, array(), $data);
