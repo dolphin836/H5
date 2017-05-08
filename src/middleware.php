@@ -126,6 +126,7 @@ $app->add(function ($request, $response, $next) {
                 }
 
                 $_SESSION['uuid'] = $user_id;
+                $newResponse = $response->withHeader('Location', 'http://m.outatv.com/');
             }
         }
     }
