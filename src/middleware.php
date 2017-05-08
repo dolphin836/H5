@@ -63,7 +63,6 @@ $app->add(function ($request, $response, $next) {
 
                 Requests::register_autoloader();
                 $response = Requests::post($zhi, array(), $data);
-                var_dump($response);
 
                 if ($response->status_code != 200) {
                     exit("Request Error.");
@@ -93,9 +92,11 @@ $app->add(function ($request, $response, $next) {
                     exit("Request Error.");
                 }
 
-                // $json = json_decode($response->body);
+                $this->logger->addInfo($response->body);
 
-                // var_dump($json);
+                $json = json_decode($response->body);
+
+                var_dump($json);
 
                 exit;
 
