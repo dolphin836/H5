@@ -45,4 +45,9 @@ class Account extends Controller
         $_SESSION['uuid'] = 'oNP02wK_vjLWB_iRRf6qbqmDXBiE';
     }
 
+    public function logout()
+    {
+        unset($_SESSION['uuid']);
+    }
+
 }
