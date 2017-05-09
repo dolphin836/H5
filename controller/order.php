@@ -62,12 +62,12 @@ class Order extends Controller
                         $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
                         $this->app->db->insert("ticket", [
                                         "code" => $code,
-                                        "uuid" => $openid,
+                                        "uuid" => $uuid,
                                     "order_id" => $order_id,
-                                "product_id" => $pro['product_id'],
+                                  "product_id" => $pro['product_id'],
                                 "product_name" => $pro['product_name'],
-                            "product_price" => $pro['product_price'],
-                                "create_time" => time(),
+                               "product_price" => $pro['product_price'],
+                                 "create_time" => time(),
                                 "modifie_time" => time()
                         ]);
                     }
