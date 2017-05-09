@@ -78,18 +78,18 @@ $app->add(function ($request, $response, $next) {
                 $user       = $this->db->select('user', ['id'], ['uuid[=]' => $user_id]);
 
                 if ( empty($user) ) { // 注册新用户
-                    $data = array(
-                            'app_id' => $this->get('settings')['zhi']['appID'],
-                            'method' => 'alipay.user.userinfo.share',
-                           'charset' => 'GBK',
-                         'sign_type' => 'RSA2',
-                         'timestamp' => date("Y-m-d H:i:s", time()),
-                           'version' => '1.0',
-                        'auth_token' => $access_token
-                    );
+                    // $data = array(
+                    //         'app_id' => $this->get('settings')['zhi']['appID'],
+                    //         'method' => 'alipay.user.userinfo.share',
+                    //        'charset' => 'GBK',
+                    //      'sign_type' => 'RSA2',
+                    //      'timestamp' => date("Y-m-d H:i:s", time()),
+                    //        'version' => '1.0',
+                    //     'auth_token' => $access_token
+                    // );
 
-                    $sign         = $this->tool->sign($data);
-                    $data['sign'] = $sign;
+                    // $sign         = $this->tool->sign($data);
+                    // $data['sign'] = $sign;
 
                     // $response = Requests::post($zhi, array(), $data);
                 
