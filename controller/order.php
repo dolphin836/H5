@@ -132,63 +132,7 @@ class Order extends Controller
             exit;     
         }
 
-        $cart     = $_SESSION['cart'];
-        $total    = 0;
-        $order_product = array();
-        foreach($cart as $c) {
-            $results        = $this->app->db->select('product', ['name', 'image', 'price'], ['id[=]' => $c['id']]);
-            $price          = 0;
-            $product_option_name = '';
-            if ( ! empty($c['option']) ) {
-                foreach ($c['option'] as $v_id) {
-                    $o_val = $this->app->db->select('product_option_value', ['description', 'add_price'], ['id[=]' => $v_id]);
-                    $price = $price + (int)$o_val[0]['add_price'];
-                    $product_option_name = $product_option_name . '-' . $o_val[0]['description'];
-                }
-            }
-
-            foreach ($results as $result) {
-                $price     += (int)$result['price'];
-                $total     += $price * (int)$c['quantity'];
-                $order_product[] = array(
-                    'product_id' => $c['id'],
-                    'product_name' => $result['name'] . $product_option_name,
-                    'product_price' => (float)$price,
-                    'product_count' => (int)$c['quantity']
-                );
-            }
-        }
-
-
-        $discount  = $total * $this->app->get('settings')['default']['discount'];
-        $pay       = $total - $discount;
-        $pay_fen   = $pay * 100;
-
-        $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
-
-        $this->app->db->insert("order", [
-                    "code" => $code,
-                    "uuid" => $_SESSION['uuid'],
-                   "total" => $pay, //实际支付金额
-               "sub_total" => $total, //订单小计
-               "red_total" => $discount, //优惠的金额
-            "payment_code" => "weixin_js",
-             "create_time" => time(),
-            "modifie_time" => time(),
-              "payed_time" => time()
-        ]);
-
-        $order_id = $this->app->db->id();
-
-        foreach ($order_product as $product) {
-            $this->app->db->insert("order_product", [
-                     "order_id" => $order_id,
-                   "product_id" => $product['product_id'],
-                 "product_name" => $product['product_name'],
-                "product_price" => $product['product_price'],
-                "product_count" => $product['product_count']
-            ]);
-        }
+        $order      = $this->create_order("weixin_js");
 
         $server     = "https://api.mch.weixin.qq.com/pay/unifiedorder";
         $randstr    = $this->GeraHash(32);
@@ -204,13 +148,15 @@ class Order extends Controller
         
         $body       = '金宁户外运动';
 
+        $pay_fen    = $order['pay'] * 100;
+
         $order = array(
             'appid' => $this->app->get('settings')['weixin']['appID'],
             'mch_id' => $this->app->get('settings')['weixin']['mch_id'],
             'device_info' => 'WEB',
             'nonce_str' => $randstr,
             'body' => $body,
-            'out_trade_no' => $code,
+            'out_trade_no' => $order['code'],
             'total_fee' => $pay_fen,
             'spbill_create_ip' => $ip_address,
             'notify_url' => $this->app->get('settings')['weixin']['buck_url'],
@@ -226,7 +172,7 @@ class Order extends Controller
         <device_info>WEB</device_info>
         <nonce_str>{$randstr}</nonce_str>
         <body>{$body}</body>
-        <out_trade_no>{$code}</out_trade_no>
+        <out_trade_no>{$order['code']}</out_trade_no>
         <total_fee>{$pay_fen}</total_fee>
         <spbill_create_ip>{$ip_address}</spbill_create_ip>
         <notify_url>{$this->app->get('settings')['weixin']['buck_url']}</notify_url>
@@ -278,12 +224,21 @@ class Order extends Controller
     {
         $json = array();
 
-        $zhi = "https://openapi.alipay.com/gateway.do";
+        if ( ! isset($_SESSION['cart']) ) {
+            $json['code']        = 2;
+            $json['msg']         = 'The Cart Is Empty.';
+            echo json_encode($json);
+            exit;     
+        }
+
+        $order   = $this->create_order("zhi_mobie");
+
+        $zhi     = "https://openapi.alipay.com/gateway.do";
 
         $content = array(
                  'subject' => 'outatv test zhi order',
-            'out_trade_no' => md5(time()),
-            'total_amount' => 0.01,
+            'out_trade_no' => $order['code'],
+            'total_amount' => $order['pay'],
             'product_code' => 'QUICK_WAP_PAY'
         );
 
@@ -294,7 +249,7 @@ class Order extends Controller
               'sign_type' => 'RSA2',
               'timestamp' => date("Y-m-d H:i:s", time()),
                 'version' => '1.0',
-             'notify_url' => 'http://m.outatv.com/order/zhiback',
+             'notify_url' => $this->app->get('settings')['zhi']['back'],
             'biz_content' => json_encode($content)
         );
 
@@ -302,12 +257,73 @@ class Order extends Controller
 
         $data['sign'] = $sign;
 
-        // $response = Requests::post($zhi, array(), $data);
-
         $json['code'] = 0;
         $json['msg']  = 'Requests Success.';
         $json['data'] = $data;
 
         echo json_encode($json);
+    }
+
+    private function create_order($payment_code)
+    {
+        $cart     = $_SESSION['cart'];
+        $total    = 0;
+        $order_product = array();
+        foreach($cart as $c) {
+            $results        = $this->app->db->select('product', ['name', 'image', 'price'], ['id[=]' => $c['id']]);
+            $price          = 0;
+            $product_option_name = '';
+            if ( ! empty($c['option']) ) {
+                foreach ($c['option'] as $v_id) {
+                    $o_val = $this->app->db->select('product_option_value', ['description', 'add_price'], ['id[=]' => $v_id]);
+                    $price = $price + (int)$o_val[0]['add_price'];
+                    $product_option_name = $product_option_name . '-' . $o_val[0]['description'];
+                }
+            }
+
+            foreach ($results as $result) {
+                $price     += (int)$result['price'];
+                $total     += $price * (int)$c['quantity'];
+                $order_product[] = array(
+                    'product_id' => $c['id'],
+                    'product_name' => $result['name'] . $product_option_name,
+                    'product_price' => (float)$price,
+                    'product_count' => (int)$c['quantity']
+                );
+            }
+        }
+
+
+        $discount  = $total * $this->app->get('settings')['default']['discount'];
+        $pay       = $total - $discount;
+        $pay_fen   = $pay * 100;
+
+        $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
+
+        $this->app->db->insert("order", [
+                    "code" => $code,
+                    "uuid" => $_SESSION['uuid'],
+                   "total" => $pay, //实际支付金额
+               "sub_total" => $total, //订单小计
+               "red_total" => $discount, //优惠的金额
+            "payment_code" => $payment_code,
+             "create_time" => time(),
+            "modifie_time" => time(),
+              "payed_time" => time()
+        ]);
+
+        $order_id = $this->app->db->id();
+
+        foreach ($order_product as $product) {
+            $this->app->db->insert("order_product", [
+                     "order_id" => $order_id,
+                   "product_id" => $product['product_id'],
+                 "product_name" => $product['product_name'],
+                "product_price" => $product['product_price'],
+                "product_count" => $product['product_count']
+            ]);
+        }
+
+        return array('code' => $code, 'pay' => $pay);
     }
 }

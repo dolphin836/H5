@@ -38,7 +38,8 @@ return [
         ],
         // zhi
         'zhi' => [
-            'appID' => getenv('ZHI_APPID')
+            'appID' => getenv('ZHI_APPID'),
+            'back' => getenv('ZHI_BACK')
         ],
     ],
 ];
