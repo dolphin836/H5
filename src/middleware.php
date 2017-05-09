@@ -75,7 +75,7 @@ $app->add(function ($request, $response, $next) {
 
                 $user_id      = $json->alipay_system_oauth_token_response->user_id;
 
-                $user       = $this->db->select('user', ['id'], ['uuid[=]' => $user_id]);
+                // $user       = $this->db->select('user', ['id'], ['uuid[=]' => $user_id]);
 
                 //if ( empty($user) ) {
                     // $data = array(
