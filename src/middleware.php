@@ -62,12 +62,12 @@ $app->add(function ($request, $response, $next) {
                 $sign         = $this->tool->sign($data);
                 $data['sign'] = $sign;
 
-                // Requests::register_autoloader();
-                // $response = Requests::post($zhi, array(), $data);
+                Requests::register_autoloader();
+                $response = Requests::post($zhi, array(), $data);
 
-                // if ($response->status_code != 200) {
-                //     exit("Request Error.");
-                // }
+                if ($response->status_code != 200) {
+                    exit("Request Error.");
+                }
 
                 // $json = json_decode($response->body);
 
