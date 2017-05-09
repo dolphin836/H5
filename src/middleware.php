@@ -77,7 +77,7 @@ $app->add(function ($request, $response, $next) {
 
                 $user       = $this->db->select('user', ['id'], ['uuid[=]' => $user_id]);
 
-                if ( empty($user) ) { // 注册新用户
+                //if ( empty($user) ) {
                     // $data = array(
                     //         'app_id' => $this->get('settings')['zhi']['appID'],
                     //         'method' => 'alipay.user.userinfo.share',
@@ -117,7 +117,7 @@ $app->add(function ($request, $response, $next) {
                     //     "register_time" => time(),
                     //        "login_time" => time()
                     // ]);
-                }
+                //}
 
                 $_SESSION['uuid'] = $user_id;
             }
