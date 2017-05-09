@@ -139,8 +139,8 @@ $app->add(function ($request, $response, $next) {
         }
     }
 
-    if ( strpos($userAgent, 'AlipayClient') !== false ) { // 支付宝浏览器
-        if ( ! isset($_SESSION['uuid']) ) {
+    if ( strpos($userAgent, 'AlipayClient') !== false && ! isset($_SESSION['uuid']) ) { // 支付宝浏览器
+        // if ( ! isset($_SESSION['uuid']) ) {
             $host = $request->getUri()->getHost();
             $path = $request->getUri()->getPath();
             $back = urlencode('http://' . $host . $path);
@@ -148,7 +148,7 @@ $app->add(function ($request, $response, $next) {
             $newResponse = $response->withHeader('Location', $url);
 
             return $newResponse;
-        }
+        // }
     }
 
     $response = $next($request, $response);
