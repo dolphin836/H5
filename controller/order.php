@@ -33,10 +33,49 @@ class Order extends Controller
     public function zcallback() // 支付宝异步通知
     {
         $this->app->logger->addInfo("POST:" , $_POST);
-        $code           = $_POST['out_trade_no'];
-        $payment_number = $_POST['trade_no'];
-        $trade_status   = $_POST['trade_status'];
-        $gmt_payment    = $_POST['gmt_payment'];
+
+        if ('TRADE_SUCCESS' == $_POST['trade_status']) {
+            $uuid           = $_POST['buyer_id'];
+            $order_code     = $_POST['out_trade_no'];
+            $payment_number = $_POST['trade_no'];
+            $gmt_payment    = strtotime($_POST['gmt_payment']);
+
+            $order = $this->app->db->select('order', ['id'], ['code[=]' => $order_code, 'uuid[=]' => $uuid, 'status[=]' => 0]);
+
+            if ( ! empty($order) ) {
+                // 更新订单 - sign 和 金额没有做验证 有安全问题
+                $this->app->db->update("order", [
+                    "payment_number" => $payment_number,
+                    "status"         => 1,
+                    "payed_time"     => $gmt_payment
+                ], [
+                    "code[=]" => $order_code
+                ]);
+                
+                $order_id = $order[0]['id'];
+
+                // 生成票码
+                $product  = $this->app->db->select('order_product', ['id', 'product_id', 'product_name', 'product_price', 'product_count'], ['order_id[=]' => $order_id]);
+
+                foreach ($product as $pro) {
+                    for ($i = 0; $i < $pro['product_count']; $i++) {
+                        $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
+                        $this->app->db->insert("ticket", [
+                                        "code" => $code,
+                                        "uuid" => $openid,
+                                    "order_id" => $order_id,
+                                "product_id" => $pro['product_id'],
+                                "product_name" => $pro['product_name'],
+                            "product_price" => $pro['product_price'],
+                                "create_time" => time(),
+                                "modifie_time" => time()
+                        ]);
+                    }
+                }
+            }
+
+            echo 'success';
+        }
     }
 
     public function callback()
