@@ -249,6 +249,7 @@ class Order extends Controller
               'sign_type' => 'RSA2',
               'timestamp' => date("Y-m-d H:i:s", time()),
                 'version' => '1.0',
+             'return_url' => 'http://m.outatv.com/success.html',
              'notify_url' => $this->app->get('settings')['zhi']['back'],
             'biz_content' => json_encode($content)
         );
