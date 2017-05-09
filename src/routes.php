@@ -17,7 +17,8 @@ $routes = array(
     array('get',  'product/view/{id:[0-9]+}.html'),
     array('any',  'order/callback'),
     array('post', 'cart/add'),
-    array('post', 'order/add')
+    array('post', 'order/add'),
+    array('post', 'order/zhi')
 );
 
 foreach ($routes as $route) {

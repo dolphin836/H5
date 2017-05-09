@@ -40,6 +40,25 @@ $container['csrf'] = function ($c) {
 $container['tool'] = function ($c) {
 
     class Tool {
+        protected $c;
+
+        function __construct($c)
+        {
+            $this->c = $c;
+        }
+        
+        public function is_weixin()
+        {
+            $headers   = $this->c->get('request')->getHeader('HTTP_USER_AGENT');
+
+            $userAgent = $headers[0];
+            if ( strpos($userAgent, 'MicroMessenger') !== false ) {
+                return true;
+            }
+
+            return false;
+        }
+
         private function checkEmpty($value) 
         {
             if (!isset($value))
@@ -88,7 +107,7 @@ $container['tool'] = function ($c) {
         }
     }
 
-    $tool = new Tool();
+    $tool = new Tool($c);
     return $tool;
 };
 

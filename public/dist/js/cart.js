@@ -80,4 +80,19 @@ $(function() {
         });
     });
 
+    $('#zhiPay').on('click', function() { // 发起支付宝支付
+        hideActionSheet();
+        $pay_back.fadeIn(200);
+
+        $.post('/order/zhi', function(response) {
+            var response = $.parseJSON(response);
+
+            if (response.code != 0) {
+                alert(response.msg);
+                return;
+            }
+            
+        });
+    });
+
 });

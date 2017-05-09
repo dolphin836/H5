@@ -52,7 +52,7 @@ class Cart extends Controller
         }
 
         $scripts[] = $this->server . 'dist/js/' . 'zepto.min.js';
-        $scripts[] = $this->server . 'dist/js/' . 'cart.js';
+        $scripts[] = $this->server . 'dist/js/' . 'cart.js?22222';
 
         $discount  = $total * $this->app->get('settings')['default']['discount'];
         $pay       = $total - $discount;
@@ -61,7 +61,9 @@ class Cart extends Controller
         $discount  = number_format ($discount, 2);
         $pay       = number_format ($pay, 2);
 
-        echo $this->app->template->render('cart', ['server' => $this->server, 'item' => 'cart', 'cartCount' => $cartCount, 'scripts' => $scripts, 'products' => $products, 'total' => $total, 'discount' => $discount, 'pay' => $pay]);
+        $is_weixin = $this->app->tool->is_weixin();
+
+        echo $this->app->template->render('cart', ['server' => $this->server, 'item' => 'cart', 'cartCount' => $cartCount, 'scripts' => $scripts, 'products' => $products, 'total' => $total, 'discount' => $discount, 'pay' => $pay, 'is_weixin' => $is_weixin]);
     }
 
     public function clean()

@@ -273,4 +273,40 @@ class Order extends Controller
 
         echo json_encode($json);
     }
+
+    public function zhi()
+    {
+        $json = array();
+
+        $zhi = "https://openapi.alipay.com/gateway.do";
+
+        $content = array(
+                 'subject' => 'outatv test zhi order',
+            'out_trade_no' => md5(time()),
+            'total_amount' => 0.01,
+            'product_code' => 'QUICK_WAP_PAY'
+        );
+
+        $data = array(
+                 'app_id' => $this->app->get('settings')['zhi']['appID'],
+                 'method' => 'alipay.trade.wap.pay',
+                'charset' => 'utf-8',
+              'sign_type' => 'RSA2',
+              'timestamp' => date("Y-m-d H:i:s", time()),
+                'version' => '1.0',
+             'notify_url' => 'http://m.outatv.com/order/zhiback',
+            'biz_content' => json_encode($content)
+        );
+
+        $sign         = $this->app->tool->sign($data);
+
+        $data['sign'] = $sign;
+
+        $response = Requests::post($zhi, array(), $data);
+
+        $json['code']    = 0;
+        $json['msg']     = 'Requests Success.';
+
+        echo json_encode($json);
+    }
 }
