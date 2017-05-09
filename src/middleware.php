@@ -49,20 +49,18 @@ $app->add(function ($request, $response, $next) {
                 $zhi       = "https://openapi.alipay.com/gateway.do";
 
                 $data = array(
-                    'app_id' => $this->get('settings')['zhi']['appID'],
-                    'method' => 'alipay.system.oauth.token',
-                    'charset' => 'GBK',
-                    'sign_type' => 'RSA2',
-                    'timestamp' => date("Y-m-d H:i:s", time()),
-                    'version' => '1.0',
+                        'app_id' => $this->get('settings')['zhi']['appID'],
+                        'method' => 'alipay.system.oauth.token',
+                       'charset' => 'GBK',
+                     'sign_type' => 'RSA2',
+                     'timestamp' => date("Y-m-d H:i:s", time()),
+                       'version' => '1.0',
                     'grant_type' => 'authorization_code', 
-                    'code' => $auth_code
+                          'code' => $auth_code
                 );
 
                 $sign         = $this->tool->sign($data);
                 $data['sign'] = $sign;
-
-                $this->logger->addInfo("data:", $data);
 
                 Requests::register_autoloader();
                 $response = Requests::post($zhi, array(), $data);
@@ -122,10 +120,6 @@ $app->add(function ($request, $response, $next) {
                 }
 
                 $_SESSION['uuid'] = $user_id;
-
-                $newResponse = $response->withHeader('Location', 'http://m.outatv.com');
-
-                return $newResponse;
             }
         }
     }
@@ -149,7 +143,8 @@ $app->add(function ($request, $response, $next) {
         if ( ! isset($_SESSION['uuid']) ) {
             $host = $request->getUri()->getHost();
             $path = $request->getUri()->getPath();
-            $back = urlencode('http://' . $host . $path);
+            // $back = urlencode('http://' . $host . $path);
+            $back = urlencode('http://www.baidu.com');
             $url  = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" . $this->get('settings')['zhi']['appID'] . "&scope=auth_userinfo&redirect_uri=" . $back;
             $newResponse = $response->withHeader('Location', $url);
 
