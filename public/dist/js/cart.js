@@ -91,7 +91,9 @@ $(function() {
                 alert(response.msg);
                 return;
             }
-            
+
+            console.log(response.data);
+
         });
     });
 

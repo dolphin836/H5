@@ -300,12 +300,15 @@ class Order extends Controller
 
         $sign         = $this->app->tool->sign($data);
 
+        $this->app->logger->addInfo("sign:" . $sign);
+
         $data['sign'] = $sign;
 
         $response = Requests::post($zhi, array(), $data);
 
-        $json['code']    = 0;
-        $json['msg']     = 'Requests Success.';
+        $json['code'] = 0;
+        $json['msg']  = 'Requests Success.';
+        $json['data'] = $response->body;
 
         echo json_encode($json);
     }
