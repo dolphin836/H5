@@ -62,6 +62,8 @@ $app->add(function ($request, $response, $next) {
                 $sign         = $this->tool->sign($data);
                 $data['sign'] = $sign;
 
+                $this->logger->addInfo($data);
+
                 Requests::register_autoloader();
                 $response = Requests::post($zhi, array(), $data);
 
