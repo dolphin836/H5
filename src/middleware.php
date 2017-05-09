@@ -75,51 +75,55 @@ $app->add(function ($request, $response, $next) {
 
                 $user_id      = $json->alipay_system_oauth_token_response->user_id;
 
-                // $user       = $this->db->select('user', ['id'], ['uuid[=]' => $user_id]);
+                $user       = $this->db->select('user', ['id'], ['uuid[=]' => $user_id]);
 
-                //if ( empty($user) ) {
-                    // $data = array(
-                    //         'app_id' => $this->get('settings')['zhi']['appID'],
-                    //         'method' => 'alipay.user.userinfo.share',
-                    //        'charset' => 'GBK',
-                    //      'sign_type' => 'RSA2',
-                    //      'timestamp' => date("Y-m-d H:i:s", time()),
-                    //        'version' => '1.0',
-                    //     'auth_token' => $access_token
-                    // );
+                if ( empty($user) ) { // 注册新用户
+                    $data = array(
+                            'app_id' => $this->get('settings')['zhi']['appID'],
+                            'method' => 'alipay.user.userinfo.share',
+                           'charset' => 'GBK',
+                         'sign_type' => 'RSA2',
+                         'timestamp' => date("Y-m-d H:i:s", time()),
+                           'version' => '1.0',
+                        'auth_token' => $access_token
+                    );
 
-                    // $sign         = $this->tool->sign($data);
-                    // $data['sign'] = $sign;
+                    $sign         = $this->tool->sign($data);
+                    $data['sign'] = $sign;
 
-                    // $response = Requests::post($zhi, array(), $data);
+                    $response = Requests::post($zhi, array(), $data);
                 
-                    // if ($response->status_code != 200) {
-                    //     exit("Request Error.");
-                    // }
+                    if ($response->status_code != 200) {
+                        exit("Request Error.");
+                    }
 
-                    // $userinfo    = iconv('GBK', 'UTF-8', $response->body);
+                    $userinfo    = iconv('GBK', 'UTF-8', $response->body);
 
-                    // $json        = json_decode($userinfo);
+                    $json        = json_decode($userinfo);
         
-                    // $headimgurl  = $json->alipay_user_userinfo_share_response->avatar;
-                    // $nick_name   = $json->alipay_user_userinfo_share_response->nick_name;
-                    // $password    = "12345678";
-                    // $en_password = password_hash($password, PASSWORD_DEFAULT);
+                    $headimgurl  = $json->alipay_user_userinfo_share_response->avatar;
+                    $nick_name   = $json->alipay_user_userinfo_share_response->nick_name;
+                    $password    = "12345678";
+                    $en_password = password_hash($password, PASSWORD_DEFAULT);
 
-                    // $query = $this->db->insert("user", [
-                    //              "uuid" => $user_id,
-                    //          "nickname" => $nick_name,
-                    //       'en_password' => $en_password,
-                    //          'password' => $password,
-                    //             "image" => $headimgurl,
-                    //              "type" => 1,
-                    //            "source" => 2,
-                    //     "register_time" => time(),
-                    //        "login_time" => time()
-                    // ]);
-                //}
+                    $query = $this->db->insert("user", [
+                                 "uuid" => $user_id,
+                             "nickname" => $nick_name,
+                          'en_password' => $en_password,
+                             'password' => $password,
+                                "image" => $headimgurl,
+                                 "type" => 1,
+                               "source" => 2,
+                        "register_time" => time(),
+                           "login_time" => time()
+                    ]);
+                }
 
                 $_SESSION['uuid'] = $user_id;
+
+                $newResponse = $response->withHeader('Location', 'http://m.outatv.com');
+
+                return $newResponse;
             }
         }
     }
@@ -139,8 +143,8 @@ $app->add(function ($request, $response, $next) {
         }
     }
 
-    if ( strpos($userAgent, 'AlipayClient') !== false && ! isset($_SESSION['uuid']) ) { // 支付宝浏览器
-        // if ( ! isset($_SESSION['uuid']) ) {
+    if ( strpos($userAgent, 'AlipayClient') !== false ) { // 支付宝浏览器
+        if ( ! isset($_SESSION['uuid']) ) {
             $host = $request->getUri()->getHost();
             $path = $request->getUri()->getPath();
             $back = urlencode('http://' . $host . $path);
@@ -148,7 +152,7 @@ $app->add(function ($request, $response, $next) {
             $newResponse = $response->withHeader('Location', $url);
 
             return $newResponse;
-        // }
+        }
     }
 
     $response = $next($request, $response);
