@@ -92,8 +92,13 @@ $(function() {
                 return;
             }
 
-            console.log(response.data);
+            var data = response.data;
 
+            for(var i in data) {
+                 $('#alipaysubmit').append("<input type='hidden' name='" + i + "' value='" + data[i] + "'>");
+            }
+
+            $('#alipaysubmit').submit();
         });
     });
 
