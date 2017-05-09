@@ -236,7 +236,7 @@ class Order extends Controller
         $zhi     = "https://openapi.alipay.com/gateway.do";
 
         $content = array(
-                 'subject' => 'outatv test zhi order',
+                 'subject' => '金宁户外运动',
             'out_trade_no' => $order['code'],
             'total_amount' => $order['pay'],
             'product_code' => 'QUICK_WAP_PAY'
