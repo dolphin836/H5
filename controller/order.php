@@ -30,6 +30,15 @@ class Order extends Controller
         return strtoupper(md5($strTemp));
     }
 
+    public function zcallback() // 支付宝异步通知
+    {
+        $this->app->logger->addInfo("POST:" , $_POST);
+        $code           = $_POST['out_trade_no'];
+        $payment_number = $_POST['trade_no'];
+        $trade_status   = $_POST['trade_status'];
+        $gmt_payment    = $_POST['gmt_payment'];
+    }
+
     public function callback()
     {
         $data   = file_get_contents('php://input');

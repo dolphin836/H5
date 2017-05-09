@@ -18,7 +18,8 @@ $routes = array(
     array('any',  'order/callback'),
     array('post', 'cart/add'),
     array('post', 'order/add'),
-    array('post', 'order/zhi')
+    array('post', 'order/zhi'),
+    array('post', 'order/zcallback')
 );
 
 foreach ($routes as $route) {
