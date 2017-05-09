@@ -32,8 +32,6 @@ class Order extends Controller
 
     public function zcallback() // 支付宝异步通知
     {
-        $this->app->logger->addInfo("POST:" , $_POST);
-
         if ('TRADE_SUCCESS' == $_POST['trade_status']) {
             $uuid           = $_POST['buyer_id'];
             $order_code     = $_POST['out_trade_no'];

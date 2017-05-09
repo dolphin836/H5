@@ -91,32 +91,32 @@ $app->add(function ($request, $response, $next) {
                     $sign         = $this->tool->sign($data);
                     $data['sign'] = $sign;
 
-                    $response = Requests::post($zhi, array(), $data);
+                    // $response = Requests::post($zhi, array(), $data);
                 
-                    if ($response->status_code != 200) {
-                        exit("Request Error.");
-                    }
+                    // if ($response->status_code != 200) {
+                    //     exit("Request Error.");
+                    // }
 
-                    $userinfo    = iconv('GBK', 'UTF-8', $response->body);
+                    // $userinfo    = iconv('GBK', 'UTF-8', $response->body);
 
-                    $json        = json_decode($userinfo);
+                    // $json        = json_decode($userinfo);
         
-                    $headimgurl  = $json->alipay_user_userinfo_share_response->avatar;
-                    $nick_name   = $json->alipay_user_userinfo_share_response->nick_name;
-                    $password    = "12345678";
-                    $en_password = password_hash($password, PASSWORD_DEFAULT);
+                    // $headimgurl  = $json->alipay_user_userinfo_share_response->avatar;
+                    // $nick_name   = $json->alipay_user_userinfo_share_response->nick_name;
+                    // $password    = "12345678";
+                    // $en_password = password_hash($password, PASSWORD_DEFAULT);
 
-                    $query = $this->db->insert("user", [
-                                 "uuid" => $user_id,
-                             "nickname" => $nick_name,
-                          'en_password' => $en_password,
-                             'password' => $password,
-                                "image" => $headimgurl,
-                                 "type" => 1,
-                               "source" => 2,
-                        "register_time" => time(),
-                           "login_time" => time()
-                    ]);
+                    // $query = $this->db->insert("user", [
+                    //              "uuid" => $user_id,
+                    //          "nickname" => $nick_name,
+                    //       'en_password' => $en_password,
+                    //          'password' => $password,
+                    //             "image" => $headimgurl,
+                    //              "type" => 1,
+                    //            "source" => 2,
+                    //     "register_time" => time(),
+                    //        "login_time" => time()
+                    // ]);
                 }
 
                 $_SESSION['uuid'] = $user_id;
