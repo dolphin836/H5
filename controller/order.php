@@ -178,7 +178,7 @@ class Order extends Controller
             exit;     
         }
 
-        $order      = $this->create_order("weixin_js");
+        $orderinfo  = $this->create_order("weixin_js");
 
         $server     = "https://api.mch.weixin.qq.com/pay/unifiedorder";
         $randstr    = $this->GeraHash(32);
@@ -194,7 +194,7 @@ class Order extends Controller
         
         $body       = '金宁户外运动';
 
-        $pay_fen    = $order['pay'] * 100;
+        $pay_fen    = $orderinfo['pay'] * 100;
 
         $order = array(
             'appid' => $this->app->get('settings')['weixin']['appID'],
@@ -202,7 +202,7 @@ class Order extends Controller
             'device_info' => 'WEB',
             'nonce_str' => $randstr,
             'body' => $body,
-            'out_trade_no' => $order['code'],
+            'out_trade_no' => $orderinfo['code'],
             'total_fee' => $pay_fen,
             'spbill_create_ip' => $ip_address,
             'notify_url' => $this->app->get('settings')['weixin']['buck_url'],
@@ -218,7 +218,7 @@ class Order extends Controller
         <device_info>WEB</device_info>
         <nonce_str>{$randstr}</nonce_str>
         <body>{$body}</body>
-        <out_trade_no>{$order['code']}</out_trade_no>
+        <out_trade_no>{$orderinfo['code']}</out_trade_no>
         <total_fee>{$pay_fen}</total_fee>
         <spbill_create_ip>{$ip_address}</spbill_create_ip>
         <notify_url>{$this->app->get('settings')['weixin']['buck_url']}</notify_url>
