@@ -144,7 +144,7 @@ $app->add(function ($request, $response, $next) {
             $host = $request->getUri()->getHost();
             $path = $request->getUri()->getPath();
             // $back = urlencode('http://' . $host . $path);
-            $back = urlencode('http://www.baidu.com');
+            $back = urlencode('https://www.baidu.com/');
             $url  = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" . $this->get('settings')['zhi']['appID'] . "&scope=auth_userinfo&redirect_uri=" . $back;
             $newResponse = $response->withHeader('Location', $url);
 
