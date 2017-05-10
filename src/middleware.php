@@ -65,9 +65,9 @@ $app->add(function ($request, $response, $next) {
                 // Requests::register_autoloader();
                 // $response = Requests::post($zhi, array(), $data);
 
-                $response = $this->tool->doPost($zhi, $data);
+                $response = $this->tool->http_post($zhi, $data);
 
-                $this->logger->addInfo("POST RETURN:" . $response);
+                $this->logger->addInfo("POST RETURN:", $response);
 
                 // if ($response->status_code != 200) {
                 //     exit("Request Error.");

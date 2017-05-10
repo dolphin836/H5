@@ -108,7 +108,7 @@ $container['tool'] = function ($c) {
 
         public function doPost($server, $data)
         {
-            $fields = (is_array($data)) ? http_build_query($data) : $data;
+            // $fields = (is_array($data)) ? http_build_query($data) : $data;
 
             $ch     = curl_init();
 
@@ -118,7 +118,7 @@ $container['tool'] = function ($c) {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
             curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
             $content = curl_exec($ch);
             $status  = curl_getinfo($ch);
@@ -130,6 +130,19 @@ $container['tool'] = function ($c) {
             } else {
                 return false;
             }
+        }
+
+        function http_post ($url, $data)
+        {
+            $data_url = http_build_query ($data);
+            $data_len = strlen ($data_url);
+
+            return array ('content'=>file_get_contents ($url, false, stream_context_create (array ('http'=>array ('method'=>'POST'
+                    , 'header'=>"Connection: close\r\nContent-Length: $data_len\r\n"
+                    , 'content'=>$data_url
+                    ))))
+                , 'headers'=>$http_response_header
+                );
         }
     }
 
