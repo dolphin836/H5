@@ -65,9 +65,20 @@ $app->add(function ($request, $response, $next) {
                 // Requests::register_autoloader();
                 // $response = Requests::post($zhi, array(), $data);
 
-                $response = $this->tool->http_post($zhi, $data);
+                $data_url = http_build_query ($data);
+                $data_len = strlen ($data_url);
 
-                // $this->logger->addInfo("POST RETURN:", $response);
+                $content  = stream_context_create (
+                    array (
+                        'http' => array (
+                            'method'  => 'POST',
+                            'header'  => "Connection: close\r\nContent-Length: $data_len\r\n",
+                            'content' => $data_url
+                )));
+
+                $response = file_get_contents ($zhi, false, $content);
+
+                $this->logger->addInfo("POST RETURN:" . $response);
 
                 // if ($response->status_code != 200) {
                 //     exit("Request Error.");
