@@ -46,12 +46,16 @@
 //     });
 // }
 
-$app->get('/', function($request, $response, $args) {
+$app->get('/test', function($request, $response, $args) {
     if ( isset($_SESSION['uuid']) ) {
         echo $_SESSION['uuid'];
     } else {
         echo 'GUEST';
     }
+});
+
+$app->get('/logout', function($request, $response, $args) {
+    unset($_SESSION['uuid']);
 });
 
 
