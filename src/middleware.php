@@ -1,6 +1,56 @@
 <?php
 
 $app->add(function ($request, $response, $next) {
+
+function checkEmpty($value) 
+{
+    if (!isset($value))
+        return true;
+    if ($value === null)
+        return true;
+    if (trim($value) === "")
+        return true;
+
+    return false;
+}
+
+function sign($data = array())
+{
+    ksort($data);
+
+    $stringToBeSigned = "";
+
+    $i = 0;
+
+    foreach ($data as $k => $v) {
+        if (false === checkEmpty($v) && "@" != substr($v, 0, 1)) {
+            if ($i == 0) {
+                $stringToBeSigned .= "$k" . "=" . "$v";
+            } else {
+                $stringToBeSigned .= "&" . "$k" . "=" . "$v";
+            }
+
+            $i++;
+        }
+    }
+
+    unset($k, $v);
+
+    $priKey  = file_get_contents('rsa_private_key.pem');
+
+    $res     = openssl_pkey_get_private($priKey);
+
+    $openssl = openssl_sign($stringToBeSigned, $sign, $res, OPENSSL_ALGO_SHA256);
+
+    openssl_free_key($res);
+
+    $sign = base64_encode($sign);
+
+    return $sign;
+}
+
+
+
     $httpQuery      = $request->getUri()->getQuery(); // 获取微信的 code 或者推荐人的 code，做相应的处理
 
     if ($httpQuery != '') {
@@ -59,7 +109,7 @@ $app->add(function ($request, $response, $next) {
                           'code' => $auth_code
                 );
 
-                $sign         = $this->tool->sign($data);
+                $sign         = sign($data);
                 $data['sign'] = $sign;
 
                 $data         = http_build_query($data);
@@ -87,7 +137,7 @@ $app->add(function ($request, $response, $next) {
                         'auth_token' => $access_token
                     );
 
-                    $sign         = $this->tool->sign($data);
+                    $sign         = sign($data);
                     $data['sign'] = $sign;
 
                     $data         = http_build_query($data);

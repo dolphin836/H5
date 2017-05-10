@@ -37,77 +37,77 @@ $container['csrf'] = function ($c) {
 };
 
 // tool
-$container['tool'] = function ($c) {
+// $container['tool'] = function ($c) {
 
-    class Tool {
-        protected $c;
+//     class Tool {
+//         protected $c;
 
-        function __construct($c)
-        {
-            $this->c = $c;
-        }
+//         function __construct($c)
+//         {
+//             $this->c = $c;
+//         }
         
-        public function is_weixin()
-        {
-            $headers   = $this->c->get('request')->getHeader('HTTP_USER_AGENT');
+//         public function is_weixin()
+//         {
+//             $headers   = $this->c->get('request')->getHeader('HTTP_USER_AGENT');
 
-            $userAgent = $headers[0];
-            if ( strpos($userAgent, 'MicroMessenger') !== false ) {
-                return true;
-            }
+//             $userAgent = $headers[0];
+//             if ( strpos($userAgent, 'MicroMessenger') !== false ) {
+//                 return true;
+//             }
 
-            return false;
-        }
+//             return false;
+//         }
 
-        private function checkEmpty($value) 
-        {
-            if (!isset($value))
-                return true;
-            if ($value === null)
-                return true;
-            if (trim($value) === "")
-                return true;
+//         private function checkEmpty($value) 
+//         {
+//             if (!isset($value))
+//                 return true;
+//             if ($value === null)
+//                 return true;
+//             if (trim($value) === "")
+//                 return true;
 
-            return false;
-        }
+//             return false;
+//         }
 
-        public function sign($data = array())
-        {
-            ksort($data);
+//         public function sign($data = array())
+//         {
+//             ksort($data);
 
-            $stringToBeSigned = "";
+//             $stringToBeSigned = "";
 
-            $i = 0;
+//             $i = 0;
 
-            foreach ($data as $k => $v) {
-                if (false === $this->checkEmpty($v) && "@" != substr($v, 0, 1)) {
-                    if ($i == 0) {
-                        $stringToBeSigned .= "$k" . "=" . "$v";
-                    } else {
-                        $stringToBeSigned .= "&" . "$k" . "=" . "$v";
-                    }
+//             foreach ($data as $k => $v) {
+//                 if (false === $this->checkEmpty($v) && "@" != substr($v, 0, 1)) {
+//                     if ($i == 0) {
+//                         $stringToBeSigned .= "$k" . "=" . "$v";
+//                     } else {
+//                         $stringToBeSigned .= "&" . "$k" . "=" . "$v";
+//                     }
 
-                    $i++;
-                }
-            }
+//                     $i++;
+//                 }
+//             }
 
-            unset($k, $v);
+//             unset($k, $v);
 
-            $priKey  = file_get_contents('rsa_private_key.pem');
+//             $priKey  = file_get_contents('rsa_private_key.pem');
 
-            $res     = openssl_pkey_get_private($priKey);
+//             $res     = openssl_pkey_get_private($priKey);
 
-            $openssl = openssl_sign($stringToBeSigned, $sign, $res, OPENSSL_ALGO_SHA256);
+//             $openssl = openssl_sign($stringToBeSigned, $sign, $res, OPENSSL_ALGO_SHA256);
 
-            openssl_free_key($res);
+//             openssl_free_key($res);
 
-            $sign = base64_encode($sign);
+//             $sign = base64_encode($sign);
 
-            return $sign;
-        }
-    }
+//             return $sign;
+//         }
+//     }
 
-    $tool = new Tool($c);
-    return $tool;
-};
+//     $tool = new Tool($c);
+//     return $tool;
+// };
 
