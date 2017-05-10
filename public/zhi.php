@@ -27,7 +27,7 @@ function sign($data = array())
     $i = 0;
 
     foreach ($data as $k => $v) {
-        if (false === $this->checkEmpty($v) && "@" != substr($v, 0, 1)) {
+        if (false === checkEmpty($v) && "@" != substr($v, 0, 1)) {
             if ($i == 0) {
                 $stringToBeSigned .= "$k" . "=" . "$v";
             } else {
