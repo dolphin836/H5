@@ -102,3 +102,5 @@ if ( isset($_SESSION['user']) ) {
 }
 
 ?>
+
+<a href="http://m.outatv.com/zhi.php"> Home </a>
