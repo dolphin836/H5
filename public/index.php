@@ -11,13 +11,13 @@ session_start();
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$env = new Dotenv\Dotenv(__DIR__ . '/..');
-$env->load();
+// $env = new Dotenv\Dotenv(__DIR__ . '/..');
+// $env->load();
 
-$settings = include __DIR__ . '/../src/settings.php';
-$app      = new \Slim\App($settings);
+// $settings = include __DIR__ . '/../src/settings.php';
+$app      = new \Slim\App;
 
-require __DIR__ . '/../src/dependencies.php';
+// require __DIR__ . '/../src/dependencies.php';
 
 require __DIR__ . '/../src/middleware.php';
 
