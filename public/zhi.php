@@ -122,6 +122,12 @@ if (isset($_GET['auth_code'])) {
     $_SESSION['name']  = $json->alipay_user_userinfo_share_response->nick_name;
 }
 
+if (isset($_GET['logoutc'])) {
+    unset($_SESSION['user']);
+    unset($_SESSION['image']);
+    unset($_SESSION['name']);
+}
+
 
 if ( isset($_SESSION['user']) ) {
     echo 'Hello ' . $_SESSION['user'];
@@ -133,6 +139,8 @@ if ( isset($_SESSION['user']) ) {
 
 <a href="http://m.outatv.com/zhi.php"> Home </a>
 
-<h1><?php echo $_SESSION['name']; ?></h1>
+<h1 class="font-size: 32px;"><?php echo $_SESSION['name']; ?></h1>
 <h3><?php echo $_SESSION['user']; ?></h3>
 <img src="<?php echo $_SESSION['image']; ?>" alt="用户头像">
+
+<a href="http://m.outatv.com/zhi.php?logout=111"> Logout </a>
