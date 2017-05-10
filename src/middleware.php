@@ -46,7 +46,7 @@ $app->add(function ($request, $response, $next) {
 
             if ($str[0]  == 'auth_code' && ! isset($_SESSION['uuid']) ) { // 检测到支付宝网页授权的 auth_code
                 $auth_code = $str[1];
-                $zhi       = "https://openapi.alipay.com/gateway.do";
+                $zhi       = "https://openapi.alipay.com/gateway.do?";
 
                 $data = array(
                         'app_id' => $this->get('settings')['zhi']['appID'],
@@ -62,18 +62,9 @@ $app->add(function ($request, $response, $next) {
                 $sign         = $this->tool->sign($data);
                 $data['sign'] = $sign;
 
-                $data_url = http_build_query ($data);
-                $data_len = strlen ($data_url);
+                $data         = http_build_query ($data);
 
-                $content  = stream_context_create (
-                    array (
-                        'http' => array (
-                            'method'  => 'POST',
-                            'header'  => "Connection: close\r\nContent-Length: $data_len\r\n",
-                            'content' => $data_url
-                )));
-
-                $response = file_get_contents ($zhi, false, $content);
+                $response     = file_get_contents($zhi . $data)
 
                 $this->logger->addInfo("POST RETURN:" . $response);
 
