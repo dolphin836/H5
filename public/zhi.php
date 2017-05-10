@@ -63,27 +63,33 @@ if (strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false && ! isset($_S
 if (isset($_GET['auth_code'])) {
     $auth_code = $_GET['auth_code'];
 
+    var_dump($auth_code);
+
     $server    = "https://openapi.alipay.com/gateway.do?";
 
     $data = array(
             'app_id' => '2017050207083850',
             'method' => 'alipay.system.oauth.token',
-            'charset' => 'GBK',
-            'sign_type' => 'RSA2',
-            'timestamp' => date("Y-m-d H:i:s", time()),
-            'version' => '1.0',
+           'charset' => 'GBK',
+         'sign_type' => 'RSA2',
+         'timestamp' => date("Y-m-d H:i:s", time()),
+           'version' => '1.0',
         'grant_type' => 'authorization_code', 
-                'code' => $auth_code
+              'code' => $auth_code
     );
 
     $sign         = sign($data);
+    var_dump($sign);
     $data['sign'] = $sign;
 
     $data         = http_build_query($data);
+    var_dump($data);
 
     $response     = file_get_contents($server . $data);
+    var_dump($response);
 
     $json         = json_decode($response);
+    var_dump($json);
 
     $_SESSION['user'] = $json->alipay_system_oauth_token_response->user_id;
 }
