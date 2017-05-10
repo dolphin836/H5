@@ -54,7 +54,7 @@ function sign($data = array())
 }
 
 if (strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false && ! isset($_SESSION['user'])) { //支付宝内置浏览器
-    $back = urlencode('http://m.outatv.com');
+    $back = urlencode('http://m.outatv.com/zhi.php');
     $url  = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017050207083850&scope=auth_userinfo&redirect_uri=" . $back;
     
     header('Location: ' . $url);
