@@ -99,7 +99,7 @@ function sign($data = array())
                 $zhi       = "https://openapi.alipay.com/gateway.do?";
 
                 $data = array(
-                        'app_id' => $this->get('settings')['zhi']['appID'],
+                        'app_id' => '2017050207083850',
                         'method' => 'alipay.system.oauth.token',
                        'charset' => 'GBK',
                      'sign_type' => 'RSA2',
@@ -128,7 +128,7 @@ function sign($data = array())
 
                 if (empty($user)) { // 注册新用户
                     $data = array(
-                            'app_id' => $this->get('settings')['zhi']['appID'],
+                            'app_id' => '2017050207083850',
                             'method' => 'alipay.user.userinfo.share',
                            'charset' => 'GBK',
                          'sign_type' => 'RSA2',
@@ -194,7 +194,8 @@ function sign($data = array())
             // $path = $request->getUri()->getPath();
             // $back = urlencode('http://' . $host . $path);
              $back = urlencode('http://m.outatv.com/test');
-            $url  = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" . $this->get('settings')['zhi']['appID'] . "&scope=auth_userinfo&redirect_uri=" . $back;
+            // $url  = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" . $this->get('settings')['zhi']['appID'] . "&scope=auth_userinfo&redirect_uri=" . $back;
+            $url  = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017050207083850&scope=auth_userinfo&redirect_uri=" . $back;
             
             // $this->logger->addInfo("URL:" . $url);
             
