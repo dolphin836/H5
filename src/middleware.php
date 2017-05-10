@@ -64,7 +64,7 @@ $app->add(function ($request, $response, $next) {
 
                 $data         = http_build_query ($data);
 
-                $response     = file_get_contents($zhi . $data)
+                $response     = file_get_contents($zhi . $data);
 
                 $this->logger->addInfo("POST RETURN:" . $response);
 
