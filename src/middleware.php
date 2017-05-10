@@ -45,74 +45,75 @@ $app->add(function ($request, $response, $next) {
             }
 
             if ($str[0]  == 'auth_code' && ! isset($_SESSION['uuid']) ) { // 检测到支付宝网页授权的 auth_code
-                $auth_code = $str[1];
-                $zhi       = "https://openapi.alipay.com/gateway.do?";
+                // $auth_code = $str[1];
+                // $zhi       = "https://openapi.alipay.com/gateway.do?";
 
-                $data = array(
-                        'app_id' => $this->get('settings')['zhi']['appID'],
-                        'method' => 'alipay.system.oauth.token',
-                       'charset' => 'GBK',
-                     'sign_type' => 'RSA2',
-                     'timestamp' => date("Y-m-d H:i:s", time()),
-                       'version' => '1.0',
-                    'grant_type' => 'authorization_code', 
-                          'code' => $auth_code
-                );
+                // $data = array(
+                //         'app_id' => $this->get('settings')['zhi']['appID'],
+                //         'method' => 'alipay.system.oauth.token',
+                //        'charset' => 'GBK',
+                //      'sign_type' => 'RSA2',
+                //      'timestamp' => date("Y-m-d H:i:s", time()),
+                //        'version' => '1.0',
+                //     'grant_type' => 'authorization_code', 
+                //           'code' => $auth_code
+                // );
 
-                $sign         = $this->tool->sign($data);
-                $data['sign'] = $sign;
+                // $sign         = $this->tool->sign($data);
+                // $data['sign'] = $sign;
 
-                $data         = http_build_query($data);
-                $response     = file_get_contents($zhi . $data);
+                // $data         = http_build_query($data);
+                // $response     = file_get_contents($zhi . $data);
 
-                $json         = json_decode($response);
+                // $json         = json_decode($response);
 
-                $access_token = $json->alipay_system_oauth_token_response->access_token;
+                // $access_token = $json->alipay_system_oauth_token_response->access_token;
 
-                $user_id      = $json->alipay_system_oauth_token_response->user_id;
+                // $user_id      = $json->alipay_system_oauth_token_response->user_id;
 
-                $user       = $this->db->select('user', ['id'], ['uuid[=]' => $user_id]);
+                // $user         = $this->db->select('user', ['id'], ['uuid[=]' => $user_id]);
 
-                if ( empty($user) ) { // 注册新用户
-                    $data = array(
-                            'app_id' => $this->get('settings')['zhi']['appID'],
-                            'method' => 'alipay.user.userinfo.share',
-                           'charset' => 'GBK',
-                         'sign_type' => 'RSA2',
-                         'timestamp' => date("Y-m-d H:i:s", time()),
-                           'version' => '1.0',
-                        'auth_token' => $access_token
-                    );
+                // if ( empty($user) ) { // 注册新用户
+                //     $data = array(
+                //             'app_id' => $this->get('settings')['zhi']['appID'],
+                //             'method' => 'alipay.user.userinfo.share',
+                //            'charset' => 'GBK',
+                //          'sign_type' => 'RSA2',
+                //          'timestamp' => date("Y-m-d H:i:s", time()),
+                //            'version' => '1.0',
+                //         'auth_token' => $access_token
+                //     );
 
-                    $sign         = $this->tool->sign($data);
-                    $data['sign'] = $sign;
+                //     $sign         = $this->tool->sign($data);
+                //     $data['sign'] = $sign;
 
-                    $data         = http_build_query($data);
-                    $response     = file_get_contents($zhi . $data);
+                //     $data         = http_build_query($data);
+                //     $response     = file_get_contents($zhi . $data);
 
-                    $userinfo     = iconv('GBK', 'UTF-8', $response);
+                //     $userinfo     = iconv('GBK', 'UTF-8', $response);
 
-                    $json         = json_decode($userinfo);
+                //     $json         = json_decode($userinfo);
         
-                    $headimgurl   = $json->alipay_user_userinfo_share_response->avatar;
-                    $nick_name    = $json->alipay_user_userinfo_share_response->nick_name;
-                    $password     = "12345678";
-                    $en_password  = password_hash($password, PASSWORD_DEFAULT);
+                //     $headimgurl   = $json->alipay_user_userinfo_share_response->avatar;
+                //     $nick_name    = $json->alipay_user_userinfo_share_response->nick_name;
+                //     $password     = "12345678";
+                //     $en_password  = password_hash($password, PASSWORD_DEFAULT);
 
-                    $query = $this->db->insert("user", [
-                                 "uuid" => $user_id,
-                             "nickname" => $nick_name,
-                          'en_password' => $en_password,
-                             'password' => $password,
-                                "image" => $headimgurl,
-                                 "type" => 1,
-                               "source" => 2,
-                        "register_time" => time(),
-                           "login_time" => time()
-                    ]);
-                }
+                //     $query = $this->db->insert("user", [
+                //                  "uuid" => $user_id,
+                //              "nickname" => $nick_name,
+                //           'en_password' => $en_password,
+                //              'password' => $password,
+                //                 "image" => $headimgurl,
+                //                  "type" => 1,
+                //                "source" => 2,
+                //         "register_time" => time(),
+                //            "login_time" => time()
+                //     ]);
+                // }
 
-                $_SESSION['uuid'] = $user_id;
+                // $_SESSION['uuid'] = $user_id;
+                $_SESSION['uuid'] = '2088002116338312';
             }
         }
     }
