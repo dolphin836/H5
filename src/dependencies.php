@@ -105,6 +105,32 @@ $container['tool'] = function ($c) {
 
             return $sign;
         }
+
+        public function doPost($server, $data)
+        {
+            $fields = (is_array($data)) ? http_build_query($data) : $data;
+
+            $ch     = curl_init();
+
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_FAILONERROR, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+
+            $content = curl_exec($ch);
+            $status  = curl_getinfo($ch);
+
+            curl_close($ch);
+
+            if( intval($status["http_code"]) == 200) {
+                return $content;
+            } else {
+                return false;
+            }
+        }
     }
 
     $tool = new Tool($c);
