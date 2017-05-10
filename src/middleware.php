@@ -62,67 +62,63 @@ $app->add(function ($request, $response, $next) {
                 $sign         = $this->tool->sign($data);
                 $data['sign'] = $sign;
 
-                $data         = http_build_query ($data);
+                $data         = http_build_query($data);
 
                 $response     = file_get_contents($zhi . $data);
 
                 $this->logger->addInfo("POST RETURN:" . $response);
 
-                // if ($response->status_code != 200) {
-                //     exit("Request Error.");
-                // }
+                $json = json_decode($response);
 
-                // $json = json_decode($response->body);
+                $access_token = $json->alipay_system_oauth_token_response->access_token;
 
-                // $access_token = $json->alipay_system_oauth_token_response->access_token;
+                $user_id      = $json->alipay_system_oauth_token_response->user_id;
 
-                // $user_id      = $json->alipay_system_oauth_token_response->user_id;
+                $user         = $this->db->select('user', ['id'], ['uuid[=]' => $user_id]);
 
-                // $user       = $this->db->select('user', ['id'], ['uuid[=]' => $user_id]);
+                if (empty($user)) { // 注册新用户
+                    $data = array(
+                            'app_id' => $this->get('settings')['zhi']['appID'],
+                            'method' => 'alipay.user.userinfo.share',
+                           'charset' => 'GBK',
+                         'sign_type' => 'RSA2',
+                         'timestamp' => date("Y-m-d H:i:s", time()),
+                           'version' => '1.0',
+                        'auth_token' => $access_token
+                    );
 
-                // if ( empty($user) ) { // 注册新用户
-                //     $data = array(
-                //             'app_id' => $this->get('settings')['zhi']['appID'],
-                //             'method' => 'alipay.user.userinfo.share',
-                //            'charset' => 'GBK',
-                //          'sign_type' => 'RSA2',
-                //          'timestamp' => date("Y-m-d H:i:s", time()),
-                //            'version' => '1.0',
-                //         'auth_token' => $access_token
-                //     );
+                    $sign         = $this->tool->sign($data);
+                    $data['sign'] = $sign;
 
-                //     $sign         = $this->tool->sign($data);
-                //     $data['sign'] = $sign;
+                    $data         = http_build_query($data);
 
-                //     $response = Requests::post($zhi, array(), $data);
-                
-                //     if ($response->status_code != 200) {
-                //         exit("Request Error.");
-                //     }
+                    $response     = file_get_contents($zhi . $data);
 
-                //     $userinfo    = iconv('GBK', 'UTF-8', $response->body);
+                    $this->logger->addInfo("POST RETURN:" . $response);
 
-                //     $json        = json_decode($userinfo);
+                    $userinfo    = iconv('GBK', 'UTF-8', $response);
+
+                    $json        = json_decode($userinfo);
         
-                //     $headimgurl  = $json->alipay_user_userinfo_share_response->avatar;
-                //     $nick_name   = $json->alipay_user_userinfo_share_response->nick_name;
-                //     $password    = "12345678";
-                //     $en_password = password_hash($password, PASSWORD_DEFAULT);
+                    $headimgurl  = $json->alipay_user_userinfo_share_response->avatar;
+                    $nick_name   = $json->alipay_user_userinfo_share_response->nick_name;
+                    $password    = "12345678";
+                    $en_password = password_hash($password, PASSWORD_DEFAULT);
 
-                //     $query = $this->db->insert("user", [
-                //                  "uuid" => $user_id,
-                //              "nickname" => $nick_name,
-                //           'en_password' => $en_password,
-                //              'password' => $password,
-                //                 "image" => $headimgurl,
-                //                  "type" => 1,
-                //                "source" => 2,
-                //         "register_time" => time(),
-                //            "login_time" => time()
-                //     ]);
-                // }
+                    $query = $this->db->insert("user", [
+                                 "uuid" => $user_id,
+                             "nickname" => $nick_name,
+                          'en_password' => $en_password,
+                             'password' => $password,
+                                "image" => $headimgurl,
+                                 "type" => 1,
+                               "source" => 2,
+                        "register_time" => time(),
+                           "login_time" => time()
+                    ]);
+                }
 
-                $_SESSION['uuid'] = "2088002116338312";
+                $_SESSION['uuid'] = $user_id;
             }
         }
     }
@@ -146,8 +142,7 @@ $app->add(function ($request, $response, $next) {
         if ( ! isset($_SESSION['uuid']) ) {
             $host = $request->getUri()->getHost();
             $path = $request->getUri()->getPath();
-            // $back = urlencode('http://' . $host . $path);
-            $back = urlencode('http://m.outatv.com');
+            $back = urlencode('http://' . $host . $path);
             $url  = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" . $this->get('settings')['zhi']['appID'] . "&scope=auth_userinfo&redirect_uri=" . $back;
             
             $this->logger->addInfo("URL:" . $url);
