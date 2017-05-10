@@ -52,7 +52,7 @@ function sign($data = array())
 
 
     $httpQuery      = $request->getUri()->getQuery(); // 获取微信的 code 或者推荐人的 code，做相应的处理
-    var_dump($httpQuery);
+
     if ($httpQuery != '') {
         $query      = explode('&', $httpQuery);
 
@@ -96,7 +96,6 @@ function sign($data = array())
 
             if ($str[0]  == 'auth_code' && ! isset($_SESSION['uuid']) ) { // 检测到支付宝网页授权的 auth_code
                 $auth_code = $str[1];
-                var_dump($auth_code);
                 $zhi       = "https://openapi.alipay.com/gateway.do?";
 
                 $data = array(
@@ -111,14 +110,11 @@ function sign($data = array())
                 );
 
                 $sign         = sign($data);
-                var_dump($sign);
                 $data['sign'] = $sign;
 
                 $data         = http_build_query($data);
 
                 $response     = file_get_contents($zhi . $data);
-
-                var_dump($response);
 
                 // $this->logger->addInfo("POST RETURN:" . $response);
 
