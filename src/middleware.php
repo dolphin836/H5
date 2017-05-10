@@ -2,7 +2,7 @@
 
 $app->add(function ($request, $response, $next) {
     $httpQuery      = $request->getUri()->getQuery(); // 获取微信的 code 或者推荐人的 code，做相应的处理
-
+    $this->logger->addInfo("query:" . $httpQuery);
     if ($httpQuery != '') {
         $query      = explode('&', $httpQuery);
 
@@ -45,25 +45,25 @@ $app->add(function ($request, $response, $next) {
             }
 
             if ($str[0]  == 'auth_code' && ! isset($_SESSION['uuid']) ) { // 检测到支付宝网页授权的 auth_code
-                $auth_code = $str[1];
-                $zhi       = "https://openapi.alipay.com/gateway.do?";
+                // $auth_code = $str[1];
+                // $zhi       = "https://openapi.alipay.com/gateway.do?";
 
-                $data = array(
-                        'app_id' => $this->get('settings')['zhi']['appID'],
-                        'method' => 'alipay.system.oauth.token',
-                       'charset' => 'GBK',
-                     'sign_type' => 'RSA2',
-                     'timestamp' => date("Y-m-d H:i:s", time()),
-                       'version' => '1.0',
-                    'grant_type' => 'authorization_code', 
-                          'code' => $auth_code
-                );
+                // $data = array(
+                //         'app_id' => $this->get('settings')['zhi']['appID'],
+                //         'method' => 'alipay.system.oauth.token',
+                //        'charset' => 'GBK',
+                //      'sign_type' => 'RSA2',
+                //      'timestamp' => date("Y-m-d H:i:s", time()),
+                //        'version' => '1.0',
+                //     'grant_type' => 'authorization_code', 
+                //           'code' => $auth_code
+                // );
 
-                $sign         = $this->tool->sign($data);
-                $data['sign'] = $sign;
+                // $sign         = $this->tool->sign($data);
+                // $data['sign'] = $sign;
 
-                $data         = http_build_query($data);
-                $response     = file_get_contents($zhi . $data);
+                // $data         = http_build_query($data);
+                // $response     = file_get_contents($zhi . $data);
 
                 $_SESSION['uuid'] = '2088002116338312';
 
