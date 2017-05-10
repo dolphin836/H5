@@ -32,9 +32,9 @@ $container['db'] = function($c) {
 };
 
 // csrf
-$container['csrf'] = function ($c) {
-    return new \Slim\Csrf\Guard('dolphin');
-};
+// $container['csrf'] = function ($c) {
+//     return new \Slim\Csrf\Guard('dolphin');
+// };
 
 // tool
 // $container['tool'] = function ($c) {
