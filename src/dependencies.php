@@ -105,45 +105,6 @@ $container['tool'] = function ($c) {
 
             return $sign;
         }
-
-        public function doPost($server, $data)
-        {
-            // $fields = (is_array($data)) ? http_build_query($data) : $data;
-
-            $ch     = curl_init();
-
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_FAILONERROR, false);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-
-            $content = curl_exec($ch);
-            $status  = curl_getinfo($ch);
-
-            curl_close($ch);
-
-            if( intval($status["http_code"]) == 200) {
-                return $content;
-            } else {
-                return false;
-            }
-        }
-
-        function http_post ($url, $data)
-        {
-            $data_url = http_build_query ($data);
-            $data_len = strlen ($data_url);
-
-            return array ('content' => file_get_contents ($url, false, stream_context_create (array ('http'=>array ('method'=>'POST'
-                    , 'header'  => "Connection: close\r\nContent-Length: $data_len\r\n"
-                    , 'content' => $data_url
-                    ))))
-                , 'headers' => $http_response_header
-                );
-        }
     }
 
     $tool = new Tool($c);
