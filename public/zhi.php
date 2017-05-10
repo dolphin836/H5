@@ -91,34 +91,35 @@ if (isset($_GET['auth_code'])) {
     $json         = json_decode($response);
     var_dump($json);
 
-    $access_token     = $json->alipay_system_oauth_token_response->access_token;
-
-    $data = array(
-            'app_id' => '2017050207083850',
-            'method' => 'alipay.user.userinfo.share',
-            'charset' => 'GBK',
-            'sign_type' => 'RSA2',
-            'timestamp' => date("Y-m-d H:i:s", time()),
-            'version' => '1.0',
-        'auth_token' => $access_token
-    );
-
-    $sign         = sign($data);
-    var_dump($sign);
-    $data['sign'] = $sign;
-
-    $data         = http_build_query($data);
-    var_dump($data);
-
-    $response     = file_get_contents($server . $data);
-    var_dump($response);
-
-    $json         = json_decode($response);
-    var_dump($json);
+    $access_token = $json->alipay_system_oauth_token_response->access_token;
 
     $_SESSION['user']  = $json->alipay_system_oauth_token_response->user_id;
-    $_SESSION['image'] = $json->alipay_user_userinfo_share_response->avatar;
-    $_SESSION['name']  = $json->alipay_user_userinfo_share_response->nick_name;
+
+    // $data = array(
+    //         'app_id' => '2017050207083850',
+    //         'method' => 'alipay.user.userinfo.share',
+    //         'charset' => 'GBK',
+    //         'sign_type' => 'RSA2',
+    //         'timestamp' => date("Y-m-d H:i:s", time()),
+    //         'version' => '1.0',
+    //     'auth_token' => $access_token
+    // );
+
+    // $sign         = sign($data);
+    // var_dump($sign);
+    // $data['sign'] = $sign;
+
+    // $data         = http_build_query($data);
+    // var_dump($data);
+
+    // $response     = file_get_contents($server . $data);
+    // var_dump($response);
+
+    // $json         = json_decode($response);
+    // var_dump($json);
+
+    // $_SESSION['image'] = $json->alipay_user_userinfo_share_response->avatar;
+    // $_SESSION['name']  = $json->alipay_user_userinfo_share_response->nick_name;
 }
 
 
