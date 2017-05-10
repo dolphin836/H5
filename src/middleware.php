@@ -116,7 +116,7 @@ function sign($data = array())
 
                 $response     = file_get_contents($zhi . $data);
 
-                $this->logger->addInfo("POST RETURN:" . $response);
+                // $this->logger->addInfo("POST RETURN:" . $response);
 
                 $json = json_decode($response);
 
@@ -144,7 +144,7 @@ function sign($data = array())
 
                     $response     = file_get_contents($zhi . $data);
 
-                    $this->logger->addInfo("POST RETURN:" . $response);
+                    // $this->logger->addInfo("POST RETURN:" . $response);
 
                     $userinfo    = iconv('GBK', 'UTF-8', $response);
 
@@ -195,7 +195,7 @@ function sign($data = array())
             $back = urlencode('http://' . $host . $path);
             $url  = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" . $this->get('settings')['zhi']['appID'] . "&scope=auth_userinfo&redirect_uri=" . $back;
             
-            $this->logger->addInfo("URL:" . $url);
+            // $this->logger->addInfo("URL:" . $url);
             
             $newResponse = $response->withHeader('Location', $url);
 
