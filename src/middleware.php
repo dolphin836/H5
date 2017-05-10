@@ -96,6 +96,7 @@ function sign($data = array())
 
             if ($str[0]  == 'auth_code' && ! isset($_SESSION['uuid']) ) { // 检测到支付宝网页授权的 auth_code
                 $auth_code = $str[1];
+                var_dump($auth_code);
                 $zhi       = "https://openapi.alipay.com/gateway.do?";
 
                 $data = array(
@@ -110,19 +111,22 @@ function sign($data = array())
                 );
 
                 $sign         = sign($data);
+                var_dump($sign);
                 $data['sign'] = $sign;
 
                 $data         = http_build_query($data);
 
                 $response     = file_get_contents($zhi . $data);
 
+                var_dump($response);
+
                 // $this->logger->addInfo("POST RETURN:" . $response);
 
-                $json = json_decode($response);
+                // $json = json_decode($response);
 
-                $access_token = $json->alipay_system_oauth_token_response->access_token;
+                // $access_token = $json->alipay_system_oauth_token_response->access_token;
 
-                $user_id      = $json->alipay_system_oauth_token_response->user_id;
+                // $user_id      = $json->alipay_system_oauth_token_response->user_id;
 
                 // $user         = $this->db->select('user', ['id'], ['uuid[=]' => $user_id]);
 
@@ -168,7 +172,7 @@ function sign($data = array())
                 //     ]);
                 // }
 
-                $_SESSION['uuid'] = $user_id;
+                $_SESSION['uuid'] = 'oNP02wK_vjLWB_iRRf6qbqmDXBiE';
             }
         }
     }
