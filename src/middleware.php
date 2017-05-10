@@ -62,9 +62,6 @@ $app->add(function ($request, $response, $next) {
                 $sign         = $this->tool->sign($data);
                 $data['sign'] = $sign;
 
-                // Requests::register_autoloader();
-                // $response = Requests::post($zhi, array(), $data);
-
                 $data_url = http_build_query ($data);
                 $data_len = strlen ($data_url);
 
@@ -159,7 +156,7 @@ $app->add(function ($request, $response, $next) {
             $host = $request->getUri()->getHost();
             $path = $request->getUri()->getPath();
             // $back = urlencode('http://' . $host . $path);
-            $back = urlencode('http://m.outatv.com/');
+            $back = urlencode('http://m.outatv.com');
             $url  = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" . $this->get('settings')['zhi']['appID'] . "&scope=auth_userinfo&redirect_uri=" . $back;
             
             $this->logger->addInfo("URL:" . $url);
