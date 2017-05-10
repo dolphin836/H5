@@ -190,9 +190,10 @@ function sign($data = array())
 
     if ( strpos($userAgent, 'AlipayClient') !== false ) { // 支付宝浏览器
         if ( ! isset($_SESSION['uuid']) ) {
-            $host = $request->getUri()->getHost();
-            $path = $request->getUri()->getPath();
-            $back = urlencode('http://' . $host . $path);
+            // $host = $request->getUri()->getHost();
+            // $path = $request->getUri()->getPath();
+            // $back = urlencode('http://' . $host . $path);
+             $back = urlencode('http://m.outatv.com/test');
             $url  = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" . $this->get('settings')['zhi']['appID'] . "&scope=auth_userinfo&redirect_uri=" . $back;
             
             // $this->logger->addInfo("URL:" . $url);
