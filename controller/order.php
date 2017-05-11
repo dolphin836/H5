@@ -57,7 +57,7 @@ class Order extends Controller
 
                 foreach ($product as $pro) {
                     for ($i = 0; $i < $pro['product_count']; $i++) {
-                        $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
+                        $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成编码
                         $this->app->db->insert("ticket", [
                                         "code" => $code,
                                         "uuid" => $uuid,
@@ -69,6 +69,14 @@ class Order extends Controller
                                 "modifie_time" => time()
                         ]);
                     }
+
+                    //更新销售量
+                    $this->app->db->update("product", [
+                        "saled[+]" => (int)$pro['product_count'],
+                        "show_saled[+]" => (int)$pro['product_count'] * rand(10, 50)
+                    ], [
+                        "id[=]" => $pro['product_id']
+                    ]);
                 }
             }
 
@@ -131,6 +139,14 @@ class Order extends Controller
                                  "modifie_time" => time()
                             ]);
                         }
+
+                        //更新销售量
+                        $this->app->db->update("product", [
+                            "saled[+]" => (int)$pro['product_count'],
+                            "show_saled[+]" => (int)$pro['product_count'] * rand(10, 50)
+                        ], [
+                            "id[=]" => $pro['product_id']
+                        ]);
                     }
                     // 消息推送
                     $options = array(
