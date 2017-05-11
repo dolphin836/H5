@@ -94,11 +94,11 @@ $app->add(function ($request, $response, $next) {
                     $data         = http_build_query($data);
                     $content      = file_get_contents($zhi . $data);
 
+                    $content      = iconv('GBK', 'UTF-8', $content);
+
                     $this->logger->addInfo("content is " . $content);
 
-                    $userinfo     = iconv('GBK', 'UTF-8', $content);
-
-                    $json         = json_decode($userinfo);
+                    $json         = json_decode($content);
         
                     $headimgurl   = $json->alipay_user_userinfo_share_response->avatar;
                     $nick_name    = $json->alipay_user_userinfo_share_response->nick_name;
