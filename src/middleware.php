@@ -71,7 +71,11 @@ $app->add(function ($request, $response, $next) {
 
                 $user_id      = $json->alipay_system_oauth_token_response->user_id;
 
+                $this->logger->addInfo("user_id = " . $user_id);
+
                 $user         = $this->db->select('user', ['id'], ['uuid[=]' => $user_id]);
+
+                $this->logger->addInfo("user is ", $user);
 
                 if ( empty($user) ) { // 注册新用户
                     $data = array(
@@ -89,6 +93,8 @@ $app->add(function ($request, $response, $next) {
 
                     $data         = http_build_query($data);
                     $content      = file_get_contents($zhi . $data);
+
+                    $this->logger->addInfo("content is " . $content);
 
                     $userinfo     = iconv('GBK', 'UTF-8', $content);
 
