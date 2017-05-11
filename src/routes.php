@@ -46,28 +46,5 @@ foreach ($routes as $route) {
     });
 }
 
-$app->get('/test', function ($request, $response, $args) { // 更新销售量
-    $this->db->update("product", [
-             "viewed" => 0,
-        "show_viewed" => 0,
-              "saled" => 0,
-         "show_saled" => 0
-    ]);
-
-    $product  = $this->db->select('order_product', ['id', 'product_id', 'product_count']);
-
-    foreach ($product as $key => $pro) {
-        //更新销售量
-        $this->db->update("product", [
-                 "viewed[+]" => (int)$pro['product_count'],
-            "show_viewed[+]" => (int)$pro['product_count'] * 50,
-                  "saled[+]" => (int)$pro['product_count'],
-             "show_saled[+]" => (int)$pro['product_count'] * rand(10, 50)
-        ], [
-            "id[=]" => $pro['product_id']
-        ]);
-    }
-});
-
 
 
