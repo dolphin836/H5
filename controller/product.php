@@ -35,6 +35,14 @@ class Product extends Controller
     {
         $results        = $this->app->db->select('product', ['id', 'name', 'image', 'price', 'abstract', 'context'], ['id[=]' => $this->args['id']]);
         foreach ($results as $result) {
+            //更新浏览量
+            $this->app->db->update("product", [
+                     "viewed[+]" => 1,
+                "show_viewed[+]" => rand(1, 10)
+            ], [
+                "id[=]" => $result['id']
+            ]);
+
             $Parsedown  = new Parsedown();
             $product_option = array();
 
