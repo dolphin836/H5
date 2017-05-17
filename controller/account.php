@@ -113,7 +113,7 @@ class Account extends Controller
     {
         $scripts[] = 'https://res.wx.qq.com/open/libs/weuijs/1.1.1/weui.min.js';
         $scripts[] = 'https://unpkg.com/axios/dist/axios.min.js';
-        $scripts[] = $this->server . 'dist/js/' . 'recharge.js?32252225';
+        $scripts[] = $this->server . 'dist/js/' . 'recharge.js?322ddddd522dddd25';
 
         echo $this->app->template->render('recharge', ['server' => $this->server, 'item' => 'account', 'scripts' => $scripts, 'cartCount' => $this->cartCount]);
     }
@@ -199,7 +199,6 @@ class Account extends Controller
                 ]);
                 //充值赠送
                 $discounts = array(
-                        '1' => 10,
                      '1000' => 300,
                      '2000' => 800,
                      '3000' => 1200,

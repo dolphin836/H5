@@ -12,6 +12,20 @@ function is_weixin()
     }
 }
 
+function getAmount()
+{
+    var radio  = document.getElementsByName('amount');
+    var amount = 0;
+    for (i = 0; i < radio.length; i++) {  
+        if (radio[i].checked) {  
+            amount = radio[i].value; 
+        } 
+    }  
+
+    return amount;
+}
+
+
 var submit = document.querySelector('#submit');
 
 submit.addEventListener('click', function () {
@@ -58,7 +72,7 @@ submit.addEventListener('click', function () {
                     });
 
                     axios.post('/account/zhi', {
-                        amount: 1
+                        amount: getAmount()
                     })
                     .then(function (response) {
                         console.log(response.data);
