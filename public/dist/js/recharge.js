@@ -67,9 +67,15 @@ submit.addEventListener('click', function () {
                             return;
                         }
 
+                        var el     = document.createElement("form");
                         var attr   = document.createAttribute("id");
                         attr.value = "zhiPay";
-                        var el     = document.createElement("form");
+                        el.setAttributeNode(attr);
+                        var attr   = document.createAttribute("action");
+                        attr.value = "https://openapi.alipay.com/gateway.do?charset=utf-8";
+                        el.setAttributeNode(attr);
+                        var attr   = document.createAttribute("method");
+                        attr.value = "POST";
                         el.setAttributeNode(attr);
                         document.body.appendChild(el);
 
