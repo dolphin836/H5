@@ -207,7 +207,7 @@ class Account extends Controller
                     '10000' => 4000
                 );
                 $amount    = (int)$transaction['amount'];
-                $this->app->logger->addInfo("amount:", $amount);
+                $this->app->logger->addInfo("amount:" . $amount);
                 $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
 
                 $this->app->db->insert("user_transaction", [
