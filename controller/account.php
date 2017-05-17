@@ -113,7 +113,7 @@ class Account extends Controller
     {
         $scripts[] = 'https://res.wx.qq.com/open/libs/weuijs/1.1.1/weui.min.js';
         $scripts[] = 'https://unpkg.com/axios/dist/axios.min.js';
-        $scripts[] = $this->server . 'dist/js/' . 'recharge.js?1111';
+        $scripts[] = $this->server . 'dist/js/' . 'recharge.js?32252225';
 
         echo $this->app->template->render('recharge', ['server' => $this->server, 'item' => 'account', 'scripts' => $scripts, 'cartCount' => $this->cartCount]);
     }

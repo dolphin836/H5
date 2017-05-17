@@ -62,6 +62,35 @@ submit.addEventListener('click', function () {
                     })
                     .then(function (response) {
                         console.log(response.data);
+                        if (response.data.code != 0) {
+                            alert(response.data.msg);
+                            return;
+                        }
+
+                        var attr   = document.createAttribute("id");
+                        attr.value = "zhiPay";
+                        var el     = document.createElement("form");
+                        el.setAttributeNode(attr);
+                        document.body.appendChild(el);
+
+                        var data = response.data.data;
+
+                        var attr, el;
+                        for(var i in data) {
+                            el         = document.createElement("input");
+                            attr       = document.createAttribute("type");
+                            attr.value = "hidden";
+                            el.setAttributeNode(attr);
+                            attr       = document.createAttribute("name");
+                            attr.value = i;
+                            el.setAttributeNode(attr);
+                            attr       = document.createAttribute("value");
+                            attr.value = data[i];
+                            el.setAttributeNode(attr);
+                            document.querySelector('#zhiPay').appendChild(el);
+                        }
+
+                        document.querySelector('#zhiPay').submit();
                     })
                     .catch(function (error) {
                         console.log(error);

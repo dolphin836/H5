@@ -40,7 +40,6 @@ sendCode.addEventListener('click', function () { // 发送验证码
         phone: phone.value
     })
     .then(function (response) {
-        console.log(response.data);
         if (response.data.code != 0) {
             weui.topTips(response.data.msg);
         } else {
