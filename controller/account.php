@@ -147,7 +147,7 @@ class Account extends Controller
               'sign_type' => 'RSA2',
               'timestamp' => date("Y-m-d H:i:s", time()),
                 'version' => '1.0',
-             'return_url' => 'http://m.outatv.com/success.html',
+             'return_url' => 'http://m.outatv.com/account.html',
              'notify_url' => $this->app->get('settings')['zhi']['t_back'],
             'biz_content' => json_encode($content)
         );
@@ -179,6 +179,50 @@ class Account extends Controller
         ]);
 
         return $code;
+    }
+
+    public function zcallback() // 支付宝充值异步通知
+    {
+        if ('TRADE_SUCCESS' == $_POST['trade_status']) {
+            $uuid           = $_POST['buyer_id'];
+            $code           = $_POST['out_trade_no'];
+            $gmt_payment    = strtotime($_POST['gmt_payment']);
+
+            $transaction    = $this->app->db->get('user_transaction', ['id', 'amount'], ['code[=]' => $code, 'uuid[=]' => $uuid, 'status[=]' => 0, 'source[=]' => 1]);
+
+            if ($transaction) {
+                $this->app->db->update("user_transaction", [
+                    "status"         => 1,
+                    "modifie_time"   => $gmt_payment
+                ], [
+                    "code[=]" => $code
+                ]);
+                //充值赠送
+                $discounts = array(
+                        '1' => 10,
+                     '1000' => 300,
+                     '2000' => 800,
+                     '3000' => 1200,
+                     '5000' => 2000,
+                    '10000' => 4000
+                );
+                $amount    = (int)$transaction['amount'];
+                $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
+
+                $this->app->db->insert("user_transaction", [
+                            "code" => $code,
+                            "uuid" => $_SESSION['uuid'],
+                          "amount" => $discounts[$amount], //充值金额
+                          "status" => 1,
+                          "source" => 2, //来源
+                          "remark" => '充值赠送',
+                     "create_time" => time(),
+                    "modifie_time" => time()
+                ]);
+                
+                echo 'success';
+            }
+        }
     }
 
 }

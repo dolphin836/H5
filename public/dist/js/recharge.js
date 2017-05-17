@@ -58,7 +58,7 @@ submit.addEventListener('click', function () {
                     });
 
                     axios.post('/account/zhi', {
-                        amount: 0.01
+                        amount: 1
                     })
                     .then(function (response) {
                         console.log(response.data);
