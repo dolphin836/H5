@@ -189,7 +189,7 @@ class Account extends Controller
             $gmt_payment    = strtotime($_POST['gmt_payment']);
 
             $transaction    = $this->app->db->get('user_transaction', ['id', 'amount'], ['code[=]' => $code, 'uuid[=]' => $uuid, 'status[=]' => 0, 'source[=]' => 1]);
-
+            $this->app->logger->addInfo("transaction:", $transaction);
             if ($transaction) {
                 $this->app->db->update("user_transaction", [
                     "status"         => 1,
@@ -207,11 +207,12 @@ class Account extends Controller
                     '10000' => 4000
                 );
                 $amount    = (int)$transaction['amount'];
+                $this->app->logger->addInfo("amount:", $amount);
                 $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
 
                 $this->app->db->insert("user_transaction", [
                             "code" => $code,
-                            "uuid" => $_SESSION['uuid'],
+                            "uuid" => $uuid,
                           "amount" => $discounts[$amount], //充值金额
                           "status" => 1,
                           "source" => 2, //来源
