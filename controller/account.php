@@ -220,6 +220,12 @@ class Account extends Controller
                      "create_time" => time(),
                     "modifie_time" => time()
                 ]);
+                //更新余额
+                $this->app->db->update("user", [
+                    "transaction"  => $amount + $discounts[$amount]
+                ], [
+                    "uuid[=]" => $uuid
+                ]);
                 
                 echo 'success';
             }
