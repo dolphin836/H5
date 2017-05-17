@@ -1,7 +1,7 @@
 <?php
 return [
     'settings' => [
-        'displayErrorDetails' => true,
+           'displayErrorDetails' => true,
         'addContentLengthHeader' => false,
         // Renderer settings
         'template' => [
@@ -38,8 +38,16 @@ return [
         ],
         // zhi
         'zhi' => [
-            'appID' => getenv('ZHI_APPID'),
-            'back' => getenv('ZHI_BACK')
+             'appID' => getenv('ZHI_APPID'),
+              'back' => getenv('ZHI_BACK'),
+            't_back' => getenv('ZHI_TBACK')
+        ],
+        // OSS
+        'oss' => [
+              'OSS_ACCESS_ID' => getenv('OSS_ACCESS_ID'),
+             'OSS_ACCESS_KEY' => getenv('OSS_ACCESS_KEY'),
+               'OSS_ENDPOINT' => getenv('OSS_ENDPOINT'),
+                 'OSS_BUCKET' => getenv('OSS_BUCKET')
         ],
     ],
 ];

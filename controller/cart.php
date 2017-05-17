@@ -18,9 +18,18 @@ class Cart extends Controller
     {
         $products = array();
         $total    = 0;
+        // 个性化需求，真人 CS 项目 10 元
+        $cs    = array(14, 11);
+        $is_cs = true;
+
         if ( isset($_SESSION['cart']) ) {
             $cart     = $_SESSION['cart'];
             foreach($cart as $key => $c) {
+
+                if (! in_array($c['id'], $cs)) {
+                    $is_cs = false;
+                }
+
                 $results        = $this->app->db->select('product', ['name', 'image', 'price'], ['id[=]' => $c['id']]);
                 $price          = 0;
                 $text           = array();
@@ -52,7 +61,7 @@ class Cart extends Controller
         }
 
         $scripts[] = $this->server . 'dist/js/' . 'zepto.min.js';
-        $scripts[] = $this->server . 'dist/js/' . 'cart.js?22222';
+        $scripts[] = $this->server . 'dist/js/' . 'cart.js';
 
         $discount  = $total * $this->app->get('settings')['default']['discount'];
         $pay       = $total - $discount;
@@ -60,6 +69,12 @@ class Cart extends Controller
         $total     = number_format ($total, 2);
         $discount  = number_format ($discount, 2);
         $pay       = number_format ($pay, 2);
+
+        // if ($is_cs) {
+        //     $total     = number_format (10 * $cartCount, 2);
+        //     $discount  = number_format (0, 2);
+        //     $pay       = $total;
+        // }
 
         $is_weixin = $this->app->tool->is_weixin();
 

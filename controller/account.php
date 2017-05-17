@@ -1,6 +1,7 @@
 <?php
 
 require 'controller.php';
+require 'sms/sms.php';
 
 class Account extends Controller
 {
@@ -43,11 +44,141 @@ class Account extends Controller
     public function login()
     {
         $_SESSION['uuid'] = 'oNP02wK_vjLWB_iRRf6qbqmDXBiE';
+        echo $this->app->template->render('login', ['server' => $this->server, 'item' => 'account', 'cartCount' => $this->cartCount]);
     }
 
     public function logout()
     {
         unset($_SESSION['uuid']);
+    }
+
+    public function phone()
+    {
+        $user      = $this->app->db->get('user', ['telephone'], ['uuid[=]' => $_SESSION['uuid']]);
+
+        $telephone = $user['telephone'];
+
+        $scripts[] = 'https://res.wx.qq.com/open/libs/weuijs/1.1.1/weui.min.js';
+        $scripts[] = 'https://unpkg.com/axios/dist/axios.min.js';
+        $scripts[] = $this->server . 'dist/js/' . 'phone.js?22333';
+
+        echo $this->app->template->render('phone', ['server' => $this->server, 'item' => 'account', 'scripts' => $scripts, 'cartCount' => $this->cartCount, 'telephone' => $telephone]);
+    }
+    // 发送验证码
+    public function sendcode()
+    {       
+        $body  = $this->request->getParsedBody();
+        $phone = $body['phone'];
+        $code  = $this->GeraHash(4, true);
+        $send  = Sms::code($phone, $code);
+
+        if ($send) {
+            $_SESSION['code'] = $code;
+            $json['code'] = 0;
+            $json['msg']  = $code;
+        } else {
+            $json['code'] = 1;
+            $json['msg']  = 'Error';
+        }
+
+        echo json_encode($json);
+    }
+    // 绑定/变更手机号码
+    public function savephone()
+    {       
+        $body  = $this->request->getParsedBody();
+        $phone = $body['phone'];
+        $code  = $body['code'];
+        
+        if ( ! isset($_SESSION['code']) || $_SESSION['code'] != $code ) {
+            $json['code'] = 1;
+            $json['msg']  = '验证码错误';  
+        } else {
+            $this->app->db->update("user", [
+                     "telephone" => $phone
+            ], [
+                "uuid[=]" => $_SESSION['uuid']
+            ]);
+
+            unset($_SESSION['code']);
+
+            $json['code'] = 0;
+            $json['msg']  = 'Success.';  
+        }
+      
+        echo json_encode($json);
+    }
+
+    public function recharge()
+    {
+        $scripts[] = 'https://res.wx.qq.com/open/libs/weuijs/1.1.1/weui.min.js';
+        $scripts[] = 'https://unpkg.com/axios/dist/axios.min.js';
+        $scripts[] = $this->server . 'dist/js/' . 'recharge.js?1111';
+
+        echo $this->app->template->render('recharge', ['server' => $this->server, 'item' => 'account', 'scripts' => $scripts, 'cartCount' => $this->cartCount]);
+    }
+
+    // 余额充值 - 支付宝
+    public function zhi()
+    {
+        $this->app->logger->addInfo("zhi");
+        $json    = array();
+
+        $body    = $this->request->getParsedBody();
+        $amount  = $body['amount']; // 充值金额
+        $this->app->logger->addInfo("amount:" . $amount);
+        // 创建充值记录
+        $code    = $this->add_transaction(1, $amount);
+        $this->app->logger->addInfo("code:" . $code);
+
+        $zhi     = "https://openapi.alipay.com/gateway.do";
+
+        $content = array(
+                 'subject' => '金宁户外运动',
+            'out_trade_no' => $code,
+            'total_amount' => $amount,
+            'product_code' => 'QUICK_WAP_PAY'
+        );
+
+        $data = array(
+                 'app_id' => $this->app->get('settings')['zhi']['appID'],
+                 'method' => 'alipay.trade.wap.pay',
+                'charset' => 'utf-8',
+              'sign_type' => 'RSA2',
+              'timestamp' => date("Y-m-d H:i:s", time()),
+                'version' => '1.0',
+             'return_url' => 'http://m.outatv.com/success.html',
+             'notify_url' => $this->app->get('settings')['zhi']['t_back'],
+            'biz_content' => json_encode($content)
+        );
+
+        $sign         = $this->app->tool->sign($data);
+        $this->app->logger->addInfo("sign:" . $sign);
+
+        $data['sign'] = $sign;
+
+        $json['code'] = 0;
+        $json['msg']  = 'Requests Success.';
+        $json['data'] = $data;
+
+        echo json_encode($json);
+    }
+
+    private function add_transaction($source, $amount)
+    {
+        $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
+
+        $this->app->db->insert("user_transaction", [
+                    "code" => $code,
+                    "uuid" => $_SESSION['uuid'],
+                  "amount" => $amount, //充值金额
+                  "source" => $source, //来源
+                  "remark" => '现金充值',
+             "create_time" => time(),
+            "modifie_time" => time()
+        ]);
+
+        return $code;
     }
 
 }

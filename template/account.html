@@ -3,28 +3,36 @@
 <div class="weui-panel weui-panel_access">
     <div class="weui-panel__bd">
         <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-            <div class="weui-media-box__hd" style="width:60px;height:60px;">
-                <img class="weui-media-box__thumb" style="border-radius:30px;" src="<?php echo ($user['image'] == '' ? $default_user_image : $user['image']); ?>" alt="">
+            <div class="weui-media-box__hd" style="width:66px;height:66px;">
+                <img class="weui-media-box__thumb" style="border-radius:33px;" src="<?php echo ($user['image'] == '' ? $default_user_image : $user['image']); ?>" alt="">
             </div>
             <div class="weui-media-box__bd">
                 <h4 class="weui-media-box__title"><?php echo $user['nickname']; ?></h4>
-                <!--<p class="weui-media-box__desc">15240248952</p>-->
+                <?php if ($user['telephone'] != ''): ?>
+                <p class="weui-media-box__desc"><?php echo $user['telephone']; ?></p>
+                <?php else: ?>
+                <p class="weui-media-box__desc">未绑定手机，可能无法接收重要通知！</p>
+                <?php endif; ?>
+                <ul class="weui-media-box__info" style="margin-top:5px;margin-bottom:0;">
+                    <li class="weui-media-box__info__meta">余额：<?php echo $user['transaction']; ?></li>
+                </ul>
             </div>
         </a>
     </div>
 </div>
 
-<!--<div class="weui-panel">
+<div class="weui-panel">
+    <div class="weui-panel__hd">个人信息</div>
     <div class="weui-panel__bd">
         <div class="weui-media-box weui-media-box_small-appmsg">
             <div class="weui-cells">
-                <a class="weui-cell weui-cell_access" href="javascript:;">
+                <!--<a class="weui-cell weui-cell_access" href="javascript:;">
                     <div class="weui-cell__bd weui-cell_primary">
-                        <p>个人信息</p>
+                        <p>编辑信息</p>
                     </div>
                     <span class="weui-cell__ft"></span>
-                </a>
-                <a class="weui-cell weui-cell_access" href="javascript:;">
+                </a>-->
+                <a class="weui-cell weui-cell_access" href="/account/phone.html">
                     <div class="weui-cell__bd weui-cell_primary">
                         <p>绑定手机</p>
                     </div>
@@ -33,15 +41,34 @@
             </div>
         </div>
     </div>
-</div>-->
+</div>
 
 <div class="weui-panel">
+    <div class="weui-panel__hd">订单信息</div>
     <div class="weui-panel__bd">
         <div class="weui-media-box weui-media-box_small-appmsg">
             <div class="weui-cells">
+                <a class="weui-cell weui-cell_access" href="/account/recharge.html">
+                    <div class="weui-cell__bd weui-cell_primary">
+                        <p>余额充值</p>
+                    </div>
+                    <span class="weui-cell__ft"></span>
+                </a>
+                <a class="weui-cell weui-cell_access" href="javascript:;">
+                    <div class="weui-cell__bd weui-cell_primary">
+                        <p>我的余额</p>
+                    </div>
+                    <span class="weui-cell__ft"></span>
+                </a>
                 <a class="weui-cell weui-cell_access" href="/account/order.html">
                     <div class="weui-cell__bd weui-cell_primary">
                         <p>我的订单</p>
+                    </div>
+                    <span class="weui-cell__ft"></span>
+                </a>
+                <a class="weui-cell weui-cell_access" href="/ticket.html">
+                    <div class="weui-cell__bd weui-cell_primary">
+                        <p>我的票码</p>
                     </div>
                     <span class="weui-cell__ft"></span>
                 </a>
@@ -50,7 +77,41 @@
     </div>
 </div>
 
-<div class="weui-panel">
+<!--<div class="weui-panel">
+    <div class="weui-panel__hd">推荐信息</div>
+    <div class="weui-panel__bd">
+        <div class="weui-media-box weui-media-box_small-appmsg">
+            <div class="weui-cells">
+                <a class="weui-cell weui-cell_access" href="javascript:;">
+                    <div class="weui-cell__bd weui-cell_primary">
+                        <p>推荐金宁</p>
+                    </div>
+                    <span class="weui-cell__ft"></span>
+                </a>
+                <a class="weui-cell weui-cell_access" href="javascript:;">
+                    <div class="weui-cell__bd weui-cell_primary">
+                        <p>推荐记录</p>
+                    </div>
+                    <span class="weui-cell__ft"></span>
+                </a>
+                <a class="weui-cell weui-cell_access" href="javascript:;">
+                    <div class="weui-cell__bd weui-cell_primary">
+                        <p>佣金记录</p>
+                    </div>
+                    <span class="weui-cell__ft"></span>
+                </a>
+                <a class="weui-cell weui-cell_access" href="javascript:;">
+                    <div class="weui-cell__bd weui-cell_primary">
+                        <p>提现记录</p>
+                    </div>
+                    <span class="weui-cell__ft"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>-->
+
+<!--<div class="weui-panel">
     <div class="weui-panel__bd">
         <div class="weui-media-box weui-media-box_small-appmsg">
             <div class="weui-cells">
@@ -69,4 +130,4 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->

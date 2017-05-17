@@ -2,7 +2,10 @@
 
 require 'controller.php';
 
-require 'phpqrcode/qrlib.php';  
+require 'phpqrcode/qrlib.php';
+
+use OSS\OssClient;
+use OSS\Core\OssException;
 
 class Ticket extends Controller
 {
@@ -74,14 +77,29 @@ class Ticket extends Controller
         $codeContents = $this->server . 'ticket/check/' . $code; 
     
         $QR           = 'dist/qrcode/'. $code . '.png';
+        $filepath     = 'qrcode/' . date("Y", time()) . '/' . date("m", time()) . '/' . date("d", time()) . '/' . $code . '.png';
             
         QRcode::png($codeContents, $QR, QR_ECLEVEL_L, 10);
+
+        try {
+            $ossClient = new OssClient($this->app->get('settings')['oss']['OSS_ACCESS_ID'], $this->app->get('settings')['oss']['OSS_ACCESS_KEY'], $this->app->get('settings')['oss']['OSS_ENDPOINT'], true);
+        } catch (OssException $e) {
+            printf($e->getMessage());
+        }
+
+        try {
+            $result = $ossClient->uploadFile($this->app->get('settings')['oss']['OSS_BUCKET'], $filepath, $QR);
+            @unlink($QR);
+        } catch(OssException $e) {
+            printf(__FUNCTION__ . ": FAILED\n");
+            printf($e->getMessage());
+        }
 
         $ticket = array(
              'product_name' => $results[0]['product_name'],
             'product_price' => $results[0]['product_price'],
                      'code' => $code,
-                       'qr' => $this->server . $QR
+                       'qr' => $this->image_server . '/' . $filepath
         );
 
         echo $this->app->template->render('ticket_view', ['server' => $this->server, 'item' => 'ticket', 'cartCount' => $this->cartCount, 'ticket' => $ticket]);

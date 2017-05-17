@@ -9,7 +9,9 @@ $routes = array(
     array('get',  'account.html'),
     array('get',  'cart/clean[/{id}]'),
     array('get',  'account/order.html'),
-    array('get',  'account/login'),
+    array('get',  'account/login.html'),
+    array('get',  'account/phone.html'),
+    array('get',  'account/recharge.html'),
     array('get',  'account/logout'),
     array('get',  'ticket/view/{id:[0-9]+}.html'),
     array('get',  'ticket/check/{code:[0-9]+}'),
@@ -19,7 +21,10 @@ $routes = array(
     array('post', 'cart/add'),
     array('post', 'order/add'),
     array('post', 'order/zhi'),
-    array('post', 'order/zcallback')
+    array('post', 'order/zcallback'),
+    array('post', 'account/sendcode'),
+    array('post', 'account/savephone'),
+    array('post', 'account/zhi')
 );
 
 foreach ($routes as $route) {

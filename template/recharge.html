@@ -1,0 +1,63 @@
+<?php $this->layout('template', ['title' => '余额充值', 'server' => $server, 'item' => $item, 'cartCount' => $cartCount, 'scripts' => $scripts]); ?>
+
+<h1 class="page_title text-center">请选择充值金额</h1>
+<!--<ul>
+    <li><p class="page_desc text-center">充值 1000 赠送 300</p></li>
+    <li><p class="page_desc text-center">充值 2000 赠送 800</p></li>
+    <li><p class="page_desc text-center">充值 3000 赠送 1200</p></li>
+    <li><p class="page_desc text-center">充值 5000 赠送 2000</p></li>
+    <li><p class="page_desc text-center">充值 10000 赠送 4000</p></li>
+</ul>-->
+<div style="padding:40px 15px 20px 15px;">
+    <div class="weui-cells weui-cells_radio">
+        <label class="weui-cell weui-check__label">
+            <div class="weui-cell__bd">
+                <p>充 1000 得 1300</p>
+            </div>
+            <div class="weui-cell__ft">
+                <input type="radio" class="weui-check" name="amount" value="1000" checked="checked">
+                <span class="weui-icon-checked"></span>
+            </div>
+        </label>
+        <label class="weui-cell weui-check__label">
+            <div class="weui-cell__bd">
+                <p>充 2000 得 2800</p>
+            </div>
+            <div class="weui-cell__ft">
+                <input type="radio" name="amount" class="weui-check" value="2000">
+                <span class="weui-icon-checked"></span>
+            </div>
+        </label>
+        <label class="weui-cell weui-check__label">
+            <div class="weui-cell__bd">
+                <p>充 3000 得 4200</p>
+            </div>
+            <div class="weui-cell__ft">
+                <input type="radio" name="amount" class="weui-check" value="3000">
+                <span class="weui-icon-checked"></span>
+            </div>
+        </label>
+        <label class="weui-cell weui-check__label">
+            <div class="weui-cell__bd">
+                <p>充 5000 得 7000</p>
+            </div>
+            <div class="weui-cell__ft">
+                <input type="radio" name="amount" class="weui-check" value="5000">
+                <span class="weui-icon-checked"></span>
+            </div>
+        </label>
+        <label class="weui-cell weui-check__label">
+            <div class="weui-cell__bd">
+                <p>充 10000 得 14000</p>
+            </div>
+            <div class="weui-cell__ft">
+                <input type="radio" name="amount" class="weui-check" value="10000">
+                <span class="weui-icon-checked"></span>
+            </div>
+        </label>
+    </div>
+</div>
+
+<div class="weui-btn-area">
+    <a id="submit" href="javascript:" class="weui-btn weui-btn_primary">确认付款</a>
+</div>
