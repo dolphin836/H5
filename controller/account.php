@@ -258,11 +258,17 @@ class Account extends Controller
             $ip_address = $serverParams['REMOTE_ADDR'];
         }
 
+        $this->app->logger->addInfo("ip_address:" . $ip_address);
+
         $openid     = $_SESSION['uuid'];
+
+        $this->app->logger->addInfo("openid:" . $openid);
         
         $body       = '金宁户外运动 - 余额充值';
 
         $pay_fen    = $amount * 100;
+
+        $this->app->logger->addInfo("pay_fen:" . $pay_fen);
 
         $order = array(
             'appid' => $this->app->get('settings')['weixin']['appID'],
@@ -279,6 +285,8 @@ class Account extends Controller
         );
 
         $sign = $this->sign($order, $this->app->get('settings')['weixin']['api_key']);
+
+        $this->app->logger->addInfo("sign:" . $sign);
 
         $xml = "<xml>
         <appid>{$this->app->get('settings')['weixin']['appID']}</appid>
@@ -306,6 +314,8 @@ class Account extends Controller
 
         $this->reader->xml($req->body);
         $result = $this->reader->parse();
+
+        $this->app->logger->addInfo("result:", $result);
 
         $prepay = "prepay_id=";
 
