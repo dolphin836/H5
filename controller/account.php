@@ -65,7 +65,7 @@ class Account extends Controller
 
         $scripts[] = 'https://res.wx.qq.com/open/libs/weuijs/1.1.1/weui.min.js';
         $scripts[] = 'https://unpkg.com/axios/dist/axios.min.js';
-        $scripts[] = $this->server . 'dist/js/' . 'phone.js?22333';
+        $scripts[] = $this->server . 'dist/js/' . 'phone.js';
 
         echo $this->app->template->render('phone', ['server' => $this->server, 'item' => 'account', 'scripts' => $scripts, 'cartCount' => $this->cartCount, 'telephone' => $telephone]);
     }
@@ -118,7 +118,7 @@ class Account extends Controller
     {
         $scripts[] = 'https://res.wx.qq.com/open/libs/weuijs/1.1.1/weui.min.js';
         $scripts[] = 'https://unpkg.com/axios/dist/axios.min.js';
-        $scripts[] = $this->server . 'dist/js/' . 'recharge.js?322ddddd522dddd25';
+        $scripts[] = $this->server . 'dist/js/' . 'recharge.js';
 
         echo $this->app->template->render('recharge', ['server' => $this->server, 'item' => 'account', 'scripts' => $scripts, 'cartCount' => $this->cartCount]);
     }
@@ -126,20 +126,17 @@ class Account extends Controller
     // 余额充值 - 支付宝
     public function zhi()
     {
-        $this->app->logger->addInfo("zhi");
         $json    = array();
 
         $body    = $this->request->getParsedBody();
         $amount  = $body['amount']; // 充值金额
-        $this->app->logger->addInfo("amount:" . $amount);
         // 创建充值记录
         $code    = $this->add_transaction(1, $amount);
-        $this->app->logger->addInfo("code:" . $code);
 
         $zhi     = "https://openapi.alipay.com/gateway.do";
 
         $content = array(
-                 'subject' => '金宁户外运动',
+                 'subject' => '金宁户外运动余额充值',
             'out_trade_no' => $code,
             'total_amount' => $amount,
             'product_code' => 'QUICK_WAP_PAY'
@@ -152,13 +149,12 @@ class Account extends Controller
               'sign_type' => 'RSA2',
               'timestamp' => date("Y-m-d H:i:s", time()),
                 'version' => '1.0',
-             'return_url' => 'http://m.outatv.com/account.html',
+             'return_url' => $this->app->get('settings')['default']['server'] . "account/transaction.html",
              'notify_url' => $this->app->get('settings')['zhi']['t_back'],
             'biz_content' => json_encode($content)
         );
 
         $sign         = $this->app->tool->sign($data);
-        $this->app->logger->addInfo("sign:" . $sign);
 
         $data['sign'] = $sign;
 
@@ -194,7 +190,7 @@ class Account extends Controller
             $gmt_payment    = strtotime($_POST['gmt_payment']);
 
             $transaction    = $this->app->db->get('user_transaction', ['id', 'amount'], ['code[=]' => $code, 'uuid[=]' => $uuid, 'status[=]' => 0, 'source[=]' => 1]);
-            $this->app->logger->addInfo("transaction:", $transaction);
+
             if ($transaction) {
                 $this->app->db->update("user_transaction", [
                     "status"         => 1,
@@ -211,7 +207,7 @@ class Account extends Controller
                     '10000' => 4000
                 );
                 $amount    = (int)$transaction['amount'];
-                $this->app->logger->addInfo("amount:" . $amount);
+
                 $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
 
                 $this->app->db->insert("user_transaction", [
@@ -238,15 +234,12 @@ class Account extends Controller
     // 余额充值 - 微信支付
     public function weixin()
     {
-        $this->app->logger->addInfo("weixin");
         $json    = array();
 
         $body    = $this->request->getParsedBody();
         $amount  = $body['amount']; // 充值金额
-        $this->app->logger->addInfo("amount:" . $amount);
         // 创建充值记录
         $code    = $this->add_transaction(0, $amount);
-        $this->app->logger->addInfo("code:" . $code);
 
         $server     = "https://api.mch.weixin.qq.com/pay/unifiedorder";
         $randstr    = $this->GeraHash(32);
@@ -258,17 +251,11 @@ class Account extends Controller
             $ip_address = $serverParams['REMOTE_ADDR'];
         }
 
-        $this->app->logger->addInfo("ip_address:" . $ip_address);
-
         $openid     = $_SESSION['uuid'];
-
-        $this->app->logger->addInfo("openid:" . $openid);
         
         $body       = '金宁户外运动余额充值';
 
         $pay_fen    = $amount * 100;
-
-        $this->app->logger->addInfo("pay_fen:" . $pay_fen);
 
         $order = array(
             'appid' => $this->app->get('settings')['weixin']['appID'],
@@ -285,8 +272,6 @@ class Account extends Controller
         );
 
         $sign = $this->sign($order, $this->app->get('settings')['weixin']['api_key']);
-
-        $this->app->logger->addInfo("sign:" . $sign);
 
         $xml = "<xml>
         <appid>{$this->app->get('settings')['weixin']['appID']}</appid>
@@ -314,8 +299,6 @@ class Account extends Controller
 
         $this->reader->xml($req->body);
         $result = $this->reader->parse();
-
-        $this->app->logger->addInfo("result:", $result);
 
         $prepay = "prepay_id=";
 
@@ -370,7 +353,6 @@ class Account extends Controller
                 $modifie_time   = time();
 
                 $transaction    = $this->app->db->get('user_transaction', ['id', 'amount'], ['code[=]' => $code, 'uuid[=]' => $openid, 'status[=]' => 0, 'source[=]' => 0]);
-                $this->app->logger->addInfo("transaction:", $transaction);
 
                 if ($transaction) {
                     $this->app->db->update("user_transaction", [
@@ -381,7 +363,6 @@ class Account extends Controller
                     ]);
                     //充值赠送
                     $discounts = array(
-                           '1' => 10,
                         '1000' => 300,
                         '2000' => 800,
                         '3000' => 1200,
@@ -389,7 +370,7 @@ class Account extends Controller
                        '10000' => 4000
                     );
                     $amount    = (int)$transaction['amount'];
-                    $this->app->logger->addInfo("amount:" . $amount);
+    
                     $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
 
                     $this->app->db->insert("user_transaction", [

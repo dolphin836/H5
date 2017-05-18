@@ -54,7 +54,7 @@ submit.addEventListener('click', function () {
                     });
                     //
                     axios.post('/account/weixin', {
-                        amount: 1
+                        amount: getAmount()
                     })
                     .then(function (response) {
                         console.log(response.data);
@@ -77,7 +77,7 @@ submit.addEventListener('click', function () {
                             function(res) {     
                                 if (res.err_msg == "get_brand_wcpay_request:ok" ) {
                                     //TO DO
-                                    location.href = '/account.html';
+                                    location.href = '/account/transaction.html';
                                 }
                             }
                         );
@@ -116,7 +116,7 @@ submit.addEventListener('click', function () {
                             label  : '支付成功',
                             type   : 'primary',
                             onClick: function () {
-                                location.href = '/account.html';
+                                location.href = '/account/transaction.html';
                             }
                         }]
                     });
