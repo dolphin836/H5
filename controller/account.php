@@ -41,7 +41,7 @@ class Account extends Controller
             exit;
         }
 
-        $order   = $this->app->db->select('order', ['code', 'total', 'sub_total', 'red_total', 'payment_code', 'payment_number', 'status', 'create_time', 'payed_time'], ['uuid[=]' => $_SESSION['uuid']]);
+        $order   = $this->app->db->select('order', ['code', 'total', 'sub_total', 'red_total', 'payment_code', 'payment_number', 'status', 'create_time', 'payed_time'], ['uuid[=]' => $_SESSION['uuid'], 'status' => 1]);
 
         echo $this->app->template->render('order', ['server' => $this->server, 'item' => 'account', 'cartCount' => $this->cartCount, 'order' => $order]);
     }
@@ -121,6 +121,14 @@ class Account extends Controller
         $scripts[] = $this->server . 'dist/js/' . 'recharge.js';
 
         echo $this->app->template->render('recharge', ['server' => $this->server, 'item' => 'account', 'scripts' => $scripts, 'cartCount' => $this->cartCount]);
+    }
+
+    public function transaction()
+    {
+        $transaction   = $this->app->db->select('user_transaction', ['id', 'code', 'amount', 'status', 'source', 'remark', 'modifie_time'], ['uuid[=]' => $_SESSION['uuid'], 'status[=]' => 1]);
+        $source        = array('微信充值', '支付宝充值', '充值赠送', '会员卡导入', '订单消费');
+        $user          = $this->app->db->get('user', ['transaction'], ['uuid[=]' => $_SESSION['uuid']]);
+        echo $this->app->template->render('transaction', ['server' => $this->server, 'item' => 'account', 'cartCount' => $this->cartCount, 'transaction' => $transaction, 'source' => $source, 'amount' => $user['transaction']]);
     }
 
     // 余额充值 - 支付宝
