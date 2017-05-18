@@ -264,7 +264,7 @@ class Account extends Controller
 
         $this->app->logger->addInfo("openid:" . $openid);
         
-        $body       = '金宁户外运动 - 余额充值';
+        $body       = '金宁户外运动余额充值';
 
         $pay_fen    = $amount * 100;
 
@@ -440,6 +440,17 @@ class Account extends Controller
 
         $xml = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
         echo $xml;
+    }
+
+    private function sign($data = array(), $key)
+    {
+        ksort($data);
+
+        $str = urldecode(http_build_query($data));
+
+        $strTemp = $str . "&key=" . $key;
+
+        return strtoupper(md5($strTemp));
     }
 
 }
