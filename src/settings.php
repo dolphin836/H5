@@ -15,7 +15,8 @@ return [
                    'api_key' => getenv('WEIXIN_APIKEY'),
                   'buck_url' => getenv('WEIXIN_BACK'),
                      'token' => getenv('WEIXIN_TOKEN'),
-            'encodingaeskey' => getenv('WEIXIN_ENCODE')
+            'encodingaeskey' => getenv('WEIXIN_ENCODE'),
+                'buck_url_2' => getenv('WEIXIN_BACK_2')
         ],
         // Monolog settings
         'logger' => [

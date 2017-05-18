@@ -25,7 +25,9 @@ $routes = array(
     array('post', 'account/sendcode'),
     array('post', 'account/savephone'),
     array('post', 'account/zhi'),
-    array('post', 'account/zcallback')
+    array('post', 'account/zcallback'),
+    array('post', 'account/weixin'),
+    array('any',  'account/wcallback')
 );
 
 foreach ($routes as $route) {

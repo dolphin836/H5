@@ -32,9 +32,59 @@ submit.addEventListener('click', function () {
     if (is_weixin()) {
         weui.actionSheet([
             {
-                label: '微信支付',
+                label: "<img src='https://act.weixin.qq.com/static/cdn/img/wepayui/0.1.1/wepay_logo_default_green_500x126.png' style='width:160px;height:40px;'>",
                 onClick: function () {
-                    console.log('微信支付');
+                    weui.dialog({
+                        title    : '支付结果',
+                        content  : '您已经完成支付了吗？',
+                        className: 'feedback',
+                        buttons  : [{
+                            label  : '重新支付',
+                            type   : 'default',
+                            onClick: function () {
+                                location.reload();
+                            }
+                        },{
+                            label  : '支付成功',
+                            type   : 'primary',
+                            onClick: function () {
+                                location.href = '/account.html';
+                            }
+                        }]
+                    });
+                    //
+                    axios.post('/account/weixin', {
+                        amount: 1
+                    })
+                    .then(function (response) {
+                        console.log(response.data);
+                        if (response.data.code != 0) {
+                            alert(response.data.msg);
+                            return;
+                        }
+
+                        var data = response.data.data;
+
+                        WeixinJSBridge.invoke(
+                            'getBrandWCPayRequest', {
+                                "appId"     : data.appId,
+                                "timeStamp" : data.timeStamp + "",  
+                                "nonceStr"  : data.nonceStr,
+                                "package"   : data.package, 
+                                "signType"  : data.signType,
+                                "paySign"   : data.paySign
+                            },
+                            function(res) {     
+                                if (res.err_msg == "get_brand_wcpay_request:ok" ) {
+                                    //TO DO
+                                    location.href = '/account.html';
+                                }
+                            }
+                        );
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
                 }
             }
         ], [

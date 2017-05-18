@@ -161,7 +161,7 @@ class Order extends Controller
                     $json = array(
                         "touser" => $openid,
                    "template_id" => "9-ZOLKYAqs-31qanynTFg5-D_uhnPFkJylh9PQ-rho4",
-                           "url" => "http://mobie.hbdx.cc/ticket.html",
+                           "url" => $this->app->get('settings')['default']['server'] . "ticket.html",
                           "data" => array(
                          "first" => array("value" => "您好，您的订单已付款成功", "color" => "#173177"),
                       "keyword1" => array("value" => $order_code, "color" => "#173177"),
