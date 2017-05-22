@@ -61,10 +61,20 @@ class Cart extends Controller
         }
 
         $scripts[] = $this->server . 'dist/js/' . 'zepto.min.js';
-        $scripts[] = $this->server . 'dist/js/' . 'cart.js';
+        $scripts[] = $this->server . 'dist/js/' . 'cart.js?20170522151600';
+
+        $user        = $this->app->db->get('user', ['transaction'], ['uuid[=]' => $_SESSION['uuid']]);
+        $user_transaction = number_format ((float)$user['transaction'], 2);
+        $transaction = (float)$user['transaction'];
 
         $discount  = $total * $this->app->get('settings')['default']['discount'];
         $pay       = $total - $discount;
+
+        if ($transaction >= $pay) {
+            $transaction  = $pay;
+        }
+
+        $pay       = $pay - $transaction;
 
         $total     = number_format ($total, 2);
         $discount  = number_format ($discount, 2);
@@ -78,7 +88,9 @@ class Cart extends Controller
 
         $is_weixin = $this->app->tool->is_weixin();
 
-        echo $this->app->template->render('cart', ['server' => $this->server, 'item' => 'cart', 'cartCount' => $cartCount, 'scripts' => $scripts, 'products' => $products, 'total' => $total, 'discount' => $discount, 'pay' => $pay, 'is_weixin' => $is_weixin]);
+
+        
+        echo $this->app->template->render('cart', ['server' => $this->server, 'item' => 'cart', 'cartCount' => $cartCount, 'scripts' => $scripts, 'products' => $products, 'total' => $total, 'discount' => $discount, 'pay' => $pay, 'is_weixin' => $is_weixin, 'user_transaction' => $user_transaction, 'transaction' => $transaction]);
     }
 
     public function clean()

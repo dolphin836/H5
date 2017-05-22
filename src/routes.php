@@ -28,7 +28,8 @@ $routes = array(
     array('post', 'account/zhi'),
     array('post', 'account/zcallback'),
     array('post', 'account/weixin'),
-    array('any',  'account/wcallback')
+    array('any',  'account/wcallback'),
+    array('post', 'order/transaction')
 );
 
 foreach ($routes as $route) {

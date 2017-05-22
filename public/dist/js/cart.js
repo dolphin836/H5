@@ -22,7 +22,7 @@ $(function() {
             })
         })
     ;
-    // 结算
+    // 重新支付
     $pay_again
         .on('click', function (e) {
             location.reload();
@@ -99,6 +99,12 @@ $(function() {
             }
 
             $('#alipaysubmit').submit();
+        });
+    });
+
+    $('#tranPay').on('click', function() { // 确认结账
+        $.post('/order/transaction', function(response) {
+            location.href = '/success.html';
         });
     });
 

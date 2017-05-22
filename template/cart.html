@@ -33,6 +33,21 @@
             </div>
         </a>
         <?php endforeach; ?>
+
+        <?php if ($user_transaction): ?>
+        <div class="weui-cells weui-cells_radio">
+            <label class="weui-cell weui-check__label" for="x12">
+                <div class="weui-cell__bd">
+                    <p>账户余额：<?php echo $user_transaction; ?></p>
+                </div>
+                <div class="weui-cell__ft">
+                    <input type="radio" name="radio1" class="weui-check" id="x12" checked="checked">
+                    <span class="weui-icon-checked"></span>
+                </div>
+            </label>
+        </div>
+        <?php endif; ?>
+
         <div class="weui-form-preview">
             <div class="weui-form-preview__bd">
                 <p>
@@ -42,6 +57,10 @@
                 <p>
                     <label class="weui-form-preview__label">优惠金额</label>
                     <span class="weui-form-preview__value"><span class="f14">¥</span><?php echo $discount; ?></span>
+                </p>
+                <p>
+                    <label class="weui-form-preview__label">账户余额</label>
+                    <span class="weui-form-preview__value"><span class="f14">¥</span><?php echo $transaction; ?></span>
                 </p>
             </div>
             <div class="weui-form-preview__hd">
@@ -62,20 +81,21 @@
     <div class="weui-mask" id="iosMask" style="display: none"></div>
     <div class="weui-actionsheet" id="iosActionsheet">
         <div class="weui-actionsheet__menu">
-            <?php if ($is_weixin): ?>
-            <div class="weui-actionsheet__cell" style="padding-top:20px;" id="weixinPay">
-               <img src="https://act.weixin.qq.com/static/cdn/img/wepayui/0.1.1/wepay_logo_default_green_500x126.png" alt="" width="160" height="40">
-            </div>
+            <?php if ((float)$pay): ?>
+                <?php if ($is_weixin): ?>
+                <div class="weui-actionsheet__cell" style="padding-top:20px;" id="weixinPay">
+                    <img src="https://act.weixin.qq.com/static/cdn/img/wepayui/0.1.1/wepay_logo_default_green_500x126.png" alt="" width="160" height="40">
+                </div>
+                <?php else: ?>
+                <form id="alipaysubmit" name="alipaysubmit" action="https://openapi.alipay.com/gateway.do?charset=utf-8" method="POST" style="display:none;">
+                </form>
+                <div class="weui-actionsheet__cell" style="padding-top:20px;" id="zhiPay">
+                    <img src="<?php echo $server . 'dist/img/zhi.png'; ?>" alt="" width="120" height="54">
+                </div>
+                <?php endif; ?>
             <?php else: ?>
-            <form id="alipaysubmit" name="alipaysubmit" action="https://openapi.alipay.com/gateway.do?charset=utf-8" method="POST" style="display:none;">
-            </form>
-            <div class="weui-actionsheet__cell" style="padding-top:20px;" id="zhiPay">
-               <img src="<?php echo $server . 'dist/img/zhi.png'; ?>" alt="" width="120" height="54">
-            </div>
+            <div class="weui-actionsheet__cell" id="tranPay">确认结账</div>
             <?php endif; ?>
-            <!--<div class="weui-actionsheet__cell">
-               请在微信或者支付宝内打开
-            </div>-->
         </div>
         <div class="weui-actionsheet__action">
             <div class="weui-actionsheet__cell" id="iosActionsheetCancel">取消</div>

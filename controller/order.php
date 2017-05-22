@@ -356,10 +356,17 @@ class Order extends Controller
             }
         }
 
-
         $discount  = $total * $this->app->get('settings')['default']['discount'];
         $pay       = $total - $discount;
-        $pay_fen   = $pay * 100;
+
+        $user        = $this->app->db->get('user', ['transaction'], ['uuid[=]' => $_SESSION['uuid']]);
+        $transaction = (float)$user['transaction'];
+
+        if ($transaction >= $pay) {
+            $transaction  = $pay;
+        }
+
+        $pay       = $pay - $transaction;
 
         $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
 
@@ -377,6 +384,34 @@ class Order extends Controller
 
         $order_id = $this->app->db->id();
 
+        if ($transaction) {
+            $this->app->db->insert("order_payment", [
+                     "order_id" => $order_id,
+                       "amount" => $transaction,
+                 "payment_code" => 'transaction',
+                  "create_time" => time()
+            ]);
+
+            $t_code      = $this->microtime_float() . $this->GeraHash(14, true);
+
+            $this->app->db->insert("user_transaction", [
+                          "code" => $t_code,
+                          "uuid" => $_SESSION['uuid'],
+                        "amount" => $transaction, //金额
+                        "status" => 1,
+                        "source" => 4, //来源
+                        "remark" => '#' . $order_id,
+                   "create_time" => time(),
+                  "modifie_time" => time()
+            ]);
+
+            $this->app->db->update("user", [
+                "transaction[-]" => $transaction
+            ], [
+                "uuid[=]" => $_SESSION['uuid']
+            ]);
+        }
+
         foreach ($order_product as $product) {
             $this->app->db->insert("order_product", [
                      "order_id" => $order_id,
@@ -387,6 +422,52 @@ class Order extends Controller
             ]);
         }
 
-        return array('code' => $code, 'pay' => $pay);
+        return array('code' => $code, 'pay' => $pay, 'order_id' => $order_id);
+    }
+
+    public function transaction() // 确认结账
+    {
+        $json     = array();
+
+        $order    = $this->create_order("transaction");
+        $order_id = $order['order_id'];
+        // 更新订单状态
+        $this->app->db->update("order", [
+            "status"         => 1,
+            "payed_time"     => time()
+        ], [
+            "code[=]" => $order['code']
+        ]);
+        // 生成票码
+        $product  = $this->app->db->select('order_product', ['id', 'product_id', 'product_name', 'product_price', 'product_count'], ['order_id[=]' => $order_id]);
+
+        foreach ($product as $pro) {
+            for ($i = 0; $i < $pro['product_count']; $i++) {
+                $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
+                $this->app->db->insert("ticket", [
+                                "code" => $code,
+                                "uuid" => $_SESSION['uuid'],
+                            "order_id" => $order_id,
+                          "product_id" => $pro['product_id'],
+                        "product_name" => $pro['product_name'],
+                       "product_price" => $pro['product_price'],
+                         "create_time" => time(),
+                        "modifie_time" => time()
+                ]);
+            }
+
+            //更新销售量
+            $this->app->db->update("product", [
+                "saled[+]" => (int)$pro['product_count'],
+                "show_saled[+]" => (int)$pro['product_count'] * rand(10, 50)
+            ], [
+                "id[=]" => $pro['product_id']
+            ]);
+        }
+
+        $json['code'] = 0;
+        $json['msg']  = 'Success.';
+
+        echo json_encode($json);
     }
 }
