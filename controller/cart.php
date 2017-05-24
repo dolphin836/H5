@@ -63,9 +63,14 @@ class Cart extends Controller
         $scripts[] = $this->server . 'dist/js/' . 'zepto.min.js';
         $scripts[] = $this->server . 'dist/js/' . 'cart.js?20170522151600';
 
-        $user        = $this->app->db->get('user', ['transaction'], ['uuid[=]' => $_SESSION['uuid']]);
-        $user_transaction = number_format ((float)$user['transaction'], 2);
-        $transaction = (float)$user['transaction'];
+        if ( isset($_SESSION['uuid']) ) {
+            $user        = $this->app->db->get('user', ['transaction'], ['uuid[=]' => $_SESSION['uuid']]);
+            $user_transaction = number_format ((float)$user['transaction'], 2);
+            $transaction = (float)$user['transaction'];
+        } else {
+            $user_transaction = 0;
+            $transaction = 0;
+        }
 
         $discount  = $total * $this->app->get('settings')['default']['discount'];
         $pay       = $total - $discount;

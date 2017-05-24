@@ -22,11 +22,6 @@ class Account extends Controller
 
     public function index()
     {
-        if ( ! isset($_SESSION['uuid']) ) {
-            var_dump("请先登录");
-            exit;
-        }
-
         $user   = $this->app->db->select('user', ['nickname', 'telephone', 'image', 'transaction', 'total', 'type'], ['uuid[=]' => $_SESSION['uuid']]);
 
         $default_user_image  = $this->image_server . 'default_user_image.png';
@@ -36,11 +31,6 @@ class Account extends Controller
 
     public function order()
     {
-        if ( ! isset($_SESSION['uuid']) ) {
-            var_dump("请先登录");
-            exit;
-        }
-
         $order   = $this->app->db->select('order', ['code', 'total', 'sub_total', 'red_total', 'payment_code', 'payment_number', 'status', 'create_time', 'payed_time'], ['uuid[=]' => $_SESSION['uuid'], 'status' => 1]);
 
         echo $this->app->template->render('order', ['server' => $this->server, 'item' => 'account', 'cartCount' => $this->cartCount, 'order' => $order]);
@@ -48,7 +38,6 @@ class Account extends Controller
 
     public function login()
     {
-        $_SESSION['uuid'] = 'oNP02wK_vjLWB_iRRf6qbqmDXBiE';
         echo $this->app->template->render('login', ['server' => $this->server, 'item' => 'account', 'cartCount' => $this->cartCount]);
     }
 

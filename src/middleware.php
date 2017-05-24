@@ -155,3 +155,30 @@ $app->add(function ($request, $response, $next) {
 
     return $response;
 });
+
+$app->add(function ($request, $response, $next) {
+    $auth = array('account/index',
+                  'account/order',
+                  'account/phone',
+                  'account/recharge',
+                  'account/transaction',
+                  'ticket/index',
+                  'ticket/view',
+                  'ticket/check',
+                  'ticket/pass');
+
+    $params = explode('.', $request->getUri()->getPath());
+    $path   = explode('/', $params[0]);
+
+    $c      = isset($path[1]) ? $path[1] : 'product';
+    $m      = isset($path[2]) ? $path[2] : 'index';
+    $r      = $c . '/' . $m;
+
+    if (in_array($r, $auth) && ! isset($_SESSION['uuid'])) {
+        return $response->withStatus(302)->withHeader('Location', '/account/login.html');
+    }
+
+    $response = $next($request, $response);
+
+    return $response;
+});

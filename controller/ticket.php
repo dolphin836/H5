@@ -21,11 +21,6 @@ class Ticket extends Controller
 
     public function index()
     {
-        if ( ! isset($_SESSION['uuid']) ) {
-            var_dump("请先登录");
-            exit;
-        }
-
         $results        = $this->app->db->select('ticket', ['id', 'code', 'product_name', 'product_price', 'status', 'create_time', 'modifie_time'], ['uuid[=]' => $_SESSION['uuid']]);
         
         $ticket_open    = array();
