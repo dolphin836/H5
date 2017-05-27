@@ -38,7 +38,7 @@ class Order extends Controller
             $payment_number = $_POST['trade_no'];
             $gmt_payment    = strtotime($_POST['gmt_payment']);
 
-            $order = $this->app->db->select('order', ['id'], ['code[=]' => $order_code, 'uuid[=]' => $uuid, 'status[=]' => 0]);
+            $order = $this->app->db->select('order', ['id'], ['code[=]' => $order_code, 'status[=]' => 0]);
 
             if ( ! empty($order) ) {
                 // 更新订单 - sign 和 金额没有做验证 有安全问题
