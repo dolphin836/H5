@@ -25,6 +25,7 @@ $routes = array(
     array('post', 'order/zcallback'),
     array('post', 'account/sendcode'),
     array('post', 'account/savephone'),
+    array('post', 'account/checklogin'),
     array('post', 'account/zhi'),
     array('post', 'account/zcallback'),
     array('post', 'account/weixin'),

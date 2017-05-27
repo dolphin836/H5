@@ -15,9 +15,9 @@ use AliyunMNS\Requests\PublishMessageRequest;
 class Sms
 {
     // 发送验证码
-    public static function code($phone = '', $code = '')
+    public static function code($phone = '', $msg = '', $data = array())
     {
-        if ($phone == '' || $code == '') {
+        if ($phone == '') {
             return false;
         }
 
@@ -27,9 +27,9 @@ class Sms
         $client             = new Client($endPoint, $accessId, $accessKey);
         $topicName          = "sms.topic-cn-hangzhou";
         $topic              = $client->getTopicRef($topicName);
-        $batchSmsAttributes = new BatchSmsAttributes("金宁户外运动", "SMS_63750898");
+        $batchSmsAttributes = new BatchSmsAttributes("金宁户外运动", $msg);
 
-        $batchSmsAttributes->addReceiver($phone, array('code' => $code, 'product' => '手机号码，属于'));
+        $batchSmsAttributes->addReceiver($phone, $data);
         $messageAttributes  = new MessageAttributes(array($batchSmsAttributes));
 
         $messageBody        = "smsmessage";

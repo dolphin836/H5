@@ -22,7 +22,7 @@ class Account extends Controller
 
     public function index()
     {
-        $user   = $this->app->db->select('user', ['nickname', 'telephone', 'image', 'transaction', 'total', 'type'], ['uuid[=]' => $_SESSION['uuid']]);
+        $user   = $this->app->db->select('user', ['nickname', 'telephone', 'image', 'transaction', 'total', 'type', 'referee_uuid'], ['uuid[=]' => $_SESSION['uuid']]);
 
         $default_user_image  = $this->image_server . 'default_user_image.png';
 
@@ -38,7 +38,58 @@ class Account extends Controller
 
     public function login()
     {
-        echo $this->app->template->render('login', ['server' => $this->server, 'item' => 'account', 'cartCount' => $this->cartCount]);
+        $scripts[] = 'https://res.wx.qq.com/open/libs/weuijs/1.1.1/weui.min.js';
+        $scripts[] = 'https://unpkg.com/axios/dist/axios.min.js';
+        $scripts[] = $this->server . 'dist/js/' . 'login.js?20170526172900';
+
+        echo $this->app->template->render('login', ['server' => $this->server, 'item' => 'account', 'cartCount' => $this->cartCount, 'scripts' => $scripts]);
+    }
+
+    // 验证登录
+    public function checklogin()
+    {       
+        $body  = $this->request->getParsedBody();
+        $phone = $body['phone'];
+        $code  = $body['code'];
+        
+        if ( ! isset($_SESSION['code']) || $_SESSION['code'] != $code ) {
+            $json['code'] = 1;
+            $json['msg']  = '验证码错误';  
+        } else {
+            unset($_SESSION['code']);
+
+            $user   = $this->app->db->get('user', ['uuid'], ['telephone[=]' => $phone]);
+            if ($user) {
+                $_SESSION['uuid'] = $user['uuid'];
+            } else {  //注册新用户
+                $uuid         = $this->microtime_float() . $this->GeraHash(14, true);
+                $password     = "12345678";
+                $en_password  = password_hash($password, PASSWORD_DEFAULT);
+
+                $query = $this->app->db->insert("user", [
+                             "uuid" => $uuid,
+                         "nickname" => $phone,
+                        "telephone" => $phone,
+                      'en_password' => $en_password,
+                         'password' => $password,
+                     'referee_uuid' => isset($_SESSION['utm_source']) ? $_SESSION['utm_source'] : '',
+                             "type" => 1,
+                           "source" => 3,
+                    "register_time" => time(),
+                       "login_time" => time()
+                ]);
+
+                $_SESSION['uuid'] = $uuid;
+                if (isset($_SESSION['utm_source'])) {
+                    unset($_SESSION['utm_source']);
+                }
+            }
+
+            $json['code'] = 0;
+            $json['msg']  = 'Success.';  
+        }
+      
+        echo json_encode($json);
     }
 
     public function logout()
@@ -54,7 +105,7 @@ class Account extends Controller
 
         $scripts[] = 'https://res.wx.qq.com/open/libs/weuijs/1.1.1/weui.min.js';
         $scripts[] = 'https://unpkg.com/axios/dist/axios.min.js';
-        $scripts[] = $this->server . 'dist/js/' . 'phone.js';
+        $scripts[] = $this->server . 'dist/js/' . 'phone.js?20170526173100';
 
         echo $this->app->template->render('phone', ['server' => $this->server, 'item' => 'account', 'scripts' => $scripts, 'cartCount' => $this->cartCount, 'telephone' => $telephone]);
     }
@@ -63,8 +114,21 @@ class Account extends Controller
     {       
         $body  = $this->request->getParsedBody();
         $phone = $body['phone'];
-        $code  = $this->GeraHash(4, true);
-        $send  = Sms::code($phone, $code);
+        $where = $body['where'];
+
+        switch ($where) {
+            case 'login':
+                $code  = $this->GeraHash(4, true);
+                $send  = Sms::code($phone, 'SMS_63750903', array('code' => $code, 'product' => '金宁户外运动'));
+                break;
+            case 'phone':
+                $code  = $this->GeraHash(4, true);
+                $send  = Sms::code($phone, 'SMS_63750898', array('code' => $code, 'product' => '手机号码，属于'));
+                break;
+            default:
+                $send  = 0;
+                break;
+        }
 
         if ($send) {
             $_SESSION['code'] = $code;

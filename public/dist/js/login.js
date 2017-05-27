@@ -6,7 +6,7 @@ var submit = document.querySelector('#submit'),
 submit.addEventListener('click', function () {
     weui.form.validate('#form', function (error) {
         if (!error) {
-            axios.post('/account/savephone', {
+            axios.post('/account/checklogin', {
                 phone: phone.value,
                 code: code.value
             })
@@ -15,7 +15,7 @@ submit.addEventListener('click', function () {
                 if (response.data.code != 0) {
                     weui.topTips(response.data.msg);
                 } else {
-                    weui.toast('手机号更新成功', 1000);
+                    weui.toast('验证成功', 1000);
                     setTimeout(function () {
                         location.href = '/account.html';
                     }, 1000);
@@ -38,7 +38,7 @@ sendCode.addEventListener('click', function () { // 发送验证码
 
     axios.post('/account/sendcode', {
         phone: phone.value,
-        where: 'phone'
+        where: 'login'
     })
     .then(function (response) {
         if (response.data.code != 0) {

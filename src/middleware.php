@@ -34,6 +34,7 @@ $app->add(function ($request, $response, $next) {
                           'en_password' => $en_password,
                              'password' => $password,
                                 "image" => $headimgurl,
+                         'referee_uuid' => isset($_SESSION['utm_source']) ? $_SESSION['utm_source'] : '',
                                  "type" => 1,
                                "source" => 1,
                         "register_time" => time(),
@@ -42,6 +43,9 @@ $app->add(function ($request, $response, $next) {
                 }
 
                 $_SESSION['uuid'] = $open_id;
+                if (isset($_SESSION['utm_source'])) {
+                    unset($_SESSION['utm_source']);
+                }
             }
 
             if ($str[0]  == 'auth_code' && ! isset($_SESSION['uuid']) ) { // 检测到支付宝网页授权的 auth_code
@@ -111,6 +115,7 @@ $app->add(function ($request, $response, $next) {
                           'en_password' => $en_password,
                              'password' => $password,
                                 "image" => $headimgurl,
+                         'referee_uuid' => isset($_SESSION['utm_source']) ? $_SESSION['utm_source'] : '',
                                  "type" => 1,
                                "source" => 2,
                         "register_time" => time(),
@@ -119,6 +124,16 @@ $app->add(function ($request, $response, $next) {
                 }
 
                 $_SESSION['uuid'] = $user_id;
+                if (isset($_SESSION['utm_source'])) {
+                    unset($_SESSION['utm_source']);
+                }
+            }
+
+            if ($str[0] == 'utm_source' && ! isset($_SESSION['uuid']) ) { // 检测到推荐人代码并且 utm_source
+                $user   = $this->db->get('user', ['id'], ['uuid[=]' => $str[1]]);
+                if ($user) {
+                    $_SESSION['utm_source'] = $str[1];
+                }
             }
         }
     }
