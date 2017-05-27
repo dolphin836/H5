@@ -152,16 +152,28 @@ class Account extends Controller
             $json['code'] = 1;
             $json['msg']  = '验证码错误';  
         } else {
-            $this->app->db->update("user", [
-                     "telephone" => $phone
+            //判断手机号是否存在
+            $user = $this->app->db->get('user', [
+                'id'
             ], [
-                "uuid[=]" => $_SESSION['uuid']
+                'telephone[=]' => $phone
             ]);
 
-            unset($_SESSION['code']);
+            if ($user) {
+                $json['code'] = 2;
+                $json['msg']  = '手机号已经被使用，请使用其他手机号。';  
+            } else {
+                $this->app->db->update("user", [
+                        "telephone" => $phone
+                ], [
+                    "uuid[=]" => $_SESSION['uuid']
+                ]);
 
-            $json['code'] = 0;
-            $json['msg']  = 'Success.';  
+                unset($_SESSION['code']);
+
+                $json['code'] = 0;
+                $json['msg']  = 'Success.';
+            }
         }
       
         echo json_encode($json);
