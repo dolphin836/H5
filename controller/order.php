@@ -38,7 +38,7 @@ class Order extends Controller
             $payment_number = $_POST['trade_no'];
             $gmt_payment    = strtotime($_POST['gmt_payment']);
 
-            $order = $this->app->db->select('order', ['id'], ['code[=]' => $order_code, 'status[=]' => 0]);
+            $order = $this->app->db->select('order', ['id', 'uuid'], ['code[=]' => $order_code, 'status[=]' => 0]);
 
             if ( ! empty($order) ) {
                 // 更新订单 - sign 和 金额没有做验证 有安全问题
@@ -51,6 +51,7 @@ class Order extends Controller
                 ]);
                 
                 $order_id = $order[0]['id'];
+                $uuid     = $order[0]['uuid'];
 
                 // 生成票码
                 $product  = $this->app->db->select('order_product', ['id', 'product_id', 'product_name', 'product_price', 'product_count'], ['order_id[=]' => $order_id]);
