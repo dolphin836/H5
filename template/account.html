@@ -15,6 +15,7 @@
                 <?php endif; ?>
                 <ul class="weui-media-box__info" style="margin-top:5px;margin-bottom:0;">
                     <li class="weui-media-box__info__meta">余额：<?php echo $user['transaction']; ?></li>
+                    <li class="weui-media-box__info__meta">佣金：<?php echo $user['commission']; ?></li>
                 </ul>
             </div>
         </a>
@@ -82,13 +83,13 @@
     <div class="weui-panel__bd">
         <div class="weui-media-box weui-media-box_small-appmsg">
             <div class="weui-cells">
-                <a class="weui-cell weui-cell_access" href="javascript:;">
+                <a class="weui-cell weui-cell_access" href="/recommend/share/<?php echo $_SESSION['uuid']; ?>.html?utm_source=<?php echo $_SESSION['uuid']; ?>">
                     <div class="weui-cell__bd weui-cell_primary">
                         <p>推荐人二维码</p>
                     </div>
                     <span class="weui-cell__ft"></span>
                 </a>
-                <a class="weui-cell weui-cell_access" href="javascript:;">
+                <a class="weui-cell weui-cell_access" href="/recommend/user.html">
                     <div class="weui-cell__bd weui-cell_primary">
                         <p>推荐记录</p>
                     </div>

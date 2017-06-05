@@ -38,7 +38,7 @@ class Order extends Controller
             $payment_number = $_POST['trade_no'];
             $gmt_payment    = strtotime($_POST['gmt_payment']);
 
-            $order = $this->app->db->select('order', ['id', 'uuid'], ['code[=]' => $order_code, 'status[=]' => 0]);
+            $order = $this->app->db->select('order', ['id', 'uuid', 'total'], ['code[=]' => $order_code, 'status[=]' => 0]);
 
             if ( ! empty($order) ) {
                 // 更新订单 - sign 和 金额没有做验证 有安全问题
@@ -52,6 +52,7 @@ class Order extends Controller
                 
                 $order_id = $order[0]['id'];
                 $uuid     = $order[0]['uuid'];
+                $order_total = $order[0]['total'];
 
                 // 生成票码
                 $product  = $this->app->db->select('order_product', ['id', 'product_id', 'product_name', 'product_price', 'product_count'], ['order_id[=]' => $order_id]);
@@ -77,6 +78,30 @@ class Order extends Controller
                         "show_saled[+]" => (int)$pro['product_count'] * rand(10, 50)
                     ], [
                         "id[=]" => $pro['product_id']
+                    ]);
+                }
+
+                // 佣金
+                $user = $this->app->db->get('user', ['referee_uuid'], ['uuid[=]' => $uuid]);
+
+                if ($user) {
+                    $amount = $order_total * 0.1;
+                    $this->app->db->insert("user_income", [
+                                         "uuid" => $user['referee_uuid'],
+                                     "order_id" => $order_id,
+                                   "order_uuid" => $uuid,
+                                  "order_total" => $order_total,
+                                       "amount" => $amount,
+                                       "status" => 1,
+                                  "create_time" => time(),
+                                 "modifie_time" => time()
+                            ]);
+
+                    // 更新 User 表
+                    $this->app->db->update("user", [
+                        "commission[+]"  => $amount
+                    ], [
+                        "uuid[=]" => $user['referee_uuid']
                     ]);
                 }
             }
@@ -109,7 +134,7 @@ class Order extends Controller
                 $total_fee      = (int)$info['total_fee'] / 100;
                 $sign           = $info['sign'];
 
-                $order = $this->app->db->select('order', ['id'], ['code[=]' => $order_code, 'uuid[=]' => $openid, 'status[=]' => 0]);
+                $order = $this->app->db->select('order', ['id', 'total'], ['code[=]' => $order_code, 'uuid[=]' => $openid, 'status[=]' => 0]);
 
                 if ( ! empty($order) ) {
                     // 更新订单 - sign 和 金额没有做验证 有安全问题
@@ -121,7 +146,8 @@ class Order extends Controller
                         "code[=]" => $order_code
                     ]);
                     
-                    $order_id = $order[0]['id'];
+                    $order_id    = $order[0]['id'];
+                    $order_total = $order[0]['total'];
 
                     // 生成票码
                     $product  = $this->app->db->select('order_product', ['id', 'product_id', 'product_name', 'product_price', 'product_count'], ['order_id[=]' => $order_id]);
@@ -147,6 +173,29 @@ class Order extends Controller
                             "show_saled[+]" => (int)$pro['product_count'] * rand(10, 50)
                         ], [
                             "id[=]" => $pro['product_id']
+                        ]);
+                    }
+                    // 佣金
+                    $user = $this->app->db->get('user', ['referee_uuid'], ['uuid[=]' => $openid]);
+
+                    if ($user) {
+                        $amount = $order_total * 0.1;
+                        $this->app->db->insert("user_income", [
+                                            "uuid" => $user['referee_uuid'],
+                                        "order_id" => $order_id,
+                                      "order_uuid" => $openid,
+                                     "order_total" => $order_total,
+                                          "amount" => $amount,
+                                          "status" => 1,
+                                     "create_time" => time(),
+                                    "modifie_time" => time()
+                                ]);
+
+                        // 更新 User 表
+                        $this->app->db->update("user", [
+                            "commission[+]"  => $amount
+                        ], [
+                            "uuid[=]" => $user['referee_uuid']
                         ]);
                     }
                     // 消息推送

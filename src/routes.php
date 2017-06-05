@@ -30,7 +30,10 @@ $routes = array(
     array('post', 'account/zcallback'),
     array('post', 'account/weixin'),
     array('any',  'account/wcallback'),
-    array('post', 'order/transaction')
+    array('post', 'order/transaction'),
+    array('get',  'recommend/share/{uuid}.html'),
+    array('get',  'recommend/user.html'),
+    array('get',  'market.html')
 );
 
 foreach ($routes as $route) {

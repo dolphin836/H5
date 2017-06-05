@@ -94,7 +94,7 @@ class Ticket extends Controller
              'product_name' => $results[0]['product_name'],
             'product_price' => $results[0]['product_price'],
                      'code' => $code,
-                       'qr' => $this->image_server . '/' . $filepath
+                       'qr' => $this->image_server . $filepath
         );
 
         echo $this->app->template->render('ticket_view', ['server' => $this->server, 'item' => 'ticket', 'cartCount' => $this->cartCount, 'ticket' => $ticket]);

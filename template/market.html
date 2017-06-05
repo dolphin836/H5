@@ -1,0 +1,27 @@
+<?php $this->layout('template', ['title' => '活动推广', 'server' => $server, 'item' => $item, 'cartCount' => $cartCount]); ?>
+
+<div class="weui-msg">
+    <?php if ($style): ?>
+    <div class="weui-msg__icon-area"><i class="weui-icon-success weui-icon_msg"></i></div>
+    <div class="weui-msg__text-area">
+        <h2 class="weui-msg__title">成功</h2>
+        <p class="weui-msg__desc">
+            恭喜您获得一张 卡丁车（单人）-1 圈 体验票
+        </p>
+    </div>
+    <?php else: ?>
+    <div class="weui-msg__icon-area"><i class="weui-icon-warn weui-icon_msg"></i></div>
+    <div class="weui-msg__text-area">
+        <h2 class="weui-msg__title">失败</h2>
+        <p class="weui-msg__desc">
+            您已经参与过本次活动了
+        </p>
+    </div>
+    <?php endif; ?>
+    <div class="weui-msg__opr-area">
+        <p class="weui-btn-area">
+            <a href="../ticket.html" class="weui-btn weui-btn_primary">查看票码</a>
+            <a href="../index.html" class="weui-btn weui-btn_default">继续选购</a>
+        </p>
+    </div>
+</div>

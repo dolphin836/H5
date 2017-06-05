@@ -22,11 +22,11 @@ class Account extends Controller
 
     public function index()
     {
-        $user   = $this->app->db->select('user', ['nickname', 'telephone', 'image', 'transaction', 'total', 'type', 'referee_uuid'], ['uuid[=]' => $_SESSION['uuid']]);
+        $user   = $this->app->db->get('user', ['nickname', 'telephone', 'image', 'transaction', 'total', 'type', 'referee_uuid', 'commission'], ['uuid[=]' => $_SESSION['uuid']]);
 
         $default_user_image  = $this->image_server . 'default_user_image.png';
 
-        echo $this->app->template->render('account', ['server' => $this->server, 'item' => 'account', 'cartCount' => $this->cartCount, 'user' => $user[0], 'default_user_image' => $default_user_image]);
+        echo $this->app->template->render('account', ['server' => $this->server, 'item' => 'account', 'cartCount' => $this->cartCount, 'user' => $user, 'default_user_image' => $default_user_image]);
     }
 
     public function order()
@@ -279,12 +279,13 @@ class Account extends Controller
                      '5000' => 2000,
                     '10000' => 4000
                 );
+
                 $amount    = (int)$transaction['amount'];
 
-                $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
+                $code1     = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
 
                 $this->app->db->insert("user_transaction", [
-                            "code" => $code,
+                            "code" => $code1,
                             "uuid" => $uuid,
                           "amount" => $discounts[$amount], //充值金额
                           "status" => 1,
@@ -295,10 +296,34 @@ class Account extends Controller
                 ]);
                 //更新余额
                 $this->app->db->update("user", [
-                    "transaction"  => $amount + $discounts[$amount]
+                    "transaction[+]"  => $amount + $discounts[$amount]
                 ], [
                     "uuid[=]" => $uuid
                 ]);
+                // 佣金
+                $user = $this->app->db->get('user', ['referee_uuid'], ['uuid[=]' => $uuid]);
+
+                if ($user) {
+                    $income_amount = $amount * 0.05;
+                    $this->app->db->insert("user_income", [
+                                        "uuid" => $user['referee_uuid'],
+                                    "order_id" => $code,
+                                  "order_uuid" => $uuid,
+                                 "order_total" => $amount,
+                                      "amount" => $income_amount,
+                                      "status" => 1,
+                                      "source" => 1,
+                                 "create_time" => time(),
+                                "modifie_time" => time()
+                            ]);
+
+                    // 更新 User 表
+                    $this->app->db->update("user", [
+                        "commission[+]"  => $income_amount
+                    ], [
+                        "uuid[=]" => $user['referee_uuid']
+                    ]);
+                }
                 
                 echo 'success';
             }
@@ -444,10 +469,10 @@ class Account extends Controller
                     );
                     $amount    = (int)$transaction['amount'];
     
-                    $code      = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
+                    $code1     = $this->microtime_float() . $this->GeraHash(14, true); //生成订单号
 
                     $this->app->db->insert("user_transaction", [
-                                "code" => $code,
+                                "code" => $code1,
                                 "uuid" => $openid,
                               "amount" => $discounts[$amount], //充值金额
                               "status" => 1,
@@ -458,10 +483,34 @@ class Account extends Controller
                     ]);
                     //更新余额
                     $this->app->db->update("user", [
-                        "transaction"  => $amount + $discounts[$amount]
+                        "transaction[+]"  => $amount + $discounts[$amount]
                     ], [
                         "uuid[=]" => $openid
                     ]);
+
+                    // 佣金
+                    $user = $this->app->db->get('user', ['referee_uuid'], ['uuid[=]' => $openid]);
+
+                    if ($user) {
+                        $income_amount = $amount * 0.05;
+                        $this->app->db->insert("user_income", [
+                                            "uuid" => $user['referee_uuid'],
+                                        "order_id" => $code,
+                                      "order_uuid" => $openid,
+                                     "order_total" => $amount,
+                                          "amount" => $income_amount,
+                                          "status" => 1,
+                                          "source" => 1,
+                                     "create_time" => time(),
+                                    "modifie_time" => time()
+                                ]);
+                        // 更新 User 表
+                        $this->app->db->update("user", [
+                            "commission[+]"  => $income_amount
+                        ], [
+                            "uuid[=]" => $user['referee_uuid']
+                        ]);
+                    }           
                     // 消息推送
                     $options = array(
                             'token'=> $this->app->get('settings')['weixin']['token'],

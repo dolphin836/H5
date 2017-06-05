@@ -1,0 +1,18 @@
+<?php $this->layout('template', ['title' => '推荐记录', 'server' => $server, 'item' => $item, 'cartCount' => $cartCount]); ?>
+
+<div class="weui-panel weui-panel_access">
+    <div class="weui-panel__hd">总推荐人数：<?php echo count($users); ?></div>
+    <div class="weui-panel__bd">
+        <?php foreach($users as $user): ?>
+        <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+            <div class="weui-media-box__hd" style="width:66px;height:66px;">
+                <img class="weui-media-box__thumb" style="border-radius:33px;" src="<?php echo ($user['image'] == '' ? $default_user_image : $user['image']); ?>" alt="">
+            </div>
+            <div class="weui-media-box__bd">
+                <h4 class="weui-media-box__title"><?php echo $user['nickname']; ?></h4>
+                <p class="weui-media-box__desc">注册日期：<?php echo date('Y-m-d', $user['register_time']); ?></p>
+            </div>
+        </a>
+        <?php endforeach; ?>
+    </div>
+</div>

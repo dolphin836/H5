@@ -1,0 +1,22 @@
+<?php $this->layout('template', ['title' => '我的推荐人二维码', 'server' => $server, 'item' => $item, 'cartCount' => $cartCount]); ?>
+
+<?php if ($is_weixin): ?>
+<div class="panel" style="margin-top:20px;padding-top:15px;">
+    <h3 class="text-center">直接扫码或分享至朋友圈、微信好友</h3>
+    <div class="text-center">
+        <img src="<?php echo $qr; ?>" class="qrcode">
+    </div>
+    <div class="text-center" style="margin-top:20px;">
+        <img style="width:66px;height:66px;border-radius:33px;" src="<?php echo ($recommend['image'] == '' ? $default_user_image : $recommend['image']); ?>" alt="">
+    </div>
+    <h5 class="text-center">推荐人：<?php echo $recommend['nickname']; ?></h5>
+    <h5 class="text-center">推荐码：<?php echo $recommend['uuid']; ?></h5>
+    <div class="weui-media-box__info" style="padding:20px 0;">
+        <h3 class="text-center" style="margin-bottom:20px;">双重福利</h3>
+        <h5 class="text-center" style="margin-bottom:10px;">首单享受 9 折优惠；</h5>
+        <h5 class="text-center" style="margin-bottom:10px;">永久每单 10% 佣金；</h5>
+    </div>
+</div>
+<?php else: ?>
+请在微信中打开当前链接。
+<?php endif; ?>
