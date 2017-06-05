@@ -18,7 +18,7 @@ class Market extends Controller
     {
         $user   = $this->app->db->get('user', ['referee_uuid'], ['uuid[=]' => $_SESSION['uuid']]);
         
-        if ($user['referee_uuid'] == 'oNP02wFZXeVAzIZD3hhqnWV6MTSQ') { // 4S 店推广活动，送卡丁车 1 圈
+        if ($user['referee_uuid'] == 'SnfNsBz0YWl5oV6Op4DvmZeXMktyxC9d') { // 4S 店推广活动，送卡丁车 1 圈
             $ticket    = $this->app->db->get('ticket', ['code'], ['uuid[=]' => $_SESSION['uuid'], 'product_id' => 1, 'product_price' => 40.00]);
             $style  = false;
             if ( ! $ticket) {
