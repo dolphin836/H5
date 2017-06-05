@@ -65,8 +65,10 @@ class Recommend extends Controller
 
     public function income()
     {
-        $users = $this->app->db->select('user_income', ['order_id', 'order_uuid', 'order_total', 'amount', 'status', 'source', 'user_income', 'remark', 'create_time', 'modifie_time'], ['uuid[=]' => $_SESSION['uuid'], 'ORDER' => ['create_time' => 'DESC']]);
+        $user   = $this->app->db->get('user', ['commission'], ['uuid[=]' => $_SESSION['uuid']]);
 
-        // echo $this->app->template->render('rec_income', ['server' => $this->server, 'item' => 'account', 'cartCount' => $this->cartCount, 'users' => $users]);
+        $incomes = $this->app->db->select('user_income', ['id', 'order_id', 'order_uuid', 'order_total', 'amount', 'status', 'source', 'remark', 'create_time', 'modifie_time'], ['uuid[=]' => $_SESSION['uuid']]);
+
+        echo $this->app->template->render('rec_income', ['server' => $this->server, 'item' => 'account', 'cartCount' => $this->cartCount, 'incomes' => $incomes, 'commission' => $user['commission']]);
     }
 }

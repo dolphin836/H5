@@ -135,6 +135,13 @@ $app->add(function ($request, $response, $next) {
                     $_SESSION['utm_source'] = $str[1];
                 }
             }
+
+            if ($str[0] == 'token') { // 通过 Token 登录
+                $user   = $this->db->get('user', ['uuid'], ['token[=]' => $str[1]]);
+                if ($user) {
+                    $_SESSION['uuid'] = $user['uuid'];
+                }
+            }
         }
     }
     

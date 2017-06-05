@@ -33,6 +33,7 @@ $routes = array(
     array('post', 'order/transaction'),
     array('get',  'recommend/share/{uuid}.html'),
     array('get',  'recommend/user.html'),
+    array('get',  'recommend/income.html'),
     array('get',  'market.html')
 );
 

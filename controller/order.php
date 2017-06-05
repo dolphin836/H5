@@ -406,7 +406,22 @@ class Order extends Controller
             }
         }
 
-        $discount  = $total * $this->app->get('settings')['default']['discount'];
+        $first = false;  //首单优惠 10%
+
+        $order = $this->app->db->get('order', ['code'], ['uuid[=]' => $_SESSION['uuid'], 'status[=]' => 1]);
+        $user  = $this->app->db->get('user', ['referee_uuid'], ['uuid[=]' => $_SESSION['uuid']]);
+
+        if (!$order && $user['referee_uuid'] != '') { //首单 并且 有推荐人
+            $first = true;
+        }
+
+        $pre   = $this->app->get('settings')['default']['discount']; // 全平台的折扣
+
+        if ( $first ) { //首单优惠 10%
+            $pre += 0.1;
+        }
+
+        $discount  = $total * $pre;
         $pay       = $total - $discount;
 
         $user        = $this->app->db->get('user', ['transaction'], ['uuid[=]' => $_SESSION['uuid']]);

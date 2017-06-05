@@ -1,0 +1,18 @@
+<?php $this->layout('template', ['title' => '佣金记录', 'server' => $server, 'item' => $item, 'cartCount' => $cartCount]); ?>
+
+<div class="weui-panel weui-panel_access">
+    <div class="weui-panel__hd">账户佣金金额：<?php echo $commission; ?></div>
+    <div class="weui-panel__hd">佣金记录总数：<?php echo count($incomes); ?></div>
+    <div class="weui-panel__bd">
+        <?php foreach($incomes as $income): ?>
+        <div class="weui-media-box weui-media-box_text">
+            <h4 class="weui-media-box__title">+ <?php echo $income['amount']; ?></h4>
+            <p class="weui-media-box__desc">订单金额：<?php echo $income['order_total']; ?></p>
+            <ul class="weui-media-box__info">
+                <li class="weui-media-box__info__meta">已入账</li>
+                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra"><?php echo date("Y-m-d", $income['create_time']); ?></li>
+            </ul>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</div>
