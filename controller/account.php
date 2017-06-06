@@ -295,6 +295,8 @@ class Account extends Controller
                      "create_time" => time(),
                     "modifie_time" => time()
                 ]);
+
+                $transaction_id = $this->app->db->id();
                 //更新余额
                 $this->app->db->update("user", [
                     "transaction[+]"  => $amount + $discounts[$amount]
@@ -308,7 +310,7 @@ class Account extends Controller
                     $income_amount = $amount * 0.05;
                     $this->app->db->insert("user_income", [
                                         "uuid" => $user['referee_uuid'],
-                                    "order_id" => $code,
+                                    "order_id" => $transaction_id,
                                   "order_uuid" => $uuid,
                                  "order_total" => $amount,
                                       "amount" => $income_amount,
@@ -483,6 +485,8 @@ class Account extends Controller
                          "create_time" => time(),
                         "modifie_time" => time()
                     ]);
+
+                    $transaction_id = $this->app->db->id();
                     //更新余额
                     $this->app->db->update("user", [
                         "transaction[+]"  => $amount + $discounts[$amount]
@@ -497,7 +501,7 @@ class Account extends Controller
                         $income_amount = $amount * 0.05;
                         $this->app->db->insert("user_income", [
                                             "uuid" => $user['referee_uuid'],
-                                        "order_id" => $code,
+                                        "order_id" => $transaction_id,
                                       "order_uuid" => $openid,
                                      "order_total" => $amount,
                                           "amount" => $income_amount,
