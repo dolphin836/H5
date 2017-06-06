@@ -273,7 +273,6 @@ class Account extends Controller
                 ]);
                 //充值赠送
                 $discounts = array(
-                       '10' => 3,
                      '1000' => 300,
                      '2000' => 800,
                      '3000' => 1200,
@@ -464,7 +463,6 @@ class Account extends Controller
                     ]);
                     //充值赠送
                     $discounts = array(
-                          '10' => 3,
                         '1000' => 300,
                         '2000' => 800,
                         '3000' => 1200,
