@@ -190,7 +190,12 @@ class Ticket extends Controller
             )
         );
 
-        $weObj->sendTemplateMessage($json);
+        $this->app->logger->addInfo('json', $json);
+
+        $send = $weObj->sendTemplateMessage($json);
+
+        $this->app->logger->addInfo('send' . $send);
+        $this->app->logger->addInfo('send', $send);
 
         echo $this->app->template->render('ticket_success', ['server' => $this->server, 'item' => 'ticket', 'cartCount' => $this->cartCount]);
     }
