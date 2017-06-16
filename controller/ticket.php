@@ -177,7 +177,7 @@ class Ticket extends Controller
 
         $json = array(
                  "touser" => $_SESSION['uuid'],
-            "template_id" => "OPENTM401400246",
+            "template_id" => "nD_NB5tlXYhbQZu9TnO__DmtNk5iKbuBBUGQ_4wWYU8",
                     "url" => $this->app->get('settings')['default']['server'],
                    "data" => array(
                        "first" => array("value" => "检票成功", "color" => "#173177"),
