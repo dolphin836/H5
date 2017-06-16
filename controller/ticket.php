@@ -4,6 +4,8 @@ require 'controller.php';
 
 require 'phpqrcode/qrlib.php';
 
+require "wechat.class.php";
+
 use OSS\OssClient;
 use OSS\Core\OssException;
 
@@ -148,9 +150,9 @@ class Ticket extends Controller
         $data   = array();
         $code   = $this->args['code'];
 
-        $ticket = $this->app->db->select('ticket', ['uuid', 'product_name', 'product_price', 'create_time'], ['code[=]' => $code, 'status[=]' => 0]);
+        $ticket = $this->app->db->get('ticket', ['id', 'uuid', 'product_name', 'product_price', 'create_time'], ['code[=]' => $code, 'status[=]' => 0]);
 
-        if ( empty($ticket) ) {
+        if ( ! $ticket ) {
             var_dump("没有查询到有效的票码");
             exit;
         }
@@ -162,6 +164,33 @@ class Ticket extends Controller
         ], [
             "code[=]" => $code
         ]);
+
+        // 消息推送
+        $options = array(
+                'token'=> $this->app->get('settings')['weixin']['token'],
+                'encodingaeskey'=> $this->app->get('settings')['weixin']['encodingaeskey'],
+                'appid'=> $this->app->get('settings')['weixin']['appID'],
+                'appsecret'=> $this->app->get('settings')['weixin']['appSecret']
+        );
+
+        $weObj = new Wechat($options);
+
+        $json = array(
+                 "touser" => $_SESSION['uuid'],
+            "template_id" => "OPENTM401400246",
+                    "url" => $this->app->get('settings')['default']['server'],
+                   "data" => array(
+                       "first" => array("value" => "检票成功", "color" => "#173177"),
+                    "keyword1" => array("value" => $code, "color" => "#173177"),
+                    "keyword2" => array("value" => $ticket['product_name'], "color" => "#173177"),
+                    "keyword3" => array("value" => $ticket['id'], "color" => "#173177"),
+                    "keyword4" => array("value" => '￥'. $ticket['product_price'], "color" => "#173177"),
+                    "keyword5" => array("value" => date("Y-m-d H:i:s", time()), "color" => "#173177"),
+                      "remark" => array("value" => "感谢您的辛苦工作！", "color" => "#173177")
+            )
+        );
+
+        $weObj->sendTemplateMessage($json);
 
         echo $this->app->template->render('ticket_success', ['server' => $this->server, 'item' => 'ticket', 'cartCount' => $this->cartCount]);
     }

@@ -1,0 +1,55 @@
+<?php $this->layout('template', ['title' => '提现', 'server' => $server, 'item' => $item, 'cartCount' => $cartCount, 'scripts' => $scripts]); ?>
+
+<div class="weui-panel weui-panel_access">
+    <div class="weui-panel__hd">你的总收益：<?php echo $commission; ?></div>
+    <div class="weui-panel__hd">可提现金额：<span id="amount"><?php echo $take; ?></span></div>
+    <div class="weui-panel__hd">待入账金额：<?php echo $wait; ?></div>
+    <div class="weui-panel__hd">
+        <div class="weui-cells__title">申请提现：最低提现金额 100.00</div>
+        <div class="weui-cells weui-cells_radio">
+            <label class="weui-cell weui-check__label" for="x11">
+                <div class="weui-cell__bd">
+                    <p>账户余额</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <input type="radio" class="weui-check" name="mode" value="transaction" id="x11" checked="checked">
+                    <span class="weui-icon-checked"></span>
+                </div>
+            </label>
+            <!--<label class="weui-cell weui-check__label" for="x12">
+                <div class="weui-cell__bd">
+                    <p>工商银行</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <input type="radio" class="weui-check" name="mode" value="bank" id="x12">
+                    <span class="weui-icon-checked"></span>
+                </div>
+            </label>-->
+        </div>
+        <?php if ((int)$take): ?>
+        <button class="weui-btn weui-btn_plain-primary" id="takeout">立即提现</button>
+        <?php else: ?>
+        <button class="weui-btn weui-btn_plain-primary weui-btn_plain-disabled">立即提现</button>
+        <?php endif; ?>
+    </div>
+    <div class="weui-panel__hd">
+        <p class="text-center"><a href="/recommend/readme.html">查看《提现规则》</a></p>
+    </div>
+
+    <div class="weui-panel__hd">提现记录</div>
+    <div class="weui-panel__bd">
+        <?php foreach($outs as $out): ?>
+        <div class="weui-media-box weui-media-box_text">
+            <h4 class="weui-media-box__title"><?php echo date("Y-m-d", $out['create_time']); ?> 提现记录</h4>
+            <p class="weui-media-box__desc">提现方式：<?php echo $mode[$out['remark']]; ?></p>
+            <p class="weui-media-box__desc">当前状态：<?php echo $status[$out['status']]; ?></p>
+            <ul class="weui-media-box__info">
+                <li class="weui-media-box__info__meta">提现金额：<?php echo $out['amount']; ?></li>
+                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra">代扣税款：<?php echo $out['tax']; ?></li>
+                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra">实际到账：<?php echo $out['total']; ?></li>
+            </ul>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+

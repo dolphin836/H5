@@ -11,6 +11,7 @@ $routes = array(
     array('get',  'account/order.html'),
     array('get',  'account/login.html'),
     array('get',  'account/phone.html'),
+    array('get',  'account/info.html'),
     array('get',  'account/recharge.html'),
     array('get',  'account/transaction.html'),
     array('get',  'account/logout'),
@@ -34,6 +35,9 @@ $routes = array(
     array('get',  'recommend/share/{uuid}.html'),
     array('get',  'recommend/user.html'),
     array('get',  'recommend/income.html'),
+    array('get',  'recommend/take.html'),
+    array('get',  'recommend/readme.html'),
+    array('post', 'recommend/out'),
     array('get',  'market.html')
 );
 
