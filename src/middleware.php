@@ -1,6 +1,36 @@
 <?php
 
 $app->add(function ($request, $response, $next) {
+    $auth = array('account/index',
+                  'account/order',
+                  'account/phone',
+                  'account/recharge',
+                  'account/transaction',
+                  'ticket/index',
+                  'ticket/view',
+                  'ticket/check',
+                  'ticket/pass',
+                  'recommend/user',
+                  'recommend/income',
+                  'recommend/take');
+
+    $params = explode('.', $request->getUri()->getPath());
+    $path   = explode('/', $params[0]);
+
+    $c      = isset($path[1]) ? $path[1] : 'product';
+    $m      = isset($path[2]) ? $path[2] : 'index';
+    $r      = $c . '/' . $m;
+
+    if (in_array($r, $auth) && ! isset($_SESSION['uuid'])) {
+        return $response->withStatus(302)->withHeader('Location', '/account/login.html');
+    }
+
+    $response = $next($request, $response);
+
+    return $response;
+});
+
+$app->add(function ($request, $response, $next) {
     $httpQuery      = $request->getUri()->getQuery(); // 获取微信的 code 或者推荐人的 code，做相应的处理
 
     if ($httpQuery != '') {
@@ -171,33 +201,6 @@ $app->add(function ($request, $response, $next) {
 
             return $newResponse;
         }
-    }
-
-    $response = $next($request, $response);
-
-    return $response;
-});
-
-$app->add(function ($request, $response, $next) {
-    $auth = array('account/index',
-                  'account/order',
-                  'account/phone',
-                  'account/recharge',
-                  'account/transaction',
-                  'ticket/index',
-                  'ticket/view',
-                  'ticket/check',
-                  'ticket/pass');
-
-    $params = explode('.', $request->getUri()->getPath());
-    $path   = explode('/', $params[0]);
-
-    $c      = isset($path[1]) ? $path[1] : 'product';
-    $m      = isset($path[2]) ? $path[2] : 'index';
-    $r      = $c . '/' . $m;
-
-    if (in_array($r, $auth) && ! isset($_SESSION['uuid'])) {
-        return $response->withStatus(302)->withHeader('Location', '/account/login.html');
     }
 
     $response = $next($request, $response);
